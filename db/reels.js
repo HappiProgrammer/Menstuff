@@ -1,8 +1,12 @@
 const fs = require('fs');
 const path = require('path');
+const os = require('os');
 
-const DATA_DIR = path.join(__dirname, '..', 'data');
+const isServerless = process.env.VERCEL || process.env.AWS_LAMBDA_FUNCTION_NAME || process.env.NOW_REGION;
+const DATA_DIR = isServerless ? path.join(os.tmpdir(), 'sonder_data') : path.join(__dirname, '..', 'data');
 const REELS_FILE = path.join(DATA_DIR, 'reels.json');
+
+let memoryReels = null;
 
 // High performance, mobile-optimized H.264 MP4 videos curated for emotional healing, relationship clarity, peace, and mindfulness
 const SEED_REELS = [
@@ -198,15 +202,25 @@ const SEED_REELS = [
 ];
 
 function ensureDataStore() {
-  if (!fs.existsSync(DATA_DIR)) {
-    fs.mkdirSync(DATA_DIR, { recursive: true });
-  }
-  if (!fs.existsSync(REELS_FILE)) {
-    fs.writeFileSync(REELS_FILE, JSON.stringify(SEED_REELS, null, 2), 'utf8');
+  try {
+    if (!fs.existsSync(DATA_DIR)) {
+      fs.mkdirSync(DATA_DIR, { recursive: true });
+    }
+    if (!fs.existsSync(REELS_FILE)) {
+      const bundledPath = path.join(__dirname, '..', 'data', 'reels.json');
+      let initial = JSON.stringify(SEED_REELS, null, 2);
+      if (fs.existsSync(bundledPath)) {
+        try { initial = fs.readFileSync(bundledPath, 'utf8'); } catch (e) {}
+      }
+      fs.writeFileSync(REELS_FILE, initial, 'utf8');
+    }
+  } catch (err) {
+    if (memoryReels === null) memoryReels = JSON.parse(JSON.stringify(SEED_REELS));
   }
 }
 
 function readReels() {
+  if (memoryReels !== null) return memoryReels;
   ensureDataStore();
   try {
     const raw = fs.readFileSync(REELS_FILE, 'utf8');
@@ -217,16 +231,21 @@ function readReels() {
     writeReels(SEED_REELS);
     return SEED_REELS;
   } catch (err) {
-    console.error('Error reading reels store:', err.message);
-    return SEED_REELS;
+    if (memoryReels === null) memoryReels = JSON.parse(JSON.stringify(SEED_REELS));
+    return memoryReels;
   }
 }
 
 function writeReels(reels) {
-  ensureDataStore();
-  const tempFile = REELS_FILE + '.tmp';
-  fs.writeFileSync(tempFile, JSON.stringify(reels, null, 2), 'utf8');
-  fs.renameSync(tempFile, REELS_FILE);
+  memoryReels = reels;
+  try {
+    ensureDataStore();
+    const tempFile = REELS_FILE + '.tmp';
+    fs.writeFileSync(tempFile, JSON.stringify(reels, null, 2), 'utf8');
+    fs.renameSync(tempFile, REELS_FILE);
+  } catch (err) {
+    // Keep in-memory
+  }
 }
 
 function getPaginatedReels(page = 1, limit = 4) {

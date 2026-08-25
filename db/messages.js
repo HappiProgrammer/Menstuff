@@ -1,17 +1,31 @@
 const fs = require('fs');
 const path = require('path');
 const crypto = require('crypto');
+const os = require('os');
 
-const DATA_DIR = path.join(__dirname, '..', 'data');
+const isServerless = process.env.VERCEL || process.env.AWS_LAMBDA_FUNCTION_NAME || process.env.NOW_REGION;
+const DATA_DIR = isServerless ? path.join(os.tmpdir(), 'sonder_data') : path.join(__dirname, '..', 'data');
 const MESSAGES_FILE = path.join(DATA_DIR, 'messages.json');
+
+// In-memory fallback
+let memoryMessages = null;
 
 // Ensure data directory and messages.json exist
 function ensureDataStore() {
-  if (!fs.existsSync(DATA_DIR)) {
-    fs.mkdirSync(DATA_DIR, { recursive: true });
-  }
-  if (!fs.existsSync(MESSAGES_FILE)) {
-    fs.writeFileSync(MESSAGES_FILE, JSON.stringify(getInitialSeedThreads(), null, 2), 'utf8');
+  try {
+    if (!fs.existsSync(DATA_DIR)) {
+      fs.mkdirSync(DATA_DIR, { recursive: true });
+    }
+    if (!fs.existsSync(MESSAGES_FILE)) {
+      const bundledPath = path.join(__dirname, '..', 'data', 'messages.json');
+      let initial = JSON.stringify(getInitialSeedThreads(), null, 2);
+      if (fs.existsSync(bundledPath)) {
+        try { initial = fs.readFileSync(bundledPath, 'utf8'); } catch (e) {}
+      }
+      fs.writeFileSync(MESSAGES_FILE, initial, 'utf8');
+    }
+  } catch (err) {
+    if (memoryMessages === null) memoryMessages = getInitialSeedThreads();
   }
 }
 
@@ -120,6 +134,7 @@ function getInitialSeedThreads() {
 
 // Read all message threads
 function readThreads() {
+  if (memoryMessages !== null) return memoryMessages;
   ensureDataStore();
   try {
     const raw = fs.readFileSync(MESSAGES_FILE, 'utf8');
@@ -131,17 +146,22 @@ function readThreads() {
     writeThreads(seed);
     return seed;
   } catch (err) {
-    console.error('Error reading messages store:', err.message);
-    return getInitialSeedThreads();
+    if (memoryMessages === null) memoryMessages = getInitialSeedThreads();
+    return memoryMessages;
   }
 }
 
 // Write threads atomically
 function writeThreads(threads) {
-  ensureDataStore();
-  const tempFile = MESSAGES_FILE + '.tmp';
-  fs.writeFileSync(tempFile, JSON.stringify(threads, null, 2), 'utf8');
-  fs.renameSync(tempFile, MESSAGES_FILE);
+  memoryMessages = threads;
+  try {
+    ensureDataStore();
+    const tempFile = MESSAGES_FILE + '.tmp';
+    fs.writeFileSync(tempFile, JSON.stringify(threads, null, 2), 'utf8');
+    fs.renameSync(tempFile, MESSAGES_FILE);
+  } catch (err) {
+    // Keep in memory
+  }
 }
 
 // Get single thread by ID

@@ -616,6 +616,27 @@ app.post('/api/reels/:reelId/comment', (req, res) => {
   }
 });
 
+// Explicit root and static routes for Vercel serverless environment
+app.get('/', (req, res) => {
+  res.sendFile(path.join(__dirname, 'index.html'));
+});
+
+app.get('/favicon.ico', (req, res) => {
+  res.sendFile(path.join(__dirname, 'favicon.svg'));
+});
+
+app.get('/favicon.png', (req, res) => {
+  res.sendFile(path.join(__dirname, 'favicon.svg'));
+});
+
+// Wildcard fallback to index.html for SPA routing
+app.get('*', (req, res, next) => {
+  if (req.path.startsWith('/api')) {
+    return next();
+  }
+  res.sendFile(path.join(__dirname, 'index.html'));
+});
+
 if (require.main === module) {
   app.listen(PORT, () => {
     console.log(`Sonder server running on http://localhost:${PORT}`);
