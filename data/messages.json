@@ -11,7 +11,7 @@
       "lastSeen": "Active now"
     },
     "unreadCount": 0,
-    "lastActivity": 1787651186370,
+    "lastActivity": 1787653076620,
     "messages": [
       {
         "id": "msg_ve_0",
@@ -76,6 +76,17 @@
         "duration": null,
         "reaction": null,
         "timestamp": 1787651186370,
+        "status": "received"
+      },
+      {
+        "id": "msg_1787653076620_7cb329",
+        "sender": "user",
+        "text": "Hey! Have you checked out the new Reels feed in Sonder?",
+        "image": null,
+        "isVoice": false,
+        "duration": null,
+        "reaction": null,
+        "timestamp": 1787653076620,
         "status": "received"
       }
     ]
