@@ -1,5 +1,15 @@
 [
   {
+    "id": "u_tester_gmail_account",
+    "email": "tester@gmail.com",
+    "username": "Tester#1001",
+    "passwordHash": "$2a$12$MQF1f.8/FXWQoIuVJKGzq.kAHjRi2PE9siaYs.cxVtT.TMcFDW3Du",
+    "role": "user",
+    "avatar": "<svg width=\"18\" height=\"18\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"1.8\" stroke-linecap=\"round\" stroke-linejoin=\"round\"><circle cx=\"12\" cy=\"7\" r=\"4\"/><path d=\"M5.5 21v-2a6.5 6.5 0 0 1 13 0v2\"/></svg>",
+    "createdAt": "2026-08-25T14:44:00.000Z",
+    "bio": "Exploring healing and relationship wisdom on Sonder."
+  },
+  {
     "id": "u_1787546674537_df653e67",
     "email": "test_1787546673954@shattered.io",
     "username": "TestSoul#9999",
