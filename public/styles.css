@@ -515,32 +515,69 @@ input, textarea, select { font-family: var(--font-sans); }
   -webkit-mask-image: linear-gradient(to right, transparent 0%, rgba(0,0,0,0.8) 35%, black 100%);
 }
 
-/* Responsive adjustments for mobile/tablet */
-@media (max-width: 860px) {
+/* ── Responsive adjustments for register / auth card ── */
+@media (max-width: 960px) {
+  .register-stage {
+    max-width: 480px;
+    width: 100%;
+    padding: 20px 16px;
+  }
   .register-split-card {
     flex-direction: column;
     min-height: auto;
+    border-radius: 24px;
+    max-width: 480px;
+    width: 100%;
+    overflow: hidden;
+  }
+  .register-auth-card {
+    flex: 1 1 auto;
+    max-width: 100%;
+    width: 100%;
+    border-radius: 24px;
+    padding: 36px 28px;
+    box-sizing: border-box;
+  }
+  .register-hero-card {
+    display: none;
+  }
+}
+
+@media (max-width: 480px) {
+  .register-stage {
+    padding: 12px 10px;
+  }
+  .register-split-card {
     border-radius: 20px;
   }
   .register-auth-card {
-    flex: 1;
-    border-radius: 20px 20px 0 0;
-    padding: 32px 24px;
+    border-radius: 20px;
+    padding: 26px 18px 22px;
   }
-  .register-hero-card {
-    margin-left: 0;
-    border-radius: 0 0 20px 20px;
-    padding: 32px 24px 200px;
+  .rac-title {
+    font-size: 22px;
   }
-  .rhc-imagery-wrap {
-    width: 100%;
-    height: 200px;
-    top: auto;
-    bottom: 0;
+  .rac-sub {
+    font-size: 12px;
   }
-  .rhc-img {
-    mask-image: linear-gradient(to bottom, transparent 0%, black 100%);
-    -webkit-mask-image: linear-gradient(to bottom, transparent 0%, black 100%);
+  .rac-mode-tabs {
+    margin-bottom: 14px;
+  }
+  .rac-tab {
+    min-height: 44px;
+    font-size: 13px;
+    padding: 8px 6px;
+  }
+  .rac-input {
+    min-height: 46px;
+    font-size: 16px;
+    padding: 12px 14px;
+    box-sizing: border-box;
+  }
+  .rac-submit-btn {
+    min-height: 48px;
+    font-size: 15px;
+    border-radius: 10px;
   }
 }
 

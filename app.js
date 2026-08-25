@@ -513,14 +513,17 @@ document.addEventListener('DOMContentLoaded', () => {
     const enterBtnSpinner = $('enter-btn-spinner');
 
     const showAuthError = (msg) => {
+      console.warn('[Sonder Auth Error]', msg);
       if (infoBanner) infoBanner.classList.add('hidden');
       if (errorBanner) {
         errorBanner.innerText = msg;
         errorBanner.classList.remove('hidden');
       }
+      showToast('⚠️ ' + msg);
     };
 
     const showAuthInfo = (msg) => {
+      console.log('[Sonder Auth Info]', msg);
       if (errorBanner) errorBanner.classList.add('hidden');
       if (infoBanner) {
         infoBanner.innerText = msg;
@@ -648,6 +651,8 @@ document.addEventListener('DOMContentLoaded', () => {
       const email = (emailInput?.value || '').trim();
       const password = passInput?.value || '';
 
+      console.log(`[Sonder Auth] Submitting mode="${authMode}" for email="${email}"`);
+
       // ── Client-Side Validation ──
       if (!email) {
         showAuthError('Please enter your email address.');
@@ -692,25 +697,29 @@ document.addEventListener('DOMContentLoaded', () => {
         let networkFailed = false;
 
         try {
-          res = await fetch(getApiUrl(endpoint), {
+          const targetUrl = getApiUrl(endpoint);
+          console.log(`[Sonder Auth] Sending POST to: ${targetUrl}`);
+          res = await fetch(targetUrl, {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             credentials: 'include',
             body: JSON.stringify(payload)
           });
           data = await res.json();
+          console.log(`[Sonder Auth] Server response status=${res?.status}:`, data);
         } catch (fetchErr) {
+          console.warn('[Sonder Auth] Fetch error:', fetchErr.message);
           networkFailed = true;
         }
 
         // If backend server is unreachable (e.g. running purely offline or protocol restriction)
         if (networkFailed || !res) {
-          console.warn('Backend server offline or unreachable. Registering in local session mode.');
+          console.warn('[Sonder Auth] Backend unreachable. Entering in local session mode.');
           setAuthLoading(false, 'Success!');
           showAuthInfo('Entering community (Local Session Mode)...');
 
           S.user = {
-            id: $('anon-id-text')?.innerText || email.split('@')[0],
+            id: email.split('@')[0],
             email: email,
             avatar: getAvatar(),
             joined: new Date().toISOString(),
@@ -770,6 +779,7 @@ document.addEventListener('DOMContentLoaded', () => {
         }, 350);
 
       } catch (err) {
+        console.error('[Sonder Auth Exception]', err);
         setAuthLoading(false);
         showAuthError('An unexpected error occurred. Please try again.');
       }
