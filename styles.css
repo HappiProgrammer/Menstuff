@@ -177,6 +177,40 @@ input, textarea, select { font-family: var(--font-sans); }
   margin-bottom: 24px;
 }
 
+/* Auth Mode Switcher Tabs */
+.rac-mode-tabs {
+  display: flex;
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 10px;
+  padding: 3px;
+  margin-bottom: 20px;
+  gap: 4px;
+}
+
+.rac-tab {
+  flex: 1;
+  background: none;
+  border: none;
+  color: #94a3b8;
+  font-size: 13px;
+  font-weight: 600;
+  padding: 8px 12px;
+  border-radius: 7px;
+  cursor: pointer;
+  transition: all var(--t-fast);
+}
+
+.rac-tab:hover {
+  color: #ffffff;
+}
+
+.rac-tab.active-tab {
+  background: var(--accent);
+  color: #06110e;
+  box-shadow: 0 2px 8px rgba(0, 199, 149, 0.3);
+}
+
 .rac-title {
   font-family: var(--font-sans);
   font-size: 26px;
@@ -209,46 +243,11 @@ input, textarea, select { font-family: var(--font-sans); }
   gap: 8px;
 }
 
-.rac-field-header {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-}
-
 .rac-label {
   font-size: 12px;
   font-weight: 500;
   color: #94a3b8;
   letter-spacing: 0.2px;
-}
-
-.rac-anon-badge {
-  display: flex;
-  align-items: center;
-  gap: 6px;
-  background: rgba(255, 255, 255, 0.05);
-  border: 1px solid rgba(255, 255, 255, 0.1);
-  padding: 2px 8px;
-  border-radius: 12px;
-  font-size: 11px;
-  color: var(--accent);
-  font-weight: 600;
-}
-
-.rac-refresh-btn {
-  background: none;
-  border: none;
-  color: #94a3b8;
-  display: flex;
-  align-items: center;
-  cursor: pointer;
-  padding: 1px;
-  transition: all var(--t-fast);
-}
-
-.rac-refresh-btn:hover {
-  color: var(--accent);
-  transform: rotate(180deg);
 }
 
 .rac-input {
@@ -5706,6 +5705,455 @@ button:focus-visible, a:focus-visible, input:focus-visible, textarea:focus-visib
 
 .rcm-comment-submit:hover {
   opacity: 0.9;
+}
+
+/* ═══════════════════════════════════════════════════════════════════
+   COMPREHENSIVE MOBILE VIEWPORT & TOUCH OPTIMIZATIONS (<768px & <480px)
+   ═══════════════════════════════════════════════════════════════════ */
+
+/* Global Mobile Touch & Viewport Utilities */
+html {
+  -webkit-text-size-adjust: 100%;
+  -webkit-tap-highlight-color: transparent;
+}
+
+@media (max-width: 768px) {
+  /* Prevent iOS zoom on input focus by guaranteeing 16px minimum */
+  input[type="text"],
+  input[type="email"],
+  input[type="password"],
+  input[type="search"],
+  textarea,
+  select {
+    font-size: 16px !important;
+  }
+
+  /* Safe Area Variables */
+  :root {
+    --sidebar-w: 0px;
+    --right-w: 0px;
+  }
+
+  body {
+    padding-bottom: calc(65px + env(safe-area-inset-bottom, 8px));
+  }
+
+  /* ── 1. Landing & Auth Page Mobile Optimization ── */
+  #landing-page {
+    padding: 16px 12px;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .register-stage {
+    width: 100%;
+    max-width: 100%;
+    padding: 0;
+  }
+
+  .register-split-card {
+    flex-direction: column;
+    width: 100%;
+    min-height: auto;
+    border-radius: 20px;
+    box-shadow: 0 16px 40px rgba(0, 0, 0, 0.4);
+    overflow: hidden;
+  }
+
+  .register-auth-card {
+    flex: 1;
+    width: 100%;
+    border-radius: 20px;
+    padding: 28px 20px 24px;
+    box-shadow: none;
+  }
+
+  .rac-header {
+    margin-bottom: 18px;
+  }
+
+  .rac-title {
+    font-size: 23px;
+  }
+
+  .rac-sub {
+    font-size: 12.5px;
+  }
+
+  .rac-mode-tabs {
+    margin-bottom: 16px;
+  }
+
+  .rac-tab {
+    font-size: 12.5px;
+    padding: 9px 8px;
+    min-height: 44px;
+  }
+
+  .rac-input {
+    padding: 13px 14px;
+    border-radius: 9px;
+  }
+
+  .rac-submit-btn {
+    min-height: 48px;
+    font-size: 15px;
+    border-radius: 9px;
+  }
+
+  /* Compact hero banner on small mobile */
+  .register-hero-card {
+    display: none; /* Hide heavy image card on small mobile for instant auth experience */
+  }
+
+  /* ── 2. Top Header & Bottom Bar Navigation ── */
+  .mobile-top-bar {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    height: 54px;
+    padding: 0 14px;
+    background: rgba(13, 19, 26, 0.95);
+    backdrop-filter: blur(16px);
+    border-bottom: 1px solid var(--border);
+    position: sticky;
+    top: 0;
+    z-index: 90;
+  }
+
+  .mobile-brand {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+
+  .mobile-brand-title {
+    font-family: var(--font-serif);
+    font-size: 19px;
+    font-weight: 700;
+    color: var(--text);
+  }
+
+  .mobile-top-actions {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+  }
+
+  .mobile-icon-btn {
+    width: 40px;
+    height: 40px;
+    min-width: 40px;
+    min-height: 40px;
+    border-radius: 50%;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    color: var(--text2);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .ig-bottom-nav {
+    display: flex;
+    align-items: center;
+    justify-content: space-around;
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    height: 60px;
+    background: rgba(13, 19, 26, 0.96);
+    backdrop-filter: blur(16px);
+    border-top: 1px solid var(--border);
+    padding: 2px 6px calc(2px + env(safe-area-inset-bottom, 6px));
+    z-index: 100;
+  }
+
+  .ib-btn {
+    flex: 1;
+    height: 100%;
+    min-height: 48px;
+    background: none;
+    border: none;
+    color: var(--text3);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 2px;
+    font-size: 10px;
+    cursor: pointer;
+    transition: color var(--t-fast);
+  }
+
+  .ib-btn.active-ib {
+    color: var(--accent);
+  }
+
+  .ib-create {
+    background: linear-gradient(135deg, var(--accent), #25e2af) !important;
+    color: #06110e !important;
+    border-radius: 50% !important;
+    width: 42px !important;
+    height: 42px !important;
+    min-width: 42px !important;
+    min-height: 42px !important;
+    flex: 0 0 42px !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    box-shadow: 0 4px 14px rgba(0, 199, 149, 0.4) !important;
+    transform: translateY(-5px);
+  }
+
+  /* ── 3. Instagram Reels & Stories Video Feed ── */
+  #pane-reels {
+    height: calc(100dvh - 54px - 60px);
+    max-height: calc(100dvh - 54px - 60px);
+    width: 100%;
+    background: #000000;
+  }
+
+  .reels-viewport-wrapper {
+    width: 100%;
+    max-width: 100%;
+    height: 100%;
+    max-height: 100%;
+    border-radius: 0;
+    box-shadow: none;
+  }
+
+  .reel-card {
+    width: 100%;
+    height: calc(100dvh - 54px - 60px);
+    max-height: calc(100dvh - 54px - 60px);
+  }
+
+  .reel-action-bar {
+    right: 10px;
+    bottom: 30px;
+    gap: 14px;
+  }
+
+  .reel-act-icon-wrap {
+    width: 44px;
+    height: 44px;
+  }
+
+  .reel-meta-bottom {
+    left: 12px;
+    right: 70px;
+    bottom: 16px;
+  }
+
+  .reel-caption-text {
+    font-size: 12.5px;
+    max-height: 44px;
+  }
+
+  .reels-floating-mute-btn {
+    top: 10px;
+    right: 10px;
+    padding: 5px 10px;
+    font-size: 10.5px;
+  }
+
+  .reels-comments-modal-container {
+    max-height: 82dvh;
+    border-radius: 20px 20px 0 0;
+  }
+
+  /* ── 4. Direct Messages & Private Chat ── */
+  #pane-messages {
+    padding: 0 !important;
+  }
+
+  .dm-container {
+    height: calc(100dvh - 54px - 60px);
+    max-height: calc(100dvh - 54px - 60px);
+    border-radius: 0;
+    border: none;
+    grid-template-columns: 1fr;
+  }
+
+  /* When a chat is active on mobile, hide the thread list sidebar */
+  .dm-container.dm-active .dm-inbox-sidebar {
+    display: none;
+  }
+
+  /* When no chat is active, hide the conversation view */
+  .dm-container:not(.dm-active) .dm-conversation-main {
+    display: none;
+  }
+
+  .dm-back-btn {
+    display: flex !important;
+    align-items: center;
+    justify-content: center;
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    color: var(--text);
+    cursor: pointer;
+    margin-right: 8px;
+    flex-shrink: 0;
+  }
+
+  .dm-inbox-sidebar {
+    width: 100%;
+    border-right: none;
+  }
+
+  .dm-conversation-main {
+    width: 100%;
+  }
+
+  .dm-msg-body-wrap {
+    max-width: 86%;
+  }
+
+  .dm-msg-bubble {
+    font-size: 13.5px;
+    padding: 9px 13px;
+  }
+
+  .dm-chat-input-row {
+    padding: 8px 10px calc(8px + env(safe-area-inset-bottom, 4px));
+    gap: 6px;
+  }
+
+  .dm-chat-input {
+    padding: 9px 12px;
+    font-size: 14px;
+  }
+
+  .dm-icon-btn {
+    width: 38px;
+    height: 38px;
+    min-width: 38px;
+    min-height: 38px;
+  }
+
+  .dm-send-btn {
+    width: 38px;
+    height: 38px;
+    min-width: 38px;
+    min-height: 38px;
+  }
+
+  /* ── 5. Home Feed & Story Cards ── */
+  .feed-inner {
+    padding: 0 12px 60px;
+  }
+
+  .pane-inner {
+    padding: 16px 12px 60px;
+  }
+
+  .stories-scroll-wrap {
+    padding: 12px 0 6px;
+  }
+
+  .story-ring-wrap {
+    width: 56px;
+    height: 56px;
+  }
+
+  .post-card {
+    padding: 16px 14px;
+    border-radius: 14px;
+    margin-bottom: 14px;
+  }
+
+  .post-title {
+    font-size: 18px;
+  }
+
+  .post-body {
+    font-size: 13.5px;
+    line-height: 1.65;
+  }
+
+  .ig-post-actions-row {
+    gap: 2px;
+  }
+
+  .ig-post-action-btn {
+    padding: 6px 6px;
+    font-size: 11.5px;
+    min-height: 40px;
+  }
+
+  /* ── 6. Relationship Advice & News ── */
+  .advice-hero-card {
+    padding: 18px 16px;
+    border-radius: 14px;
+  }
+
+  .ahc-quote {
+    font-size: 16px;
+    line-height: 1.5;
+  }
+
+  .advice-grid {
+    grid-template-columns: 1fr;
+    gap: 14px;
+  }
+
+  .advice-card {
+    padding: 16px 14px;
+    border-radius: 14px;
+  }
+
+  /* ── 7. Healing Hub & Sobriety Tracker ── */
+  .streak-timer-grid {
+    grid-template-columns: repeat(4, 1fr) !important;
+    gap: 6px !important;
+  }
+
+  .st-card {
+    padding: 10px 4px !important;
+  }
+
+  .st-num {
+    font-size: clamp(17px, 5.5vw, 24px) !important;
+  }
+
+  .st-label {
+    font-size: 9.5px !important;
+  }
+
+  .mood-grid {
+    grid-template-columns: repeat(3, 1fr);
+    gap: 8px;
+  }
+
+  /* ── 8. Modals Bottom Sheet Transition ── */
+  .fullscreen-modal {
+    align-items: flex-end;
+    padding: 0;
+  }
+
+  .write-modal-card,
+  .post-modal-card,
+  .story-viewer-card,
+  .sos-modal-card {
+    width: 100%;
+    max-width: 100%;
+    border-radius: 20px 20px 0 0;
+    max-height: 90dvh;
+    border-bottom: none;
+    border-left: none;
+    border-right: none;
+  }
+
+  .sos-breathing-ring {
+    width: min(220px, 60vw) !important;
+    height: min(220px, 60vw) !important;
+  }
 }
 
 

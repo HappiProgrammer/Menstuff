@@ -98,5 +98,35 @@
     "avatar": null,
     "createdAt": "2026-08-25T10:33:28.355Z",
     "bio": ""
+  },
+  {
+    "id": "u_1787655259693_9207d4b2",
+    "email": "reels_tester_1787655259288@shattered.io",
+    "username": "Anonymous#7243",
+    "passwordHash": "$2a$12$dJ5yCJxVodBkAGXnPEFF8OtD3I8jjO/kPWYQ6d/tRPtvnSM8.6yfa",
+    "role": "user",
+    "avatar": null,
+    "createdAt": "2026-08-25T10:54:19.693Z",
+    "bio": ""
+  },
+  {
+    "id": "u_1787655706296_d4c315f0",
+    "email": "reels_tester_1787655705942@shattered.io",
+    "username": "Anonymous#7791",
+    "passwordHash": "$2a$12$PDQMZO8ylU8zk5fwq5TNO.s/mcSB30mu71udMU7cGjAQBBcEMVwRS",
+    "role": "user",
+    "avatar": null,
+    "createdAt": "2026-08-25T11:01:46.296Z",
+    "bio": ""
+  },
+  {
+    "id": "u_1787656163075_0dfb7d51",
+    "email": "reels_tester_1787656162760@shattered.io",
+    "username": "Anonymous#1012",
+    "passwordHash": "$2a$12$B64qc9wBNRwaMV4tQwtdEOqm0UgKN1OPIXu.IoBz4oX8.lXggfXd.",
+    "role": "user",
+    "avatar": null,
+    "createdAt": "2026-08-25T11:09:23.075Z",
+    "bio": ""
   }
 ]

@@ -502,7 +502,7 @@ document.addEventListener('DOMContentLoaded', () => {
   const PASSWORD_RULE_REGEX = /^(?=.*[0-9!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?]).{8,}$/;
 
   const setupLanding = () => {
-    let authMode = 'register'; // Default to registration
+    let authMode = 'signin'; // Default to Sign In
 
     const errorBanner = $('rac-error-banner');
     const infoBanner = $('rac-info-banner');
@@ -547,47 +547,59 @@ document.addEventListener('DOMContentLoaded', () => {
       }
     };
 
-    const refreshAnonId = () => {
-      const newId = generateId();
-      if ($('anon-id-text')) $('anon-id-text').innerText = newId;
-      return newId;
-    };
-
-    refreshAnonId();
-
-    if ($('refresh-id-btn')) {
-      $('refresh-id-btn').onclick = () => {
-        const id = refreshAnonId();
-        showToast(`Generated ID: ${id}`);
-      };
-    }
-
-    // Set mode: 'register' vs 'signin'
+    // Set mode: 'signin' vs 'register'
     const setAuthMode = (mode) => {
       authMode = mode;
       clearAuthBanners();
+      const tabSignin = $('tab-mode-signin');
+      const tabRegister = $('tab-mode-register');
+      const toggleLink = $('returning-toggle-btn');
+      
+      if (tabSignin) {
+        tabSignin.classList.toggle('active-tab', mode === 'signin');
+        tabSignin.setAttribute('aria-selected', mode === 'signin');
+      }
+      if (tabRegister) {
+        tabRegister.classList.toggle('active-tab', mode === 'register');
+        tabRegister.setAttribute('aria-selected', mode === 'register');
+      }
+
       if (mode === 'register') {
         if (enterBtnText) enterBtnText.innerText = 'Create Account';
         const titleEl = document.querySelector('.rac-title');
         if (titleEl) titleEl.innerHTML = 'Create your <span class="rac-title-bold">account</span>';
         const subEl = document.querySelector('.rac-sub');
         if (subEl) subEl.innerText = 'Join our supportive anonymous community.';
+        if (toggleLink) toggleLink.innerText = 'Already have an account? Sign in';
       } else {
         if (enterBtnText) enterBtnText.innerText = 'Sign in';
         const titleEl = document.querySelector('.rac-title');
         if (titleEl) titleEl.innerHTML = 'Welcome <span class="rac-title-bold">back</span>';
         const subEl = document.querySelector('.rac-sub');
         if (subEl) subEl.innerText = 'Sign in to your account below.';
+        if (toggleLink) toggleLink.innerText = 'Need an account? Create one';
       }
     };
+
+    // Tab buttons
+    if ($('tab-mode-signin')) {
+      $('tab-mode-signin').onclick = () => {
+        setAuthMode('signin');
+        emailInput?.focus();
+      };
+    }
+    if ($('tab-mode-register')) {
+      $('tab-mode-register').onclick = () => {
+        setAuthMode('register');
+        emailInput?.focus();
+      };
+    }
 
     // Hero Card: Register CTA button
     if ($('hero-register-btn')) {
       $('hero-register-btn').onclick = () => {
         setAuthMode('register');
-        if (emailInput) {
-          emailInput.focus();
-        }
+        emailInput?.focus();
         showToast('Ready to register! Enter your email and password.');
       };
     }
@@ -602,21 +614,26 @@ document.addEventListener('DOMContentLoaded', () => {
         if (passInput && !passInput.value) {
           passInput.value = `Shattered#${Math.floor(1000 + Math.random() * 9000)}!`;
         }
-        enterBtn?.click();
+        handleAuthSubmit();
       };
     }
 
-    // Forgot Password / Toggle Mode link
+    // Toggle link below form
     if ($('returning-toggle-btn')) {
       $('returning-toggle-btn').onclick = (e) => {
         e.preventDefault();
-        if (authMode === 'register') {
-          setAuthMode('signin');
-          $('returning-toggle-btn').innerText = 'Need an account? Register';
-        } else {
-          setAuthMode('register');
-          $('returning-toggle-btn').innerText = 'Already have an account? Sign in';
-        }
+        const nextMode = authMode === 'register' ? 'signin' : 'register';
+        setAuthMode(nextMode);
+        emailInput?.focus();
+      };
+    }
+
+    // Form submission handler
+    const authForm = $('rac-auth-form');
+    if (authForm) {
+      authForm.onsubmit = (e) => {
+        e.preventDefault();
+        handleAuthSubmit();
       };
     }
 
@@ -666,7 +683,7 @@ document.addEventListener('DOMContentLoaded', () => {
         const payload = {
           email: email,
           password: password,
-          username: $('anon-id-text')?.innerText || '',
+          username: email.split('@')[0],
           avatar: getAvatar()
         };
 
@@ -717,8 +734,13 @@ document.addEventListener('DOMContentLoaded', () => {
 
         if (!res.ok) {
           setAuthLoading(false);
-          // Surface real backend error message (duplicate email, validation error, etc.)
-          showAuthError(data.error || 'Authentication request failed. Please try again.');
+          if (res.status === 409) {
+            showAuthError('An account with this email already exists. Please click "Sign In" above to log in.');
+          } else if (res.status === 401) {
+            showAuthError('Invalid email or password. If you do not have an account yet, click "Create Account" above.');
+          } else {
+            showAuthError(data?.error || 'Authentication request failed. Please try again.');
+          }
           return;
         }
 
@@ -3564,6 +3586,25 @@ document.addEventListener('DOMContentLoaded', () => {
       };
     }
 
+    // Mobile Back Button (returns to conversation thread list)
+    const backBtn = $('dm-back-btn');
+    if (backBtn) {
+      backBtn.onclick = () => {
+        activeDmThreadId = null;
+        S.activeDmThread = null;
+        const container = $('dm-container');
+        if (container) {
+          container.classList.remove('dm-active');
+          container.classList.remove('thread-open');
+        }
+        const nts = $('dm-no-thread-selected');
+        const threadView = $('dm-thread');
+        if (nts) nts.classList.remove('hidden');
+        if (threadView) threadView.classList.add('hidden');
+        renderDMInbox($('dm-search-input')?.value || '');
+      };
+    }
+
     // Quick empathy chips in composer
     qa('.dm-emp-chip').forEach(btn => {
       btn.addEventListener('click', (e) => {
@@ -3909,7 +3950,10 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // Update UI elements
     const container = $('dm-container');
-    if (container) container.classList.add('thread-open');
+    if (container) {
+      container.classList.add('thread-open');
+      container.classList.add('dm-active');
+    }
 
     const nts = $('dm-no-thread-selected');
     const threadView = $('dm-thread');

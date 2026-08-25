@@ -11,7 +11,7 @@
       "lastSeen": "Active now"
     },
     "unreadCount": 0,
-    "lastActivity": 1787654008914,
+    "lastActivity": 1787656164727,
     "messages": [
       {
         "id": "msg_ve_0",
@@ -98,6 +98,39 @@
         "duration": null,
         "reaction": null,
         "timestamp": 1787654008914,
+        "status": "received"
+      },
+      {
+        "id": "msg_1787655260164_626065",
+        "sender": "user",
+        "text": "Hey! Have you checked out the new Reels feed in Sonder?",
+        "image": null,
+        "isVoice": false,
+        "duration": null,
+        "reaction": null,
+        "timestamp": 1787655260164,
+        "status": "received"
+      },
+      {
+        "id": "msg_1787655706728_b8dcba",
+        "sender": "user",
+        "text": "Hey! Have you checked out the new Reels feed in Sonder?",
+        "image": null,
+        "isVoice": false,
+        "duration": null,
+        "reaction": null,
+        "timestamp": 1787655706728,
+        "status": "received"
+      },
+      {
+        "id": "msg_1787656164727_0dae81",
+        "sender": "user",
+        "text": "Hey! Have you checked out the new Reels feed in Sonder?",
+        "image": null,
+        "isVoice": false,
+        "duration": null,
+        "reaction": null,
+        "timestamp": 1787656164727,
         "status": "received"
       }
     ]

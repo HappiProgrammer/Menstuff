@@ -96,27 +96,25 @@
       
       <!-- LEFT DARK AUTH CARD (Matches Left Dark Section of Reference) -->
       <div class="register-auth-card">
+        <!-- Explicit Auth Mode Switcher Tabs -->
+        <div class="rac-mode-tabs" id="rac-mode-tabs" role="tablist">
+          <button type="button" class="rac-tab active-tab" id="tab-mode-signin" role="tab" aria-selected="true">Sign In</button>
+          <button type="button" class="rac-tab" id="tab-mode-register" role="tab" aria-selected="false">Create Account</button>
+        </div>
+
         <div class="rac-header">
           <h1 class="rac-title">Welcome <span class="rac-title-bold">back</span></h1>
           <p class="rac-sub">Sign in to your account below.</p>
         </div>
 
-        <form class="rac-form" id="rac-auth-form" onsubmit="event.preventDefault(); $('enter-btn').click();">
+        <form class="rac-form" id="rac-auth-form" novalidate>
           <!-- Real-Time Error & Info Banners -->
           <div id="rac-error-banner" class="rac-error-banner hidden" role="alert" aria-live="assertive"></div>
           <div id="rac-info-banner" class="rac-info-banner hidden" role="status" aria-live="polite"></div>
 
-          <!-- Email / Anonymous ID Field -->
+          <!-- Email Field -->
           <div class="rac-field">
-            <div class="rac-field-header">
-              <label class="rac-label" for="returning-id">Email</label>
-              <div class="rac-anon-badge">
-                <span id="anon-id-text">Generating&hellip;</span>
-                <button type="button" id="refresh-id-btn" class="rac-refresh-btn" title="Generate New Anonymous ID" aria-label="Generate new anonymous ID">
-                  <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="23 4 23 10 17 10"/><polyline points="1 20 1 14 7 14"/><path d="M3.51 9a9 9 0 0 1 14.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0 0 20.49 15"/></svg>
-                </button>
-              </div>
-            </div>
+            <label class="rac-label" for="returning-id">Email</label>
             <input type="email" id="returning-id" class="rac-input" placeholder="you@example.com" autocomplete="email" required />
           </div>
 
@@ -134,14 +132,14 @@
           <button type="submit" class="rac-submit-btn" id="enter-btn">
             <span id="enter-btn-text">Sign in</span>
             <span class="rac-btn-spinner hidden" id="enter-btn-spinner" aria-hidden="true">
-              <svg class="spin-svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="12" cy="12" r="10" stroke-dasharray="32" stroke-dashoffset="12"/></svg>
+              <svg class="spin-svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="12" cy="10" r="10" stroke-dasharray="32" stroke-dashoffset="12"/></svg>
             </span>
           </button>
         </form>
 
         <!-- Footer Link -->
         <div class="rac-footer">
-          <button type="button" class="rac-link-btn" id="returning-toggle-btn">Forgot Password ?</button>
+          <button type="button" class="rac-link-btn" id="returning-toggle-btn">Need an account? Create one</button>
         </div>
       </div>
 
