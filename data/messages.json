@@ -1,0 +1,132 @@
+[
+  {
+    "threadId": "th_velvet_echo",
+    "recipient": {
+      "id": "VelvetEcho#4092",
+      "name": "VelvetEcho",
+      "tag": "VelvetEcho#4092",
+      "avatar": "<svg width=\"18\" height=\"18\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"1.8\" stroke-linecap=\"round\" stroke-linejoin=\"round\"><circle cx=\"12\" cy=\"7\" r=\"4\"/><path d=\"M5.5 21v-2a6.5 6.5 0 0 1 13 0v2\"/></svg>",
+      "online": true,
+      "bio": "Finding peace in the quiet aftermath. Here to listen and hold space.",
+      "lastSeen": "Active now"
+    },
+    "unreadCount": 0,
+    "lastActivity": 1787589339981,
+    "messages": [
+      {
+        "id": "msg_ve_0",
+        "sender": "them",
+        "text": "Hey there. I saw your reflection on healing — just wanted to check in. How are you holding up today?",
+        "timestamp": 1787585676586,
+        "status": "read"
+      },
+      {
+        "id": "msg_ve_1",
+        "sender": "me",
+        "text": "Taking it one hour at a time. Some days are heavier than others.",
+        "timestamp": 1787587176586,
+        "status": "read"
+      },
+      {
+        "id": "msg_ve_2",
+        "sender": "them",
+        "text": "That is completely normal. Healing is messy and non-linear. Be gentle with yourself tonight 🕊️",
+        "timestamp": 1787587896586,
+        "status": "delivered"
+      },
+      {
+        "id": "msg_1787588376626_8922d1",
+        "sender": "me",
+        "text": "Automated test message for Instagram/WhatsApp UI",
+        "image": null,
+        "isVoice": false,
+        "duration": null,
+        "reaction": null,
+        "timestamp": 1787588376603,
+        "status": "read"
+      },
+      {
+        "id": "msg_1787588411924_c06d44",
+        "sender": "me",
+        "text": "Automated test message for Instagram/WhatsApp UI",
+        "image": null,
+        "isVoice": false,
+        "duration": null,
+        "reaction": null,
+        "timestamp": 1787588411921,
+        "status": "read"
+      },
+      {
+        "id": "msg_1787589339981_3a9e94",
+        "sender": "user",
+        "text": "Hey! Have you checked out the new Reels feed in Sonder?",
+        "image": null,
+        "isVoice": false,
+        "duration": null,
+        "reaction": null,
+        "timestamp": 1787589339981,
+        "status": "received"
+      }
+    ]
+  },
+  {
+    "threadId": "th_solitary_wanderer",
+    "recipient": {
+      "id": "SolitaryWanderer#8812",
+      "name": "SolitaryWanderer",
+      "tag": "SolitaryWanderer#8812",
+      "avatar": "<svg width=\"18\" height=\"18\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"1.8\" stroke-linecap=\"round\" stroke-linejoin=\"round\"><path d=\"M7 7.5a5 5 0 0 1 10 0v1H7V7.5z\"/><circle cx=\"12\" cy=\"10\" r=\"3\"/><path d=\"M5.5 21v-2a6.5 6.5 0 0 1 13 0v2\"/></svg>",
+      "online": true,
+      "bio": "3 months post-breakup. Rebuilding day by day through mountains and music.",
+      "lastSeen": "Active now"
+    },
+    "unreadCount": 0,
+    "lastActivity": 1787586576586,
+    "messages": [
+      {
+        "id": "msg_sw_0",
+        "sender": "them",
+        "text": "Have you listened to that new track in the Music Room? Really helped me get through a rough evening.",
+        "timestamp": 1787581176586,
+        "status": "read"
+      },
+      {
+        "id": "msg_sw_1",
+        "sender": "me",
+        "text": "Not yet! Which one was it?",
+        "timestamp": 1787582676586,
+        "status": "read"
+      },
+      {
+        "id": "msg_sw_2",
+        "sender": "them",
+        "text": "'Glimpse of Us' — hit deep, but brought a weird sense of closure. Give it a listen when you're ready 🎧",
+        "timestamp": 1787586576586,
+        "status": "read"
+      }
+    ]
+  },
+  {
+    "threadId": "th_quiet_rain",
+    "recipient": {
+      "id": "QuietRain#1943",
+      "name": "QuietRain",
+      "tag": "QuietRain#1943",
+      "avatar": "<svg width=\"18\" height=\"18\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"1.8\" stroke-linecap=\"round\" stroke-linejoin=\"round\"><path d=\"M9 3.5c2-1 5.5-.8 7 1 1 1.2 1.5 2.8 1.5 4.5v1c-.5.5-1.5.5-2 0V9a3.5 3.5 0 0 0-7 0v2a4 4 0 0 1-1.5-2.2C7 6.5 7.5 4.5 9 3.5z\"/><path d=\"M5.5 21v-2a6.5 6.5 0 0 1 13 0v2\"/></svg>",
+      "online": false,
+      "bio": "Night owl & writer. Finding strength in vulnerability.",
+      "lastSeen": "Seen 15m ago"
+    },
+    "unreadCount": 0,
+    "lastActivity": 1787570376586,
+    "messages": [
+      {
+        "id": "msg_qr_0",
+        "sender": "them",
+        "text": "Remember: someone else's inability to see your worth never decreases your actual value.",
+        "timestamp": 1787570376586,
+        "status": "read"
+      }
+    ]
+  }
+]
