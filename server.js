@@ -616,22 +616,49 @@ app.post('/api/reels/:reelId/comment', (req, res) => {
   }
 });
 
-// Explicit root and static routes for Vercel serverless environment
+// Explicit static asset routes with guaranteed MIME types for Vercel Serverless
 app.get('/', (req, res) => {
   res.sendFile(path.join(__dirname, 'index.html'));
 });
 
+app.get('/styles.css', (req, res) => {
+  res.type('text/css');
+  res.sendFile(path.join(__dirname, 'styles.css'));
+});
+
+app.get('/app.js', (req, res) => {
+  res.type('application/javascript');
+  res.sendFile(path.join(__dirname, 'app.js'));
+});
+
+app.get('/favicon.svg', (req, res) => {
+  res.type('image/svg+xml');
+  res.sendFile(path.join(__dirname, 'favicon.svg'));
+});
+
 app.get('/favicon.ico', (req, res) => {
+  res.type('image/svg+xml');
   res.sendFile(path.join(__dirname, 'favicon.svg'));
 });
 
 app.get('/favicon.png', (req, res) => {
+  res.type('image/svg+xml');
   res.sendFile(path.join(__dirname, 'favicon.svg'));
 });
 
-// Wildcard fallback to index.html for SPA routing
+app.get('/register-bg.jpg', (req, res) => {
+  res.type('image/jpeg');
+  res.sendFile(path.join(__dirname, 'register-bg.jpg'));
+});
+
+app.get('/register-hero.jpg', (req, res) => {
+  res.type('image/jpeg');
+  res.sendFile(path.join(__dirname, 'register-hero.jpg'));
+});
+
+// Wildcard fallback ONLY for SPA page routes (not for missing assets)
 app.get('*', (req, res, next) => {
-  if (req.path.startsWith('/api')) {
+  if (req.path.startsWith('/api') || req.path.includes('.')) {
     return next();
   }
   res.sendFile(path.join(__dirname, 'index.html'));

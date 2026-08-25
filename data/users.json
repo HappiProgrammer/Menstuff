@@ -88,5 +88,15 @@
     "avatar": null,
     "createdAt": "2026-08-25T10:17:56.145Z",
     "bio": ""
+  },
+  {
+    "id": "u_1787654008355_c0317140",
+    "email": "reels_tester_1787654007414@shattered.io",
+    "username": "Anonymous#8432",
+    "passwordHash": "$2a$12$zHm7IRqA/1iMu0NX55qiPei2PJqK8xsHuHEb/xEzBfKuwm21SzK9a",
+    "role": "user",
+    "avatar": null,
+    "createdAt": "2026-08-25T10:33:28.355Z",
+    "bio": ""
   }
 ]

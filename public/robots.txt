@@ -1,0 +1,5 @@
+# Shattered — robots.txt
+User-agent: *
+Allow: /
+
+Sitemap: https://shattered.app/sitemap.xml

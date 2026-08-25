@@ -1,0 +1,1873 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+  <!-- Primary SEO -->
+  <title>Sonder — Anonymous Stories, Healing &amp; Relationship Wisdom</title>
+  <meta name="description" content="Sonder is an anonymous community where hearts connect, stories heal, and relationship insights bring clarity. Share freely with zero judgment." />
+  <link rel="canonical" href="https://sonder.app/" />
+
+  <!-- Open Graph -->
+  <meta property="og:type" content="website" />
+  <meta property="og:url" content="https://sonder.app/" />
+  <meta property="og:title" content="Sonder — Anonymous Stories, Healing &amp; Relationship Wisdom" />
+  <meta property="og:description" content="An anonymous community where hearts connect, stories heal, and relationship insights bring clarity." />
+  <meta property="og:image" content="https://sonder.app/og-image.png" />
+  <meta property="og:image:width" content="1200" />
+  <meta property="og:image:height" content="630" />
+  <meta property="og:site_name" content="Sonder" />
+
+  <!-- Twitter Card -->
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:title" content="Sonder — Anonymous Stories, Healing &amp; Relationship Wisdom" />
+  <meta name="twitter:description" content="An anonymous community where hearts connect, stories heal, and relationship insights bring clarity." />
+  <meta name="twitter:image" content="https://sonder.app/og-image.png" />
+
+  <!-- Favicon -->
+  <link rel="icon" href="favicon.svg?v=2" type="image/svg+xml" />
+
+  <!-- Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400&family=Inter:wght@300;400;500;600&family=Dancing+Script:wght@600&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="styles.css?v=24" />
+
+  <!-- JSON-LD Structured Data -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@graph": [
+      {
+        "@type": "WebSite",
+        "@id": "https://sonder.app/#website",
+        "url": "https://sonder.app/",
+        "name": "Sonder",
+        "description": "An anonymous social community for heartfelt stories and relationship advice.",
+        "potentialAction": {
+          "@type": "SearchAction",
+          "target": "https://sonder.app/#search",
+          "query-input": "required name=search_term_string"
+        }
+      },
+      {
+        "@type": "WebApplication",
+        "@id": "https://sonder.app/#app",
+        "name": "Sonder",
+        "url": "https://sonder.app/",
+        "applicationCategory": "SocialNetworkingApplication",
+        "operatingSystem": "Any",
+        "offers": { "@type": "Offer", "price": "0", "priceCurrency": "USD" },
+        "description": "Anonymous heartbreak stories, live relationship advice news, music playlists, mood tracking, private diary, and direct messages."
+      }
+    ]
+  }
+  </script>
+</head>
+<body>
+  <!-- TOP NAVIGATION -->
+  <nav id="top-nav" class="hidden" aria-label="Top navigation">
+    <ul class="top-nav-list">
+      <li><a href="#feed" class="top-nav-link active-top-nav" data-pane="feed">Home</a></li>
+      <li><a href="#explore" class="top-nav-link" data-pane="explore">Explore</a></li>
+      <li><a href="#advice" class="top-nav-link" data-pane="advice">Advice &amp; News</a></li>
+      <li><a href="#messages" class="top-nav-link" data-pane="messages">Messages</a></li>
+      <li><a href="#music" class="top-nav-link" data-pane="music">Music</a></li>
+      <li><a href="#healing" class="top-nav-link" data-pane="healing">Healing</a></li>
+      <li><a href="#diary" class="top-nav-link" data-pane="diary">Diary</a></li>
+      <li><a href="#saved" class="top-nav-link" data-pane="saved">Saved</a></li>
+      <li><a href="#about" class="top-nav-link" data-pane="about">About</a></li>
+      <li><a href="#contact" class="top-nav-link" data-pane="contact">Contact</a></li>
+      <li><a href="#profile" class="top-nav-link" data-pane="profile">Profile</a></li>
+    </ul>
+  </nav>
+
+<!-- ============================================
+     REGISTER / LANDING PAGE (Referencing Split Dual-Card Design)
+============================================ -->
+<div id="landing-page" class="page active">
+  <div class="land-mist-bg"></div>
+  <div class="land-particles" id="particles"></div>
+
+  <div class="register-stage">
+    <!-- SPLIT DUAL-CARD CONTAINER -->
+    <div class="register-split-card">
+      
+      <!-- LEFT DARK AUTH CARD (Matches Left Dark Section of Reference) -->
+      <div class="register-auth-card">
+        <div class="rac-header">
+          <h1 class="rac-title">Welcome <span class="rac-title-bold">back</span></h1>
+          <p class="rac-sub">Sign in to your account below.</p>
+        </div>
+
+        <form class="rac-form" id="rac-auth-form" onsubmit="event.preventDefault(); $('enter-btn').click();">
+          <!-- Real-Time Error & Info Banners -->
+          <div id="rac-error-banner" class="rac-error-banner hidden" role="alert" aria-live="assertive"></div>
+          <div id="rac-info-banner" class="rac-info-banner hidden" role="status" aria-live="polite"></div>
+
+          <!-- Email / Anonymous ID Field -->
+          <div class="rac-field">
+            <div class="rac-field-header">
+              <label class="rac-label" for="returning-id">Email</label>
+              <div class="rac-anon-badge">
+                <span id="anon-id-text">Generating&hellip;</span>
+                <button type="button" id="refresh-id-btn" class="rac-refresh-btn" title="Generate New Anonymous ID" aria-label="Generate new anonymous ID">
+                  <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="23 4 23 10 17 10"/><polyline points="1 20 1 14 7 14"/><path d="M3.51 9a9 9 0 0 1 14.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0 0 20.49 15"/></svg>
+                </button>
+              </div>
+            </div>
+            <input type="email" id="returning-id" class="rac-input" placeholder="you@example.com" autocomplete="email" required />
+          </div>
+
+          <!-- Password Field -->
+          <div class="rac-field">
+            <label class="rac-label" for="rac-password-input">Password <span style="font-size:11px; opacity:0.75;">(min 8 chars, 1 number/symbol)</span></label>
+            <input type="password" id="rac-password-input" class="rac-input" placeholder="&bull;&bull;&bull;&bull;&bull;&bull;&bull;&bull;" autocomplete="current-password" required />
+          </div>
+
+          <div class="hidden" id="returning-wrap">
+            <p class="lc-error hidden" id="returning-error">ID not found. Try creating a new one.</p>
+          </div>
+
+          <!-- Primary Emerald Mint CTA Button -->
+          <button type="submit" class="rac-submit-btn" id="enter-btn">
+            <span id="enter-btn-text">Sign in</span>
+            <span class="rac-btn-spinner hidden" id="enter-btn-spinner" aria-hidden="true">
+              <svg class="spin-svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="12" cy="12" r="10" stroke-dasharray="32" stroke-dashoffset="12"/></svg>
+            </span>
+          </button>
+        </form>
+
+        <!-- Footer Link -->
+        <div class="rac-footer">
+          <button type="button" class="rac-link-btn" id="returning-toggle-btn">Forgot Password ?</button>
+        </div>
+      </div>
+
+      <!-- RIGHT LIGHT HERO CARD (Matches Right Light Section of Reference) -->
+      <div class="register-hero-card">
+        <!-- Logo & Brand Header -->
+        <div class="rhc-brand">
+          <div class="rhc-logo-emblem">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#00c795" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/><circle cx="12" cy="11" r="2.5" fill="#00c795"/></svg>
+          </div>
+          <div class="rhc-brand-text">
+            <span class="rhc-brand-name">Sonder <span class="rhc-brand-subword">Community</span></span>
+            <span class="rhc-brand-tag">Every heart has a story</span>
+          </div>
+        </div>
+
+        <!-- Hero Headline -->
+        <div class="rhc-headline-wrap">
+          <h2 class="rhc-headline">
+            Every Heart <span class="rhc-badge">Has a Story</span>
+          </h2>
+          <p class="rhc-subheadline">
+            Connect anonymously, find healing, and explore <strong>real relationship wisdom</strong>.
+          </p>
+        </div>
+
+        <!-- Action Buttons -->
+        <div class="rhc-actions">
+          <button type="button" class="rhc-btn-outline" id="hero-register-btn">Register</button>
+          <button type="button" class="rhc-btn-text" id="hero-free-btn">Try for Free</button>
+        </div>
+
+        <!-- Hero Imagery (Hiker in turquoise jacket on mountain rock summit) -->
+        <div class="rhc-imagery-wrap">
+          <img src="register-hero.jpg" alt="Hiker in turquoise jacket overlooking misty mountain peak" class="rhc-img" loading="eager" />
+        </div>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+<!-- ============================================
+     APP — IG LAYOUT
+============================================ -->
+<div id="app-page" class="page hidden">
+
+  <!-- LEFT SIDEBAR -->
+  <aside class="ig-sidebar" id="ig-sidebar">
+    <div class="ig-logo">
+      <svg class="ig-logo-icon" width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/><circle cx="12" cy="10" r="2" fill="var(--accent)"/></svg>
+      <span class="ig-logo-text">Sonder</span>
+    </div>
+
+    <nav class="ig-nav" aria-label="Main navigation">
+      <button class="ig-nav-item active-nav" data-pane="feed" id="nav-feed" aria-label="Home feed">
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" aria-hidden="true"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
+        <span>Home</span>
+      </button>
+      <button class="ig-nav-item" data-pane="search" id="nav-search" aria-label="Search stories">
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" aria-hidden="true"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+        <span>Search</span>
+      </button>
+      <button class="ig-nav-item" data-pane="explore" id="nav-explore" aria-label="Explore community posts">
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" aria-hidden="true"><circle cx="12" cy="12" r="10"/><polygon points="16.24 7.76 14.12 14.12 7.76 16.24 9.88 9.88 16.24 7.76"/></svg>
+        <span>Explore</span>
+      </button>
+      <button class="ig-nav-item" data-pane="reels" id="nav-reels" aria-label="Reels & Stories Video Feed">
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="2" y="2" width="20" height="20" rx="5" ry="5"/><path d="M16 2v20M8 2v20M2 12h20M2 7h6M2 17h6M16 17h6M16 7h6"/></svg>
+        <span>Reels</span>
+      </button>
+      <button class="ig-nav-item" data-pane="advice" id="nav-advice" aria-label="Relationship Advice & News">
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/><line x1="8" y1="7" x2="16" y2="7"/><line x1="8" y1="11" x2="14" y2="11"/></svg>
+        <span>Advice &amp; News</span>
+      </button>
+      <button class="ig-nav-item" data-pane="messages" id="nav-messages" aria-label="Direct messages">
+        <span class="ig-notif-wrap">
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" aria-hidden="true"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
+          <span class="notif-badge hidden" id="dm-badge">0</span>
+        </span>
+        <span>Messages</span>
+      </button>
+      <button class="ig-nav-item" data-pane="music" id="nav-music" aria-label="Music Room">
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" aria-hidden="true"><path d="M9 18V5l12-2v13"/><circle cx="6" cy="18" r="3"/><circle cx="18" cy="16" r="3"/></svg>
+        <span>Music Room</span>
+      </button>
+      <button class="ig-nav-item" data-pane="healing" id="nav-healing" aria-label="Healing Hub">
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" aria-hidden="true"><path d="M11 20A7 7 0 0 1 9.8 6.1C15.5 5 17 4.48 19 2c1 2 2 4.18 2 8 0 5.5-4.78 10-10 10z"/><path d="M2 21c0-3 1.85-5.36 5.08-6C9.5 14.52 12 13 13 12"/></svg>
+        <span>Healing Hub</span>
+      </button>
+      <button class="ig-nav-item" data-pane="diary" id="nav-diary" aria-label="Private Diary">
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" aria-hidden="true"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/></svg>
+        <span>Diary</span>
+      </button>
+      <button class="ig-nav-item" data-pane="saved" id="nav-saved" aria-label="Saved posts">
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" aria-hidden="true"><path d="M19 21l-7-5-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z"/></svg>
+        <span>Saved</span>
+      </button>
+      <button class="ig-nav-item" data-pane="notif" id="nav-notif" aria-label="Notifications">
+        <span class="ig-notif-wrap">
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" aria-hidden="true"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/></svg>
+          <span class="notif-badge hidden" id="notif-badge">0</span>
+        </span>
+        <span>Notifications</span>
+      </button>
+      <button class="ig-nav-item" data-pane="profile" id="nav-profile" aria-label="Profile">
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" aria-hidden="true"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+        <span>Profile</span>
+      </button>
+      <button class="ig-nav-item" data-pane="about" id="nav-about" aria-label="About Sonder">
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" aria-hidden="true"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+        <span>About</span>
+      </button>
+      <button class="ig-nav-item" data-pane="contact" id="nav-contact" aria-label="Contact Us">
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" aria-hidden="true"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
+        <span>Contact</span>
+      </button>
+      <button class="ig-nav-item ig-create-btn" id="nav-create" aria-label="Create new story">
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" aria-hidden="true"><rect x="3" y="3" width="18" height="18" rx="2"/><line x1="12" y1="8" x2="12" y2="16"/><line x1="8" y1="12" x2="16" y2="12"/></svg>
+        <span>New Story</span>
+      </button>
+    </nav>
+
+    <div class="ig-sidebar-foot">
+      <div class="ig-sound-row">
+        <button class="ig-sound-btn" id="ambient-sound-btn">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M11 5L6 9H2v6h4l5 4V5z"/><path d="M19.07 4.93a10 10 0 0 1 0 14.14"/><path d="M15.54 8.46a5 5 0 0 1 0 7.07"/></svg>
+        </button>
+        <span class="ig-sound-label" id="ig-sound-label">No Sound</span>
+        <div class="sound-dropdown hidden" id="sound-dropdown">
+          <button class="sound-opt" data-sound="off">Off</button>
+          <button class="sound-opt" data-sound="rain">Rain</button>
+          <button class="sound-opt" data-sound="noise">White Noise</button>
+          <button class="sound-opt" data-sound="lofi">Lo-fi</button>
+        </div>
+      </div>
+      <div class="ig-profile-row" data-pane="profile" title="View your profile">
+        <div class="ig-profile-avatar" id="sidebar-avatar"></div>
+        <div class="ig-profile-info">
+          <div class="ig-profile-id" id="sidebar-user-id"></div>
+          <span class="ig-online-tag"><span class="online-dot-sm"></span> Online</span>
+        </div>
+        <button class="ig-logout-btn" id="logout-btn" title="Log out">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></svg>
+        </button>
+      </div>
+    </div>
+  </aside>
+
+  <!-- MAIN CONTENT -->
+  <div class="ig-main" id="ig-main">
+
+    <!-- MOBILE TOP BAR -->
+    <header class="mobile-top-bar" aria-label="Mobile application header">
+      <div class="mobile-brand" data-pane="feed">
+        <svg class="mobile-logo-icon" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="var(--accent)" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/><circle cx="12" cy="10" r="2" fill="var(--accent)"/></svg>
+        <span class="mobile-brand-title">Sonder</span>
+      </div>
+      <div class="mobile-top-actions">
+        <button type="button" class="sos-pill-btn" id="sos-pill-btn" title="Emergency Box Breathing &amp; Impulse Cooldown">
+          <span class="sos-dot"></span>
+          <span>SOS Cooldown</span>
+        </button>
+        <button class="mobile-icon-btn" data-pane="notif" aria-label="Notifications">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/></svg>
+          <span class="notif-badge hidden" id="mobile-notif-dot">0</span>
+        </button>
+        <button class="mobile-icon-btn" data-pane="music" aria-label="Music Room">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path d="M9 18V5l12-2v13"/><circle cx="6" cy="18" r="3"/><circle cx="18" cy="16" r="3"/></svg>
+        </button>
+      </div>
+    </header>
+
+    <!-- FEED PANE -->
+    <div id="pane-feed" class="ig-pane">
+      <div class="feed-inner">
+
+        <!-- Stories Bar -->
+        <div class="stories-scroll-wrap">
+          <div class="stories-bar" id="stories-bar">
+            <div class="story-bubble your-story-bubble" id="your-story-bubble">
+              <div class="story-ring-wrap add-ring">
+                <div class="story-avatar" id="your-story-avatar">
+                  <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+                </div>
+              </div>
+              <span class="story-name">Your Story</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- 24-Hour Daily Community Prompt Card -->
+        <div class="daily-prompt-card" id="daily-prompt-card">
+          <div class="dpc-top">
+            <div class="dpc-badge">
+              <span class="live-dot-inline"></span> Daily Sonder Question &bull; Resets at Midnight
+            </div>
+            <span class="dpc-countdown" id="dpc-countdown">Resets in 9h 42m</span>
+          </div>
+          <h3 class="dpc-question" id="dpc-question">&ldquo;What is something you forgave them for that you now realize you shouldn&rsquo;t have?&rdquo;</h3>
+          <p class="dpc-sub">Share your anonymous perspective to join today&rsquo;s community reflection.</p>
+          <div class="dpc-actions">
+            <button type="button" class="dpc-answer-btn" id="dpc-answer-btn">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M12 20h9"/><path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"/></svg>
+              <span>Answer Question</span>
+            </button>
+            <button type="button" class="dpc-export-btn" id="dpc-export-btn" title="Export Question as Social Quote Card">
+              <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2" ry="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg>
+              <span>Export Card</span>
+            </button>
+          </div>
+        </div>
+
+        <!-- Write Bar -->
+        <div class="write-bar" id="write-bar">
+          <div class="write-bar-avatar" id="write-bar-avatar"></div>
+          <div class="write-bar-pill" id="write-trigger">What broke your heart?</div>
+          <button class="write-bar-btn" id="write-bar-btn">Share</button>
+        </div>
+
+        <!-- Feed Header -->
+        <div class="feed-header-strip">
+          <div class="live-badge-row">
+            <span class="live-dot-pulse"></span>
+            <span class="live-label">Live Feed</span>
+          </div>
+          <div class="feed-header-right">
+            <span id="stories-count-label" class="stories-count-label"></span>
+            <select class="ig-filter-select" id="filter-select">
+              <option value="all">All emotions</option>
+              <option value="heartbreak">Heartbreak</option>
+              <option value="betrayal">Betrayal</option>
+              <option value="longing">Longing</option>
+              <option value="healing">Healing</option>
+              <option value="anger">Anger</option>
+              <option value="acceptance">Acceptance</option>
+            </select>
+          </div>
+        </div>
+
+        <!-- Posts -->
+        <div id="ig-posts-list" class="ig-posts-list"></div>
+
+        <div class="feed-end" id="feed-end">
+          <div class="feed-end-line"></div>
+          <span class="feed-end-text">You&rsquo;re all caught up</span>
+          <div class="feed-end-line"></div>
+        </div>
+        <div class="empty-feed hidden" id="empty-feed">
+          <p>No stories match this filter.</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- SEARCH PANE -->
+    <div id="pane-search" class="ig-pane hidden">
+      <div class="search-pane">
+        <div class="search-box">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+          <input type="text" id="search-input" class="search-box-input" placeholder="Search stories&hellip;" autocomplete="off" />
+          <button class="search-clear hidden" id="search-clear">&times;</button>
+        </div>
+        <div id="search-results" class="search-results">
+          <p class="search-hint">Search for keywords, titles, or emotions</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- MUSIC PANE -->
+    <div id="pane-music" class="ig-pane hidden">
+      <!-- Sticky Pane Header -->
+      <div class="pane-sticky-header">
+        <div class="pane-sticky-title">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M9 18V5l12-2v13"/><circle cx="6" cy="18" r="3"/><circle cx="18" cy="16" r="3"/></svg>
+          Music Room
+        </div>
+        <p class="pane-sticky-sub">Stream legal music, soothing lo-fi, official Spotify albums, SoundCloud mixes, and ambient frequencies.</p>
+      </div>
+      <div class="pane-inner">
+        <!-- Audio Source Switcher -->
+        <div class="music-source-tabs" id="music-source-tabs" role="tablist">
+          <button class="source-tab-btn active-source" data-source="direct" role="tab">
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polygon points="10 8 16 12 10 16 10 8"/></svg>
+            <span>Direct Audio &amp; Lo-Fi</span>
+          </button>
+          <button class="source-tab-btn" data-source="spotify" role="tab">
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="currentColor"><path d="M12 0C5.373 0 0 5.373 0 12s5.373 12 12 12 12-5.373 12-12S18.627 0 12 0zm5.503 17.31c-.216.353-.674.467-1.027.25-2.812-1.718-6.352-2.107-10.52-1.155-.403.092-.806-.16-.898-.563-.092-.403.16-.806.563-.898 4.567-1.042 8.48-.6 11.632 1.339.353.217.467.674.25 1.027zm1.468-3.26c-.272.441-.853.582-1.294.31-3.22-1.979-8.128-2.55-11.936-1.393-.497.151-1.028-.135-1.179-.632-.151-.497.135-1.028.632-1.179 4.358-1.323 9.774-.683 13.467 1.589.441.272.582.853.31 1.294zm.126-3.41c-3.861-2.293-10.229-2.504-13.91-1.386-.593.18-1.222-.16-1.402-.753-.18-.593.16-1.222.753-1.402 4.238-1.287 11.275-1.036 15.719 1.603.533.316.708 1.011.392 1.544-.316.533-1.011.708-1.544.392z"/></svg>
+            <span>Spotify</span>
+          </button>
+          <button class="source-tab-btn" data-source="soundcloud" role="tab">
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="currentColor"><path d="M11.56 8.87V17h9.54c1.6 0 2.9-1.3 2.9-2.9 0-1.57-1.25-2.85-2.81-2.9-.19-2.22-2.06-3.96-4.34-3.96-.92 0-1.78.29-2.48.78-.45-.44-1.05-.72-1.71-.72-.37 0-.72.09-1.03.24-.04.1-.07.2-.07.33v1.01zM1.77 13.23c-.43 0-.77.34-.77.77v1.94c0 .43.34.77.77.77s.77-.34.77-.77V14c0-.43-.34-.77-.77-.77zm2.46-1.63c-.43 0-.77.34-.77.77v4.46c0 .43.34.77.77.77s.77-.34.77-.77v-4.46c0-.43-.34-.77-.77-.77zm2.46-1.36c-.43 0-.77.34-.77.77v6.08c0 .43.34.77.77.77s.77-.34.77-.77V11c0-.43-.34-.77-.77-.77zm2.46-.82c-.43 0-.77.34-.77.77v7.17c0 .43.34.77.77.77s.77-.34.77-.77V10.2c0-.43-.34-.77-.77-.77z"/></svg>
+            <span>SoundCloud</span>
+          </button>
+          <button class="source-tab-btn" data-source="ambient" role="tab">
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 16.2A4.5 4.5 0 0 0 17.5 8h-1.8A7 7 0 1 0 4 14.9"/><path d="M8 19v2"/><path d="M8 13v2"/><path d="M12 21v2"/><path d="M12 15v2"/><path d="M16 19v2"/><path d="M16 13v2"/></svg>
+            <span>Sound Sanctuary</span>
+          </button>
+          <button class="source-tab-btn" data-source="youtube" role="tab">
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="currentColor"><path d="M19.615 3.184c-3.604-.246-11.631-.245-15.23 0-3.897.266-4.356 2.62-4.385 8.816.029 6.185.484 8.549 4.385 8.816 3.6.245 11.626.246 15.23 0 3.897-.266 4.356-2.62 4.385-8.816-.029-6.185-.484-8.549-4.385-8.816zm-10.615 12.816v-8l8 3.993-8 4.007z"/></svg>
+            <span>YouTube</span>
+          </button>
+        </div>
+
+        <!-- ═══════════════════════════════════════════════════════════
+             1. DIRECT AUDIO & LO-FI ENGINE (Zero-Error, HTML5 Audio)
+             ═══════════════════════════════════════════════════════════ -->
+        <div class="source-pane active-source-pane" id="pane-source-direct">
+          <!-- Mood Filter -->
+          <div class="direct-mood-chips" id="direct-mood-chips">
+            <button class="direct-chip active-chip" data-mood="heartbreak">💔 Heartbreak</button>
+            <button class="direct-chip" data-mood="healing">🌿 Healing &amp; Calm</button>
+            <button class="direct-chip" data-mood="lofi">🌧️ Lo-Fi &amp; Piano</button>
+            <button class="direct-chip" data-mood="letitout">😤 Cathartic</button>
+            <button class="direct-chip" data-mood="movingon">🚀 Moving On</button>
+          </div>
+
+          <div class="music-layout">
+            <!-- Main Player Card -->
+            <div class="player-card" id="direct-player-card">
+              <!-- Disc Art + Glow -->
+              <div class="player-display">
+                <div class="player-art-wrap">
+                  <div class="player-art-disc" id="direct-art-disc">
+                    <div class="player-art-center"></div>
+                  </div>
+                  <div class="player-art-glow"></div>
+                </div>
+
+                <!-- Equalizer Visualizer -->
+                <div class="eq-bars" id="direct-eq-bars">
+                  <span class="eq-bar"></span>
+                  <span class="eq-bar"></span>
+                  <span class="eq-bar"></span>
+                  <span class="eq-bar"></span>
+                  <span class="eq-bar"></span>
+                  <span class="eq-bar"></span>
+                  <span class="eq-bar"></span>
+                  <span class="eq-bar"></span>
+                </div>
+              </div>
+
+              <!-- Track Info -->
+              <div class="player-info">
+                <div class="player-tag" id="direct-mood-tag">Heartbreak Mood</div>
+                <h3 class="player-title" id="direct-track-title">Someone You Loved</h3>
+                <p class="player-artist" id="direct-track-artist">Acoustic Piano &amp; Cello</p>
+              </div>
+
+              <!-- Progress Bar -->
+              <div class="player-progress-section">
+                <div class="progress-bar-wrap" id="direct-progress-wrap" role="slider" aria-label="Seek track" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0" tabindex="0">
+                  <div class="progress-bar-fill" id="direct-progress-fill"></div>
+                </div>
+                <div class="progress-times">
+                  <span id="direct-time-cur">0:00</span>
+                  <span id="direct-time-total">3:24</span>
+                </div>
+              </div>
+
+              <!-- Controls -->
+              <div class="player-controls">
+                <button class="player-ctrl-btn" id="direct-prev-btn" aria-label="Previous Track">
+                  <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="19 20 9 12 19 4 19 20"/><line x1="5" y1="19" x2="5" y2="5"/></svg>
+                </button>
+                <button class="player-play-btn" id="direct-play-btn" aria-label="Play or Pause Track">
+                  <svg id="direct-play-icon" width="22" height="22" viewBox="0 0 24 24" fill="currentColor"><polygon points="6 3 20 12 6 21 6 3"/></svg>
+                  <svg id="direct-pause-icon" class="hidden" width="22" height="22" viewBox="0 0 24 24" fill="currentColor"><rect x="6" y="4" width="4" height="16"/><rect x="14" y="4" width="4" height="16"/></svg>
+                </button>
+                <button class="player-ctrl-btn" id="direct-next-btn" aria-label="Next Track">
+                  <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="5 4 15 12 5 20 5 4"/><line x1="19" y1="5" x2="19" y2="19"/></svg>
+                </button>
+              </div>
+
+              <!-- Footer Volume -->
+              <div class="player-footer">
+                <div class="player-volume-row">
+                  <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"/><path d="M15.54 8.46a5 5 0 0 1 0 7.07"/></svg>
+                  <input type="range" id="direct-volume" min="0" max="100" value="80" class="player-vol-slider" aria-label="Volume" />
+                </div>
+                <span class="badge-legal">✓ 100% DRM-Free Audio</span>
+              </div>
+            </div>
+
+            <!-- Queue Drawer Card -->
+            <div class="song-list-card" id="direct-queue-card">
+              <div class="song-list-header">
+                <h3 class="song-list-title">Up Next</h3>
+                <button class="clear-queue-btn" id="direct-clear-queue">Clear Queue</button>
+              </div>
+              <div id="direct-queue-container" class="songs-container"></div>
+            </div>
+          </div>
+
+          <!-- Direct Audio Track Catalogue -->
+          <div class="audio-catalog-section">
+            <h3 class="audio-catalog-title">Curated Emotional Catalogue</h3>
+            <div class="audio-catalog-grid" id="audio-catalog-grid"></div>
+          </div>
+        </div>
+
+        <!-- ═══════════════════════════════════════════════════════════
+             2. SPOTIFY OFFICIAL EMBED HUB
+             ═══════════════════════════════════════════════════════════ -->
+        <div class="source-pane hidden" id="pane-source-spotify">
+          <div class="spotify-header-row">
+            <div>
+              <h3 class="spotify-title">Spotify Official Music Hub</h3>
+              <p class="spotify-sub">Official streaming with full tracks for Spotify users &amp; high-res previews.</p>
+            </div>
+          </div>
+
+          <!-- Album / Playlist Quick Switcher -->
+          <div class="spotify-album-chips" id="spotify-album-chips">
+            <button class="spotify-chip active-spotify-chip" data-spotify-uri="album/6s8qw0Vn1vGbsqZox90k1A">💔 Olivia Rodrigo — SOUR</button>
+            <button class="spotify-chip" data-spotify-uri="album/1xJHno549zEBi246tlPp1j">💔 Olivia Rodrigo — GUTS</button>
+            <button class="spotify-chip" data-spotify-uri="album/21jF5jlMt19JwTdFFVGnIH">💔 Adele — 30</button>
+            <button class="spotify-chip" data-spotify-uri="album/0nsc24XU66g8pQ3lK37rT4">🌧️ Lewis Capaldi — Divinely Uninspired</button>
+            <button class="spotify-chip" data-spotify-uri="playlist/37i9dQZF1DX4sWSpwq3LiO">🌿 Peaceful Piano &amp; Healing</button>
+            <button class="spotify-chip" data-spotify-uri="playlist/37i9dQZF1DXbrUpGwg3EUZ">🌧️ Sad Beats &amp; Broken Hearts</button>
+          </div>
+
+          <div class="spotify-embed-card">
+            <iframe id="spotify-iframe" style="border-radius:12px; width:100%; height:380px; border:none;" src="https://open.spotify.com/embed/album/6s8qw0Vn1vGbsqZox90k1A?utm_source=generator&theme=0" allowfullscreen="" allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture" loading="lazy"></iframe>
+          </div>
+        </div>
+
+        <!-- ═══════════════════════════════════════════════════════════
+             3. SOUNDCLOUD OFFICIAL EMBED HUB
+             ═══════════════════════════════════════════════════════════ -->
+        <div class="source-pane hidden" id="pane-source-soundcloud">
+          <div class="sc-header-row">
+            <div>
+              <h3 class="sc-title">SoundCloud Acoustic &amp; Indie Hub</h3>
+              <p class="sc-sub">Stream unrestricted acoustic covers, indie heartbreak songs, and emotional mixes.</p>
+            </div>
+          </div>
+
+          <!-- SoundCloud Selector Chips -->
+          <div class="sc-selector-chips" id="sc-selector-chips">
+            <button class="sc-chip active-sc-chip" data-sc-url="https%3A//api.soundcloud.com/playlists/284050720">💔 Acoustic Heartbreak Covers</button>
+            <button class="sc-chip" data-sc-url="https%3A//api.soundcloud.com/playlists/404179331">🌧️ Midnight Sad Lo-Fi</button>
+            <button class="sc-chip" data-sc-url="https%3A//api.soundcloud.com/playlists/673891461">🌿 Healing Ambient Piano</button>
+            <button class="sc-chip" data-sc-url="https%3A//api.soundcloud.com/tracks/312015093">🎸 Lord Huron — The Night We Met</button>
+          </div>
+
+          <div class="sc-embed-card">
+            <iframe id="soundcloud-iframe" width="100%" height="380" scrolling="no" frameborder="no" allow="autoplay" src="https://w.soundcloud.com/player/?url=https%3A//api.soundcloud.com/playlists/284050720&color=%23d85c80&auto_play=false&hide_related=true&show_comments=false&show_user=true&show_reposts=false&show_teaser=false"></iframe>
+          </div>
+        </div>
+
+        <!-- ═══════════════════════════════════════════════════════════
+             4. AMBIENT SOUND SANCTUARY (Multi-Layer Web Audio Mixer)
+             ═══════════════════════════════════════════════════════════ -->
+        <div class="source-pane hidden" id="pane-source-ambient">
+          <div class="ambient-card">
+            <div class="ambient-header">
+              <div>
+                <h3 class="ambient-title">Procedural Sound Sanctuary</h3>
+                <p class="ambient-sub">Mix soothing natural sound layers to ease grief, meditate, and journal.</p>
+              </div>
+              <button class="ambient-master-btn" id="ambient-master-toggle">
+                <span id="ambient-btn-text">Start Ambient Sound</span>
+              </button>
+            </div>
+
+            <div class="ambient-mixer-grid">
+              <!-- Rain -->
+              <div class="ambient-slider-card">
+                <div class="asc-top">
+                  <span class="asc-icon">🌧️</span>
+                  <span class="asc-label">Rainstorm</span>
+                  <span class="asc-val" id="val-rain">60%</span>
+                </div>
+                <input type="range" class="asc-slider" id="slider-rain" min="0" max="100" value="60" />
+              </div>
+
+              <!-- Ocean -->
+              <div class="ambient-slider-card">
+                <div class="asc-top">
+                  <span class="asc-icon">🌊</span>
+                  <span class="asc-label">Ocean Waves</span>
+                  <span class="asc-val" id="val-ocean">30%</span>
+                </div>
+                <input type="range" class="asc-slider" id="slider-ocean" min="0" max="100" value="30" />
+              </div>
+
+              <!-- Campfire -->
+              <div class="ambient-slider-card">
+                <div class="asc-top">
+                  <span class="asc-icon">🔥</span>
+                  <span class="asc-label">Campfire Crackle</span>
+                  <span class="asc-val" id="val-fire">40%</span>
+                </div>
+                <input type="range" class="asc-slider" id="slider-fire" min="0" max="100" value="40" />
+              </div>
+
+              <!-- 432Hz Calm -->
+              <div class="ambient-slider-card">
+                <div class="asc-top">
+                  <span class="asc-icon">🧘</span>
+                  <span class="asc-label">432Hz Healing Frequency</span>
+                  <span class="asc-val" id="val-binaural">50%</span>
+                </div>
+                <input type="range" class="asc-slider" id="slider-binaural" min="0" max="100" value="50" />
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- ═══════════════════════════════════════════════════════════
+             5. YOUTUBE VIDEO MODE
+             ═══════════════════════════════════════════════════════════ -->
+        <div class="source-pane hidden" id="pane-source-youtube">
+          <!-- Search & Filter Bar -->
+          <div class="yt-search-section">
+            <div class="yt-search-bar">
+              <svg class="yt-search-icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+              <input type="text" id="yt-search-input" class="yt-search-input" placeholder="Search YouTube music videos&hellip;" autocomplete="off" aria-label="Search music videos" />
+              <button class="yt-search-clear hidden" id="yt-search-clear" aria-label="Clear search">&times;</button>
+            </div>
+            
+            <div class="yt-genre-chips" id="yt-genre-chips" role="tablist">
+              <button class="yt-genre-chip active-genre" data-genre="heartbreak" role="tab">💔 Heartbreak</button>
+              <button class="yt-genre-chip" data-genre="healing" role="tab">🌿 Healing</button>
+              <button class="yt-genre-chip" data-genre="lofi" role="tab">🌧️ Lo-Fi &amp; Piano</button>
+              <button class="yt-genre-chip" data-genre="letitout" role="tab">😤 Cathartic</button>
+              <button class="yt-genre-chip" data-genre="movingon" role="tab">🚀 Moving On</button>
+            </div>
+          </div>
+
+          <div class="music-layout">
+            <div class="player-card" id="yt-main-player-card">
+              <div class="yt-video-wrap" id="yt-video-wrap">
+                <div class="yt-video-aspect">
+                  <div id="yt-player-embed"></div>
+                </div>
+                <div class="yt-fallback-notice hidden" id="yt-fallback-notice">
+                  <p>Playback restricted by copyright holder &bull; <a id="yt-restricted-link" href="#" target="_blank" rel="noopener noreferrer">Watch on YouTube ↗</a> &bull; <button class="yt-skip-btn" id="yt-skip-btn">Skip to next</button></p>
+                </div>
+              </div>
+
+              <!-- Track Info -->
+              <div class="player-info">
+                <div class="player-tag" id="player-mood-tag">Heartbreak Mood</div>
+                <h3 class="player-title" id="player-track-title">Select a video</h3>
+                <p class="player-artist" id="player-track-artist">Artist</p>
+              </div>
+
+              <!-- Controls -->
+              <div class="player-controls">
+                <button class="player-ctrl-btn" id="player-prev" aria-label="Previous Track">
+                  <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="19 20 9 12 19 4 19 20"/><line x1="5" y1="19" x2="5" y2="5"/></svg>
+                </button>
+                <button class="player-play-btn" id="player-play-toggle" aria-label="Play or Pause Track">
+                  <svg id="play-icon" width="22" height="22" viewBox="0 0 24 24" fill="currentColor"><polygon points="6 3 20 12 6 21 6 3"/></svg>
+                  <svg id="pause-icon" class="hidden" width="22" height="22" viewBox="0 0 24 24" fill="currentColor"><rect x="6" y="4" width="4" height="16"/><rect x="14" y="4" width="4" height="16"/></svg>
+                </button>
+                <button class="player-ctrl-btn" id="player-next" aria-label="Next Track">
+                  <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="5 4 15 12 5 20 5 4"/><line x1="19" y1="5" x2="19" y2="19"/></svg>
+                </button>
+              </div>
+
+              <!-- Footer -->
+              <div class="player-footer">
+                <a href="https://www.youtube.com" target="_blank" rel="noopener noreferrer" class="player-ext-link" id="player-ext-link" title="Open on YouTube">
+                  <span>YouTube ↗</span>
+                </a>
+              </div>
+            </div>
+
+            <!-- YouTube Queue Card -->
+            <div class="song-list-card" id="queue-card">
+              <div class="song-list-header">
+                <h3 class="song-list-title" id="song-list-title">Up Next</h3>
+                <button class="clear-queue-btn" id="clear-queue-btn">Clear Queue</button>
+              </div>
+              <div id="songs-container" class="songs-container"></div>
+            </div>
+          </div>
+
+          <!-- Video Results Grid Section -->
+          <div class="yt-browse-section">
+            <div class="yt-browse-header">
+              <h3 class="yt-browse-title" id="yt-browse-title">Recommended Videos</h3>
+              <span class="yt-browse-meta" id="yt-browse-meta">YouTube Data API v3</span>
+            </div>
+            <div class="yt-video-grid" id="yt-video-grid"></div>
+            <div class="yt-empty-state hidden" id="yt-empty-state">
+              <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+              <p>No music videos found</p>
+              <span>Try searching for another artist or song title.</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- HEALING PANE -->
+    <div id="pane-healing" class="ig-pane hidden">
+      <!-- Sticky Pane Header -->
+      <div class="pane-sticky-header">
+        <div class="pane-sticky-title">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M11 20A7 7 0 0 1 9.8 6.1C15.5 5 17 4.48 19 2c1 2 2 4.18 2 8 0 5.5-4.78 10-10 10z"/><path d="M2 21c0-3 1.85-5.36 5.08-6C9.5 14.52 12 13 13 12"/></svg>
+          Healing Hub
+        </div>
+        <p class="pane-sticky-sub">Your journey to wholeness starts here.</p>
+      </div>
+
+      <div class="pane-inner">
+        <!-- No-Contact & Healing Tracker Hero Card -->
+        <div class="pane-section">
+          <div class="pane-section-label">Recovery Journey</div>
+          <div class="tracker-hero-card" id="tracker-hero-card">
+            <div class="thc-top-row">
+              <div class="thc-title-block">
+                <div class="thc-badge">
+                  <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="var(--accent)" stroke-width="2.2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+                  <span id="tracker-mode-label">No-Contact &amp; Healing Streak</span>
+                </div>
+                <h3 class="thc-heading">Every Day You Choose Yourself Is a Victory</h3>
+              </div>
+              <div class="thc-actions-row">
+                <button type="button" class="thc-btn-secondary" id="tracker-set-date-btn" title="Set or edit your start date">
+                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
+                  <span>Set Start Date</span>
+                </button>
+                <button type="button" class="thc-btn-shield" id="tracker-sos-trigger" title="Impulse to text or feeling flooded? Launch Emergency Cooldown">
+                  <span class="sos-dot"></span>
+                  <span>Impulse Shield</span>
+                </button>
+              </div>
+            </div>
+
+            <!-- Big Live Streak Counter -->
+            <div class="thc-counter-box">
+              <div class="thc-days-block">
+                <span class="thc-days-num" id="tracker-days-num">0</span>
+                <span class="thc-days-label">DAYS OF HEALING</span>
+              </div>
+              <div class="thc-time-detail" id="tracker-time-detail">
+                <span id="tracker-hours">0 hours</span>, <span id="tracker-mins">0 mins</span> since you chose peace
+              </div>
+              <p class="thc-encouragement" id="tracker-encouragement">Your nervous system is slowly resetting. Breathe through the quiet.</p>
+            </div>
+
+            <!-- Unlockable Milestone Badges Grid -->
+            <div class="thc-milestones-block">
+              <div class="thc-ms-header">
+                <span class="thc-ms-title">Milestone Achievements</span>
+                <span class="thc-next-target" id="tracker-next-milestone">Next milestone: Day 1 &bull; The First Step 🌱</span>
+              </div>
+              <div class="thc-badges-grid" id="tracker-badges-grid">
+                <!-- 8 dynamic unlockable badges -->
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Daily Quote -->
+        <div class="pane-section">
+          <div class="pane-section-label">Daily Reflection</div>
+          <div class="heal-quote-card" id="heal-quote-card">
+            <div class="hq-mark">&ldquo;</div>
+            <p class="hq-text" id="heal-quote-text">Loading&hellip;</p>
+            <div class="hq-author" id="heal-quote-author">&mdash;</div>
+            <button class="hq-refresh" id="hq-refresh-btn">New Quote</button>
+          </div>
+        </div>
+
+        <!-- Mood Check-In -->
+        <div class="pane-section">
+          <div class="pane-section-label">Mood Check-In</div>
+          <h3 class="heal-h">How are you feeling today?</h3>
+          <div class="mood-grid" id="mood-grid">
+            <button class="mood-btn" data-mood="1" data-label="Devastated">😭<span>Devastated</span></button>
+            <button class="mood-btn" data-mood="2" data-label="Heartbroken">💔<span>Heartbroken</span></button>
+            <button class="mood-btn" data-mood="3" data-label="Sad">😢<span>Sad</span></button>
+            <button class="mood-btn" data-mood="4" data-label="Numb">😐<span>Numb</span></button>
+            <button class="mood-btn" data-mood="5" data-label="Confused">😕<span>Confused</span></button>
+            <button class="mood-btn" data-mood="6" data-label="Angry">😤<span>Angry</span></button>
+            <button class="mood-btn" data-mood="7" data-label="Okay">🙂<span>Okay</span></button>
+            <button class="mood-btn" data-mood="8" data-label="Better">😊<span>Better</span></button>
+            <button class="mood-btn" data-mood="9" data-label="Healing">🌟<span>Healing</span></button>
+          </div>
+        </div>
+
+        <!-- Mood History -->
+        <div class="pane-section">
+          <div class="pane-section-label">Your Progress</div>
+          <h3 class="heal-h">Mood This Week</h3>
+          <div class="mood-chart-wrap">
+            <canvas id="mood-chart" width="640" height="180"></canvas>
+            <div class="chart-labels" id="chart-labels"></div>
+          </div>
+        </div>
+
+        <!-- Tips -->
+        <div class="pane-section">
+          <div class="pane-section-label">Wellness</div>
+          <h3 class="heal-h">Healing Tips</h3>
+          <div class="wellness-grid" id="wellness-grid"></div>
+        </div>
+
+        <!-- Crisis Support -->
+        <div class="crisis-card">
+          <div class="crisis-card-head">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
+            <h4>Need Immediate Support?</h4>
+          </div>
+          <p>You are not alone. These resources are free and available 24/7.</p>
+          <div class="crisis-links">
+            <a href="https://www.crisistextline.org/" target="_blank" rel="noopener noreferrer">Crisis Text Line</a>
+            <a href="https://www.befrienders.org/" target="_blank" rel="noopener noreferrer">Befrienders Worldwide</a>
+            <a href="https://www.samaritans.org/" target="_blank" rel="noopener noreferrer">Samaritans UK</a>
+            <a href="https://988lifeline.org/" target="_blank" rel="noopener noreferrer">988 Lifeline (US)</a>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- RELATIONSHIP ADVICE & NEWS PANE (Real-Life API Updates) -->
+    <div id="pane-advice" class="ig-pane hidden">
+      <div class="pane-sticky-header">
+        <div class="pane-sticky-title">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/><line x1="8" y1="7" x2="16" y2="7"/><line x1="8" y1="11" x2="14" y2="11"/></svg>
+          Relationship Advice &amp; News
+        </div>
+        <p class="pane-sticky-sub">Real-time wisdom, evidence-based relationship science, and daily guidance.</p>
+      </div>
+
+      <div class="pane-inner">
+        <!-- Live Daily Advice Slip Widget (Real-Life API) -->
+        <div class="advice-hero-card">
+          <div class="ahc-badge">
+            <span class="live-dot-inline"></span> Live Advice Stream &bull; Advice Slip API
+          </div>
+          <blockquote class="ahc-quote" id="live-advice-quote">
+            "Loading today's relationship insight&hellip;"
+          </blockquote>
+          <div class="ahc-footer">
+            <span class="ahc-source" id="live-advice-source">Source: Global Relationship Advice Engine</span>
+            <div class="ahc-actions">
+              <button type="button" class="ahc-btn" id="refresh-advice-btn" title="Fetch fresh live advice from API">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="23 4 23 10 17 10"/><polyline points="1 20 1 14 7 14"/><path d="M3.51 9a9 9 0 0 1 14.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0 0 20.49 15"/></svg>
+                <span>New Advice</span>
+              </button>
+              <button type="button" class="ahc-btn" id="copy-advice-btn" title="Copy advice to clipboard">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>
+                <span id="copy-advice-btn-text">Copy</span>
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <!-- Search and Category Filter -->
+        <div class="pane-section">
+          <div class="advice-search-bar">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+            <input type="text" id="advice-search-input" class="advice-search-input" placeholder="Search relationship advice, trust, boundaries, breakup recovery&hellip;" />
+            <button type="button" id="advice-search-clear" class="advice-search-clear hidden">&times;</button>
+          </div>
+
+          <div class="advice-chips" id="advice-chips">
+            <button class="advice-chip active-chip" data-category="all">All Advice</button>
+            <button class="advice-chip" data-category="communication">💬 Communication &amp; Trust</button>
+            <button class="advice-chip" data-category="breakup">💔 Breakup Recovery</button>
+            <button class="advice-chip" data-category="healing">🌿 Self-Worth &amp; Boundaries</button>
+            <button class="advice-chip" data-category="psychology">🧠 Psychology Research</button>
+            <button class="advice-chip" data-category="slips">💡 Quick Wisdom Slips</button>
+          </div>
+        </div>
+
+        <!-- Articles & Advice Grid -->
+        <div class="pane-section">
+          <div class="advice-grid" id="advice-grid">
+            <!-- Rendered dynamically by app.js -->
+          </div>
+          <div class="empty-state hidden" id="empty-advice">
+            <p>No advice articles match this filter.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- DIARY PANE -->
+    <div id="pane-diary" class="ig-pane hidden">
+      <!-- Sticky Pane Header -->
+      <div class="pane-sticky-header">
+        <div class="pane-sticky-title">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/></svg>
+          Private Diary
+        </div>
+        <p class="pane-sticky-sub">Only on your device. Never shared.</p>
+      </div>
+
+      <div class="pane-inner">
+        <!-- Write New Entry -->
+        <div class="pane-section">
+          <div class="pane-section-label">New Entry</div>
+          <div class="diary-write-card">
+            <input type="text" id="diary-title" class="diary-title-input" placeholder="Entry title&hellip;" maxlength="80" />
+            <textarea id="diary-body" class="diary-body-input" placeholder="Write freely&hellip;" rows="5" maxlength="3000"></textarea>
+            <div class="diary-write-footer">
+              <span class="diary-privacy-note">🔒 Saved locally &mdash; never uploaded</span>
+              <button class="diary-save-btn" id="submit-diary-btn">Save Entry</button>
+            </div>
+          </div>
+        </div>
+
+        <!-- My Entries -->
+        <div class="pane-section">
+          <div class="pane-section-label">My Entries</div>
+          <div class="diary-list" id="diary-list"></div>
+          <div class="empty-state hidden" id="empty-diary"><p>No diary entries yet. Start writing above.</p></div>
+        </div>
+
+        <!-- Shared Stories -->
+        <div class="pane-section">
+          <div class="pane-section-label">My Shared Stories</div>
+          <div id="my-stories-list" class="ig-posts-list"></div>
+          <div class="empty-state hidden" id="empty-my"><p>No shared stories yet.</p></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- NOTIFICATIONS PANE -->
+    <div id="pane-notif" class="ig-pane hidden">
+      <div class="pane-sticky-header">
+        <div class="pane-sticky-title">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/></svg>
+          Notifications
+        </div>
+        <p class="pane-sticky-sub">Reactions and replies to your stories.</p>
+      </div>
+      <div class="pane-inner">
+        <div class="notif-list" id="notif-list"></div>
+        <div class="empty-state hidden" id="empty-notif">
+          <svg width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" opacity="0.3"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/></svg>
+          <p>No notifications yet.</p>
+          <span>Reactions and replies will appear here.</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- ABOUT PANE -->
+    <div id="pane-about" class="ig-pane hidden">
+      <div class="pane-sticky-header">
+        <div class="pane-sticky-title">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+          About Sonder
+        </div>
+        <p class="pane-sticky-sub">The realization that each random passerby is living a life as vivid as your own.</p>
+      </div>
+      <div class="pane-inner">
+        <!-- Mission Statement -->
+        <div class="about-mission">
+          <p><strong>Sonder</strong> is a sanctuary where human vulnerability is met with compassion. We believe that sharing our stories, exploring relationship psychology, and healing together connects us in profound ways &mdash; all without ever needing a real name.</p>
+        </div>
+
+        <!-- Feature Cards -->
+        <div class="pane-section">
+          <div class="pane-section-label">What We Offer</div>
+          <div class="about-cards">
+            <div class="about-card">
+              <div class="about-card-icon"><svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="var(--accent)" stroke-width="2"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg></div>
+              <h3>Share Anonymously</h3>
+              <p>Post your heartbreak stories without revealing your identity. Your words matter, not your name.</p>
+            </div>
+            <div class="about-card">
+              <div class="about-card-icon"><svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="var(--accent2)" stroke-width="2"><path d="M9 18V5l12-2v13"/><circle cx="6" cy="18" r="3"/><circle cx="18" cy="16" r="3"/></svg></div>
+              <h3>Music Room</h3>
+              <p>Curated playlists for every stage of heartbreak — from the raw pain to healing.</p>
+            </div>
+            <div class="about-card">
+              <div class="about-card-icon"><svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="var(--green)" stroke-width="2"><path d="M11 20A7 7 0 0 1 9.8 6.1C15.5 5 17 4.48 19 2c1 2 2 4.18 2 8 0 5.5-4.78 10-10 10z"/></svg></div>
+              <h3>Healing Hub</h3>
+              <p>Quotes, wellness tips, and a personal mood tracker to guide your recovery journey.</p>
+            </div>
+            <div class="about-card">
+              <div class="about-card-icon"><svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="var(--accent)" stroke-width="2"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/></svg></div>
+              <h3>Private Diary</h3>
+              <p>Write entries just for yourself. Saved locally, never shared — your private sanctuary.</p>
+            </div>
+          </div>
+        </div>
+
+        <!-- Privacy Promise -->
+        <div class="about-privacy-banner">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="var(--green)" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+          <div>
+            <strong>Your Privacy is Sacred</strong>
+            <span>No sign-ups. No tracking. No real names. Ever.</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- CONTACT PANE -->
+    <div id="pane-contact" class="ig-pane hidden">
+      <div class="pane-sticky-header">
+        <div class="pane-sticky-title">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
+          Contact Us
+        </div>
+        <p class="pane-sticky-sub">Have feedback, a suggestion, or just want to say hello?</p>
+      </div>
+      <div class="pane-inner">
+        <form id="contact-form" class="contact-form">
+          <div class="contact-field">
+            <label class="lc-input-label" for="contact-name">Your Name <span class="field-optional">(optional)</span></label>
+            <input type="text" id="contact-name" class="lc-input" placeholder="e.g. Anonymous" autocomplete="off" />
+          </div>
+          <div class="contact-field">
+            <label class="lc-input-label" for="contact-email">Email <span class="field-optional">(optional)</span></label>
+            <input type="email" id="contact-email" class="lc-input" placeholder="your@email.com" autocomplete="off" />
+          </div>
+          <div class="contact-field">
+            <label class="lc-input-label" for="contact-message">Message <span class="field-required">*</span></label>
+            <textarea id="contact-message" rows="5" placeholder="Write your message here&hellip;" required></textarea>
+          </div>
+          <button type="submit" class="contact-submit-btn">Send Message</button>
+        </form>
+        <div id="contact-thankyou" class="contact-thankyou hidden">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="var(--green)" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>
+          <span>Message sent! Thank you for reaching out.</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- PROFILE PANE -->
+    <div id="pane-profile" class="ig-pane hidden">
+      <div class="pane-sticky-header">
+        <div class="pane-sticky-title">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+          Your Profile
+        </div>
+        <p class="pane-sticky-sub">Your anonymous identity and community presence.</p>
+      </div>
+      <div class="pane-inner">
+        <!-- Identity Card -->
+        <div class="pane-section">
+          <div class="pane-section-label">Identity</div>
+          <div class="profile-card">
+            <div class="profile-card-avatar" id="profile-big-avatar"></div>
+            <div class="profile-card-info">
+              <div class="profile-card-id" id="profile-id"></div>
+              <div class="profile-card-joined">Member since <span id="profile-joined"></span></div>
+              <div class="profile-anon-badge">🔒 Anonymous</div>
+            </div>
+            <button class="profile-edit-btn" id="profile-edit-btn" aria-label="Edit profile">Edit</button>
+          </div>
+          <!-- Editable Bio -->
+          <div class="profile-bio-wrap" id="profile-bio-wrap">
+            <div class="profile-bio-display" id="profile-bio-display">
+              <p id="profile-bio-text" class="profile-bio-text">No bio yet. Tell the community a little about your journey.</p>
+            </div>
+            <div class="profile-bio-edit hidden" id="profile-bio-edit">
+              <textarea id="profile-bio-input" class="profile-bio-textarea" maxlength="150" placeholder="Your bio (max 150 chars)…" rows="3"></textarea>
+              <div class="profile-bio-actions">
+                <span class="profile-bio-chars"><span id="bio-char-count">0</span>/150</span>
+                <button class="profile-bio-save" id="profile-bio-save">Save Bio</button>
+                <button class="profile-bio-cancel" id="profile-bio-cancel">Cancel</button>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Social Stats -->
+        <div class="pane-section">
+          <div class="pane-section-label">Community</div>
+          <div class="profile-stats-row">
+            <div class="profile-stat">
+              <span class="profile-stat-num" id="profile-stat-stories">0</span>
+              <span class="profile-stat-label">Stories</span>
+            </div>
+            <div class="profile-stat">
+              <span class="profile-stat-num" id="profile-stat-following">0</span>
+              <span class="profile-stat-label">Following</span>
+            </div>
+            <div class="profile-stat">
+              <span class="profile-stat-num" id="profile-stat-followers">0</span>
+              <span class="profile-stat-label">Followers</span>
+            </div>
+            <div class="profile-stat">
+              <span class="profile-stat-num" id="profile-stat-diary">0</span>
+              <span class="profile-stat-label">Diary</span>
+            </div>
+            <div class="profile-stat">
+              <span class="profile-stat-num" id="profile-stat-moods">0</span>
+              <span class="profile-stat-label">Mood Logs</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Danger Zone -->
+        <div class="pane-section">
+          <div class="profile-section-title">Danger Zone</div>
+          <div class="danger-zone-card">
+            <div class="danger-zone-desc">
+              <strong>Log Out &amp; Clear Session</strong>
+              <span>This will erase your local data. Make sure you have saved your anonymous ID.</span>
+            </div>
+            <button id="logout-profile-btn" class="logout-danger-btn">Log Out</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- EXPLORE PANE -->
+    <div id="pane-explore" class="ig-pane hidden">
+      <div class="pane-sticky-header">
+        <div class="pane-sticky-title">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polygon points="16.24 7.76 14.12 14.12 7.76 16.24 9.88 9.88 16.24 7.76"/></svg>
+          Explore
+        </div>
+        <p class="pane-sticky-sub">Discover stories from the community.</p>
+      </div>
+      <div class="pane-inner pane-inner--explore">
+        <div class="explore-filters" id="explore-filters">
+          <button class="explore-chip active-chip" data-emotion="all">All</button>
+          <button class="explore-chip" data-emotion="heartbreak">💔 Heartbreak</button>
+          <button class="explore-chip" data-emotion="betrayal">🗡 Betrayal</button>
+          <button class="explore-chip" data-emotion="longing">🌙 Longing</button>
+          <button class="explore-chip" data-emotion="healing">🌿 Healing</button>
+          <button class="explore-chip" data-emotion="anger">🔥 Anger</button>
+          <button class="explore-chip" data-emotion="acceptance">🕊 Acceptance</button>
+        </div>
+        <div class="explore-grid" id="explore-grid" role="list" aria-label="Explore posts"></div>
+        <div class="empty-state hidden" id="empty-explore">
+          <svg width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" opacity="0.3"><circle cx="12" cy="12" r="10"/><polygon points="16.24 7.76 14.12 14.12 7.76 16.24 9.88 9.88 16.24 7.76"/></svg>
+          <p>No posts match this filter.</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- REELS & SHORT-FORM VIDEO FEED PANE (INSTAGRAM REELS & STORIES UX) -->
+    <div id="pane-reels" class="ig-pane hidden">
+      <div class="reels-viewport-wrapper" id="reels-viewport-wrapper">
+        <!-- Floating Volume & Sound Indicator -->
+        <button type="button" class="reels-floating-mute-btn" id="reels-global-mute-btn" title="Toggle audio (Muted by default)">
+          <svg class="icon-mute-on" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M11 5L6 9H2v6h4l5 4V5z"/><line x1="23" y1="9" x2="17" y2="15"/><line x1="17" y1="9" x2="23" y2="15"/></svg>
+          <svg class="icon-mute-off hidden" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M11 5L6 9H2v6h4l5 4V5z"/><path d="M19.07 4.93a10 10 0 0 1 0 14.14"/><path d="M15.54 8.46a5 5 0 0 1 0 7.07"/></svg>
+          <span id="reels-mute-label">Muted</span>
+        </button>
+
+        <!-- Vertical Swipeable Snap Container -->
+        <div class="reels-feed-container" id="reels-feed-container" role="feed" aria-label="Reels short video stream">
+          <!-- Dynamically populated video cards -->
+          <div id="reels-cards-stream" class="reels-cards-stream"></div>
+
+          <!-- Loading Sentinel at end of list -->
+          <div id="reels-sentinel" class="reels-sentinel">
+            <div class="reels-loader-spinner"></div>
+            <span>Loading more healing moments&hellip;</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- MESSAGES PANE (Instagram DM & WhatsApp Inspired Private Chat) -->
+    <div id="pane-messages" class="ig-pane hidden">
+      <div class="pane-sticky-header">
+        <div class="pane-sticky-title">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
+          Direct Messages &amp; Friends
+        </div>
+        <p class="pane-sticky-sub">End-to-end encrypted private conversations with trusted community friends.</p>
+      </div>
+
+      <div class="dm-container" id="dm-container">
+        <!-- LEFT: Inbox Conversations & Friends Sidebar -->
+        <aside class="dm-sidebar" id="dm-sidebar" aria-label="Direct message conversations and friends">
+          <!-- Switcher Tabs: All Chats vs Unread vs Friends Circle -->
+          <div class="dm-tabs-header">
+            <button type="button" class="dm-tab-btn active-dm-tab" id="dm-tab-all-btn" data-filter="all">
+              <span>All</span>
+            </button>
+            <button type="button" class="dm-tab-btn" id="dm-tab-unread-btn" data-filter="unread">
+              <span>Unread</span>
+              <span class="dm-tab-badge hidden" id="dm-unread-tab-badge">0</span>
+            </button>
+            <button type="button" class="dm-tab-btn" id="dm-tab-friends-btn" data-filter="friends">
+              <span>Friends (<span id="dm-friends-count">4</span>)</span>
+            </button>
+          </div>
+
+          <div class="dm-sidebar-top">
+            <div class="dm-sidebar-title-row">
+              <div class="dm-sidebar-title" id="dm-sidebar-title-label">
+                <span>Conversations</span>
+                <span class="dm-unread-pill hidden" id="dm-total-unread-pill">0</span>
+              </div>
+              <div class="dm-sidebar-actions">
+                <button type="button" class="dm-new-chat-btn" id="dm-add-friend-btn" title="Add new friend by username/handle">
+                  <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+                  <span>Add Friend</span>
+                </button>
+                <button type="button" class="dm-new-chat-btn" id="dm-new-chat-btn" title="Start new conversation" aria-label="Start new conversation">
+                  <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+                  <span>New Chat</span>
+                </button>
+              </div>
+            </div>
+            <div class="dm-search-row">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+              <input type="text" id="dm-search-input" class="dm-search-input" placeholder="Search friends or messages&hellip;" />
+              <button type="button" id="dm-search-clear" class="dm-search-clear hidden">&times;</button>
+            </div>
+          </div>
+
+          <!-- Chats List View -->
+          <div class="dm-thread-list" id="dm-thread-list" role="list">
+            <!-- Dynamically rendered conversation threads -->
+          </div>
+
+          <!-- Friends List View (Toggleable) -->
+          <div class="dm-friends-list hidden" id="dm-friends-list" role="list">
+            <!-- Dynamically rendered friends cards -->
+          </div>
+
+          <div class="dm-empty-inbox hidden" id="empty-dm">
+            <svg width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" opacity="0.35"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
+            <p id="empty-dm-title">No conversations found</p>
+            <span id="empty-dm-sub">Tap &ldquo;New Chat&rdquo; or add a friend to start chatting.</span>
+          </div>
+        </aside>
+
+        <!-- RIGHT: Active Private Chat View (WhatsApp & Instagram DM Inspired) -->
+        <main class="dm-main" id="dm-main">
+          <!-- Placeholder when no thread is selected -->
+          <div class="dm-no-thread-selected hidden" id="dm-no-thread-selected">
+            <div class="dm-nts-icon">
+              <svg width="52" height="52" viewBox="0 0 24 24" fill="none" stroke="var(--accent)" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/><line x1="8" y1="9" x2="16" y2="9"/><line x1="8" y1="13" x2="13" y2="13"/></svg>
+            </div>
+            <h3>Your Private Messages</h3>
+            <p>Send safe, end-to-end encrypted messages and voice notes to other members navigating heartbreak and healing.</p>
+            <button type="button" class="dm-start-btn" id="dm-nts-start-btn">Start a Conversation</button>
+          </div>
+
+          <!-- Active Thread Box -->
+          <div class="dm-active-thread" id="dm-thread">
+            <!-- Thread Header -->
+            <div class="dm-thread-head" id="dm-thread-head">
+              <button type="button" class="dm-back-btn" id="dm-back-btn" aria-label="Back to conversations" title="Back">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="15 18 9 12 15 6"/></svg>
+              </button>
+              <div class="dm-th-user-info">
+                <div class="dm-th-avatar-wrap">
+                  <div class="dm-thread-avatar" id="dm-thread-avatar"></div>
+                  <span class="dm-online-dot-mini" id="dm-th-online-dot"></span>
+                </div>
+                <div class="dm-th-text">
+                  <div class="dm-th-name-row">
+                    <span class="dm-thread-name" id="dm-thread-name">VelvetEcho</span>
+                    <span class="dm-verified-badge" title="Verified Sonder Member">✓</span>
+                    <button type="button" class="dm-friend-badge-btn" id="dm-th-friend-toggle" title="Friend status">
+                      <span>★ Friend</span>
+                    </button>
+                  </div>
+                  <div class="dm-th-status" id="dm-th-status">Active now &bull; End-to-end encrypted</div>
+                </div>
+              </div>
+              <div class="dm-th-actions">
+                <button type="button" class="dm-th-action-btn" id="dm-th-call-btn" title="Start Audio Call">
+                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/></svg>
+                </button>
+                <button type="button" class="dm-th-action-btn" id="dm-th-video-btn" title="Start Video Call">
+                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="23 7 16 12 23 17 23 7"/><rect x="1" y="5" width="15" height="14" rx="2" ry="2"/></svg>
+                </button>
+                <button type="button" class="dm-th-action-btn" id="dm-clear-thread-btn" title="Clear conversation history">
+                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="3 6 5 6 21 6"/><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/></svg>
+                </button>
+              </div>
+            </div>
+
+            <!-- Messages Stream (Auto-Scrolls to bottom) -->
+            <div class="dm-messages" id="dm-messages" aria-live="polite" aria-label="Message stream">
+              <!-- Dynamically populated -->
+            </div>
+
+            <!-- Typing Indicator Bubble -->
+            <div class="dm-typing-row hidden" id="dm-typing-row">
+              <div class="dm-typing-bubble">
+                <span class="dm-dot"></span>
+                <span class="dm-dot"></span>
+                <span class="dm-dot"></span>
+              </div>
+              <span class="dm-typing-label" id="dm-typing-label">Typing&hellip;</span>
+            </div>
+
+            <!-- Attached Image Preview in Chat Composer -->
+            <div class="dm-attached-preview hidden" id="dm-attached-preview">
+              <img id="dm-preview-thumb" src="" alt="Image to send" />
+              <div class="dm-attach-meta">
+                <span class="dm-attach-title">Photo attached</span>
+                <span class="dm-attach-sub">Ready to send</span>
+              </div>
+              <button type="button" class="dm-remove-attachment-btn" id="dm-remove-attachment-btn" title="Remove image">&times;</button>
+            </div>
+
+            <!-- Composer & Empathy Quick Toolbar -->
+            <div class="dm-composer-area">
+              <!-- Interactive Floating Emoji Picker Popover -->
+              <div class="dm-emoji-popover hidden" id="dm-emoji-popover">
+                <div class="dm-ep-tabs">
+                  <button type="button" class="dm-ep-tab active-ep-tab" data-cat="smileys">😊 Smileys</button>
+                  <button type="button" class="dm-ep-tab" data-cat="love">❤️ Hearts</button>
+                  <button type="button" class="dm-ep-tab" data-cat="hands">🙏 Gestures</button>
+                  <button type="button" class="dm-ep-tab" data-cat="nature">🌿 Comfort</button>
+                </div>
+                <div class="dm-ep-grid" id="dm-ep-grid">
+                  <!-- Injected via app.js -->
+                </div>
+              </div>
+
+              <div class="dm-quick-empathy-row">
+                <span class="dm-empathy-label">Quick Reactions:</span>
+                <div class="dm-empathy-chips">
+                  <button type="button" class="dm-emp-chip" data-emoji="❤️">❤️</button>
+                  <button type="button" class="dm-emp-chip" data-emoji="🫂">🫂</button>
+                  <button type="button" class="dm-emp-chip" data-emoji="🕊️">🕊️</button>
+                  <button type="button" class="dm-emp-chip" data-emoji="✨">✨</button>
+                  <button type="button" class="dm-emp-chip" data-emoji="💔">💔</button>
+                  <button type="button" class="dm-emp-chip" data-emoji="🌧️">🌧️</button>
+                  <button type="button" class="dm-emp-chip" data-emoji="☕">☕</button>
+                  <button type="button" class="dm-emp-chip" data-emoji="🙏">🙏</button>
+                </div>
+              </div>
+              
+              <div class="dm-input-row">
+                <!-- Emoji Picker Toggle Button -->
+                <button type="button" class="dm-composer-tool-btn" id="dm-emoji-toggle-btn" title="Insert emoji">
+                  <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M8 14s1.5 2 4 2 4-2 4-2"/><line x1="9" y1="9" x2="9.01" y2="9"/><line x1="15" y1="9" x2="15.01" y2="9"/></svg>
+                </button>
+
+                <!-- Attach Image File Input -->
+                <label for="dm-image-upload" class="dm-composer-tool-btn" title="Send a photo / image">
+                  <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2" ry="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg>
+                </label>
+                <input type="file" id="dm-image-upload" accept="image/*" class="hidden" />
+
+                <!-- Voice Note Trigger -->
+                <button type="button" class="dm-composer-tool-btn" id="dm-voice-trigger-btn" title="Send voice note (0:14)">
+                  <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 1a3 3 0 0 0-3 3v8a3 3 0 0 0 6 0V4a3 3 0 0 0-3-3z"/><path d="M19 10v2a7 7 0 0 1-14 0v-2"/></svg>
+                </button>
+
+                <textarea id="dm-input" class="dm-input" placeholder="Message… (Enter to send, Shift+Enter for newline)" rows="1" maxlength="2000" aria-label="Type a message"></textarea>
+                
+                <button type="button" class="dm-send-btn" id="dm-send-btn" aria-label="Send message" title="Send message (Enter)">
+                  <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg>
+                </button>
+              </div>
+            </div>
+          </div>
+        </main>
+      </div>
+    </div>
+
+    <!-- SAVED PANE -->
+    <div id="pane-saved" class="ig-pane hidden">
+      <div class="pane-sticky-header">
+        <div class="pane-sticky-title">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 21l-7-5-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z"/></svg>
+          Saved
+        </div>
+        <p class="pane-sticky-sub">Stories you've bookmarked.</p>
+      </div>
+      <div class="pane-inner">
+        <div id="saved-list" class="ig-posts-list" aria-live="polite"></div>
+        <div class="empty-state hidden" id="empty-saved">
+          <svg width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" opacity="0.3"><path d="M19 21l-7-5-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z"/></svg>
+          <p>No saved stories yet.</p>
+          <span>Tap the bookmark icon on any story to save it here.</span>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- RIGHT SIDEBAR -->
+  <aside class="ig-right" id="ig-right">
+
+    <div class="right-user">
+      <div class="right-avatar" id="right-avatar"></div>
+      <div>
+        <div class="right-user-id" id="right-user-id"></div>
+        <button class="right-logout-link" id="right-logout-btn">Log out</button>
+      </div>
+    </div>
+
+    <div class="right-divider"></div>
+
+    <div class="right-section">
+      <div class="right-section-head">
+        <span><span class="live-dot-inline"></span> Online Now</span>
+        <span class="online-count" id="online-count">—</span>
+      </div>
+      <div class="online-avatars" id="online-avatars"></div>
+    </div>
+
+    <div class="right-divider"></div>
+
+    <div class="right-section">
+      <div class="right-section-head">
+        <span><span class="live-dot-inline accent2"></span> Live Activity</span>
+      </div>
+      <div class="live-feed" id="live-feed"></div>
+    </div>
+
+    <div class="right-divider"></div>
+
+    <div class="right-section">
+      <div class="right-section-head">🔥 Trending</div>
+      <div class="trending-list" id="trending-list"></div>
+    </div>
+
+    <div class="right-divider"></div>
+
+    <div class="right-section">
+      <div class="right-section-head">🎧 Ambient Sound</div>
+      <div class="right-ambient" id="right-ambient">
+        <button class="right-ambient-btn active-amb" data-sound="off">Off</button>
+        <button class="right-ambient-btn" data-sound="rain">🌧 Rain</button>
+        <button class="right-ambient-btn" data-sound="noise">〰 Noise</button>
+        <button class="right-ambient-btn" data-sound="lofi">🎵 Lo-fi</button>
+      </div>
+    </div>
+
+  </aside>
+
+</div>
+
+<!-- MOBILE BOTTOM NAV -->
+<nav class="ig-bottom-nav" id="ig-bottom-nav" aria-label="Mobile navigation">
+  <button class="ib-btn active-ib" data-pane="feed" aria-label="Home">
+    <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" aria-hidden="true"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
+  </button>
+  <button class="ib-btn" data-pane="explore" aria-label="Explore">
+    <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" aria-hidden="true"><circle cx="12" cy="12" r="10"/><polygon points="16.24 7.76 14.12 14.12 7.76 16.24 9.88 9.88 16.24 7.76"/></svg>
+  </button>
+  <button class="ib-btn" data-pane="reels" id="mobile-reels-btn" aria-label="Reels Video Feed">
+    <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="2" y="2" width="20" height="20" rx="5" ry="5"/><path d="M16 2v20M8 2v20M2 12h20M2 7h6M2 17h6M16 17h6M16 7h6"/></svg>
+  </button>
+  <button class="ib-btn ib-create" id="mobile-create-btn" aria-label="Create new story">
+    <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><rect x="3" y="3" width="18" height="18" rx="2"/><line x1="12" y1="8" x2="12" y2="16"/><line x1="8" y1="12" x2="16" y2="12"/></svg>
+  </button>
+  <button class="ib-btn" data-pane="messages" aria-label="Messages">
+    <span class="ig-notif-wrap">
+      <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" aria-hidden="true"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
+      <span class="notif-badge hidden" id="dm-badge-mobile">0</span>
+    </span>
+  </button>
+  <button class="ib-btn" data-pane="saved" aria-label="Saved">
+    <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" aria-hidden="true"><path d="M19 21l-7-5-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z"/></svg>
+  </button>
+</nav>
+
+<!-- WRITE STORY MODAL -->
+<div id="write-modal" class="fullscreen-modal hidden" role="dialog" aria-modal="true" aria-label="Write a new story">
+  <div class="write-modal-card">
+    <div class="write-modal-head">
+      <button class="wm-cancel" id="wm-cancel" aria-label="Cancel">Cancel</button>
+      <h3>New Story</h3>
+      <button class="wm-submit" id="wm-submit" aria-label="Share story">Share</button>
+    </div>
+    <div class="write-modal-body">
+      <div class="wm-user-row">
+        <div class="wm-avatar" id="wm-avatar"></div>
+        <div>
+          <div class="wm-user-id" id="wm-user-id"></div>
+          <div class="wm-anon-row">
+            <label class="wm-radio"><input type="radio" name="post-as" value="anon" id="post-anon" checked> My ID</label>
+            <label class="wm-radio"><input type="radio" name="post-as" value="ghost" id="post-ghost"> Ghost</label>
+          </div>
+        </div>
+      </div>
+
+      <!-- Image Attach -->
+      <div class="wm-image-section">
+        <div class="wm-image-preview hidden" id="wm-image-preview">
+          <img id="wm-preview-img" src="" alt="Post image preview" class="wm-preview-img" />
+          <button class="wm-image-remove" id="wm-image-remove" aria-label="Remove image">×</button>
+        </div>
+        <label class="wm-attach-btn" for="wm-image-input" id="wm-attach-label">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><rect x="3" y="3" width="18" height="18" rx="2" ry="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg>
+          Add Image
+        </label>
+        <input type="file" id="wm-image-input" accept="image/*" class="wm-image-file" aria-label="Attach an image" />
+      </div>
+
+      <div class="wm-prompt-row">
+        <span class="wm-prompt-label">Prompt:</span>
+        <span class="wm-prompt-text" id="wm-prompt-text">Loading&hellip;</span>
+        <button class="wm-prompt-new" id="wm-prompt-new">New</button>
+      </div>
+      <input type="text" id="wm-title" class="wm-title-input" placeholder="Story title&hellip;" maxlength="100" />
+      <textarea id="wm-body" class="wm-body-input" placeholder="Pour your heart out&hellip; This is completely anonymous." rows="7" maxlength="2000" aria-label="Story body"></textarea>
+      <div class="wm-meta-row">
+        <select id="wm-emotion" class="wm-emotion-select" aria-label="Select emotion">
+          <option value="heartbreak">💔 Heartbreak</option>
+          <option value="betrayal">🗡 Betrayal</option>
+          <option value="longing">🌙 Longing</option>
+          <option value="healing">🌿 Healing</option>
+          <option value="anger">🔥 Anger</option>
+          <option value="acceptance">🕊 Acceptance</option>
+        </select>
+        <span class="wm-char-count"><span id="wm-char">0</span>/2000</span>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- REELS COMMENTS BOTTOM SHEET MODAL -->
+<div id="reels-comments-modal" class="fullscreen-modal hidden" role="dialog" aria-modal="true" aria-label="Reel Comments Sheet">
+  <div class="reels-comments-card">
+    <div class="rcm-head">
+      <div class="rcm-drag-handle"></div>
+      <div class="rcm-title-row">
+        <h3 class="rcm-title">Comments (<span id="rcm-comments-count">0</span>)</h3>
+        <button type="button" class="rcm-close-btn" id="reels-comments-close" aria-label="Close comments">&times;</button>
+      </div>
+    </div>
+    <div class="rcm-comments-list" id="rcm-comments-list">
+      <!-- Injected dynamically via app.js -->
+    </div>
+    <div class="rcm-input-row">
+      <div class="rcm-user-avatar" id="rcm-my-avatar"></div>
+      <input type="text" id="rcm-comment-input" class="rcm-comment-input" placeholder="Add a supportive comment&hellip;" maxlength="400" />
+      <button type="button" id="rcm-comment-submit" class="rcm-comment-submit">Post</button>
+    </div>
+  </div>
+</div>
+
+<!-- STORY VIEWER (Full Screen) -->
+<div id="story-viewer" class="story-viewer hidden">
+  <div class="sv-card">
+    <div class="sv-progress-wrap" id="sv-progress-wrap"></div>
+    <div class="sv-head">
+      <div class="sv-user-info">
+        <div class="sv-avatar-circle" id="sv-avatar"></div>
+        <div>
+          <div class="sv-id" id="sv-id"></div>
+          <div class="sv-time" id="sv-time"></div>
+        </div>
+      </div>
+      <button class="sv-close-btn" id="sv-close">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+      </button>
+    </div>
+    <div class="sv-content">
+      <div class="sv-emotion" id="sv-emotion"></div>
+      <h2 class="sv-title" id="sv-title"></h2>
+      <p class="sv-body" id="sv-body"></p>
+    </div>
+    <div class="sv-tap-zones">
+      <div class="sv-tap-prev" id="sv-tap-prev"></div>
+      <div class="sv-tap-next" id="sv-tap-next"></div>
+    </div>
+    <div class="sv-foot">
+      <input type="text" class="sv-reply" id="sv-reply" placeholder="Reply&hellip;" />
+      <div class="sv-reacts">
+        <button class="sv-react" data-r="love">💔</button>
+        <button class="sv-react" data-r="cry">🥲</button>
+        <button class="sv-react" data-r="healing">🌱</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- POST DETAIL MODAL -->
+<div id="post-modal" class="fullscreen-modal hidden">
+  <div class="post-modal-card">
+    <button class="pm-close" id="pm-close">
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+    </button>
+    <div id="pm-content" class="pm-content"></div>
+    <div class="pm-reactions-bar" id="pm-reactions-bar">
+      <span class="pm-react-label">React:</span>
+      <button class="pm-react-btn" data-reaction="love">💔 <span class="pm-rc" data-r="love">0</span></button>
+      <button class="pm-react-btn" data-reaction="cry">🥲 <span class="pm-rc" data-r="cry">0</span></button>
+      <button class="pm-react-btn" data-reaction="angry">😤 <span class="pm-rc" data-r="angry">0</span></button>
+      <button class="pm-react-btn" data-reaction="healing">🌱 <span class="pm-rc" data-r="healing">0</span></button>
+      <button class="pm-react-btn" data-reaction="peace">🕊️ <span class="pm-rc" data-r="peace">0</span></button>
+    </div>
+    <div class="pm-comments">
+      <h4>Responses (<span id="pm-comments-count">0</span>)</h4>
+      <div id="pm-comments-list" class="pm-comments-list"></div>
+      <div class="pm-comment-row">
+        <input type="text" id="pm-comment-input" class="pm-comment-input" placeholder="Write a response&hellip;" maxlength="300" />
+        <button id="pm-comment-submit" class="pm-comment-send">Post</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- DIARY ENTRY MODAL -->
+<div id="diary-modal" class="fullscreen-modal hidden">
+  <div class="post-modal-card">
+    <button class="pm-close" id="dm-close">
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+    </button>
+    <div id="dm-content" class="pm-content"></div>
+  </div>
+</div>
+
+<!-- TOAST -->
+<div class="toast hidden" id="toast">
+  <span id="toast-icon">✓</span>
+  <span id="toast-msg">Done!</span>
+</div>
+
+<!-- LIVE NOTIFICATION (top banner) -->
+<div class="live-notif hidden" id="live-notif">
+  <span class="live-notif-dot"></span>
+  <span id="live-notif-text"></span>
+</div>
+
+<!-- Heart burst overlay (double-tap like) -->
+<div class="heart-burst-overlay" id="heart-burst" aria-hidden="true">
+  <svg width="80" height="80" viewBox="0 0 24 24" fill="var(--accent)" stroke="var(--accent)" stroke-width="1"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>
+</div>
+
+<!-- FLOATING MINI-PLAYER BAR (Pinned when browsing or navigating) -->
+<div class="yt-mini-player hidden" id="yt-mini-player" aria-label="Mini music player">
+  <div class="mini-player-track" id="mini-player-expand" title="Click to view full player">
+    <div class="mini-player-thumb-wrap">
+      <img class="mini-player-thumb" id="mini-player-thumb" src="data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='44' height='44' fill='%23222'><rect width='44' height='44'/></svg>" alt="Current song thumbnail" />
+      <span class="mini-pulse-dot hidden" id="mini-pulse-dot"></span>
+    </div>
+    <div class="mini-player-info">
+      <div class="mini-player-title" id="mini-player-title">Song Title</div>
+      <div class="mini-player-artist" id="mini-player-artist">Artist</div>
+    </div>
+  </div>
+  <div class="mini-player-actions">
+    <button class="mini-btn" id="mini-prev-btn" aria-label="Previous track">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="19 20 9 12 19 4 19 20"/><line x1="5" y1="19" x2="5" y2="5"/></svg>
+    </button>
+    <button class="mini-play-btn" id="mini-play-btn" aria-label="Play or Pause track">
+      <svg id="mini-play-icon" width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><polygon points="6 3 20 12 6 21 6 3"/></svg>
+      <svg id="mini-pause-icon" class="hidden" width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><rect x="6" y="4" width="4" height="16"/><rect x="14" y="4" width="4" height="16"/></svg>
+    </button>
+    <button class="mini-btn" id="mini-next-btn" aria-label="Next track">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="5 4 15 12 5 20 5 4"/><line x1="19" y1="5" x2="19" y2="19"/></svg>
+    </button>
+  </div>
+</div>
+
+<!-- NEW DIRECT MESSAGE MODAL -->
+<div id="new-dm-modal" class="fullscreen-modal hidden">
+  <div class="new-dm-modal-card">
+    <div class="ndm-header">
+      <div class="ndm-title">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="var(--accent)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
+        <span>New Anonymous Message</span>
+      </div>
+      <button type="button" class="ndm-close" id="new-dm-close" aria-label="Close modal">&times;</button>
+    </div>
+    
+    <div class="ndm-search-box">
+      <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+      <input type="text" id="new-dm-search-input" class="ndm-search-input" placeholder="Search members or enter handle&hellip;" />
+    </div>
+
+    <div class="ndm-section-label">Active Community Members</div>
+    <div class="ndm-members-list" id="new-dm-members-list">
+      <!-- Populated dynamically with active personas -->
+    </div>
+  </div>
+</div>
+
+<!-- ADD FRIEND MODAL -->
+<div id="add-friend-modal" class="fullscreen-modal hidden" role="dialog" aria-modal="true" aria-label="Add Friend">
+  <div class="new-dm-modal-card">
+    <div class="ndm-header">
+      <div class="ndm-title">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="var(--accent)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M16 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="8.5" cy="7" r="4"/><line x1="20" y1="8" x2="20" y2="14"/><line x1="23" y1="11" x2="17" y2="11"/></svg>
+        <span>Add a Trusted Friend</span>
+      </div>
+      <button type="button" class="ndm-close" id="add-friend-close" aria-label="Close modal">&times;</button>
+    </div>
+
+    <div class="ndm-add-box">
+      <input type="text" id="add-friend-input" class="ndm-search-input" placeholder="Enter username or friend handle (e.g. VelvetEcho#4092)…" />
+      <button type="button" class="ndm-add-submit-btn" id="add-friend-submit-btn">Add Friend</button>
+    </div>
+
+    <div class="ndm-section-label">Suggested Community Friends to Connect With</div>
+    <div class="ndm-members-list" id="add-friend-suggestions-list">
+      <!-- Populated dynamically with active friend suggestions -->
+    </div>
+  </div>
+</div>
+
+<!-- EMERGENCY SOS GROUNDING & BOX BREATHING MODAL -->
+<div id="sos-modal" class="fullscreen-modal hidden" role="dialog" aria-modal="true" aria-label="Emergency Impulse Cooldown">
+  <div class="sos-modal-card">
+    <div class="sos-modal-header">
+      <div class="sos-header-tag">
+        <span class="sos-dot"></span> Emergency Impulse Cooldown &bull; Don&rsquo;t Text Them
+      </div>
+      <button type="button" class="sos-close-btn" id="sos-close-btn" aria-label="Exit Cooldown">&times;</button>
+    </div>
+
+    <!-- Interactive Box Breathing Circle -->
+    <div class="sos-breathing-stage">
+      <div class="breath-ring-wrap" id="breath-ring-wrap">
+        <div class="breath-outer-glow"></div>
+        <div class="breath-circle" id="breath-circle">
+          <div class="breath-inner-content">
+            <span class="breath-phase-label" id="breath-phase-label">Breathe In</span>
+            <span class="breath-seconds" id="breath-seconds">4</span>
+          </div>
+        </div>
+      </div>
+      <div class="breath-instructions" id="breath-instructions">
+        Inhale slowly through your nose&hellip; Fill your lungs with calm.
+      </div>
+    </div>
+
+    <!-- 3 Reality-Check Grounding Anchors -->
+    <div class="sos-anchors-wrap">
+      <div class="sos-anchor-item">
+        <div class="sos-anchor-icon">🕊️</div>
+        <div>
+          <h4 class="sos-anchor-title">The Urge Is Just Dopamine Withdrawal</h4>
+          <p class="sos-anchor-text">Your brain is seeking a familiar chemical spike. Breathe through the 90-second wave.</p>
+        </div>
+      </div>
+      <div class="sos-anchor-item">
+        <div class="sos-anchor-icon">🛡️</div>
+        <div>
+          <h4 class="sos-anchor-title">Remember Why the Door Closed</h4>
+          <p class="sos-anchor-text">Don&rsquo;t sacrifice 6 months of future peace for 10 seconds of temporary relief.</p>
+        </div>
+      </div>
+      <div class="sos-anchor-item">
+        <div class="sos-anchor-icon">✨</div>
+        <div>
+          <h4 class="sos-anchor-title">Write the Text in Your Private Diary Instead</h4>
+          <p class="sos-anchor-text">Release every raw word into your private encrypted diary right now without breaking no-contact.</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="sos-footer-actions">
+      <button type="button" class="sos-journal-btn" id="sos-journal-btn">
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 20h9"/><path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"/></svg>
+        <span>Write In Private Diary</span>
+      </button>
+      <button type="button" class="sos-done-btn" id="sos-done-btn">I Feel Calmer Now</button>
+    </div>
+  </div>
+</div>
+
+<!-- SOCIAL STORY / QUOTE CARD EXPORTER MODAL -->
+<div id="export-card-modal" class="fullscreen-modal hidden" role="dialog" aria-modal="true" aria-label="Export Social Quote Card">
+  <div class="export-modal-card">
+    <div class="emc-header">
+      <div class="emc-title">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="var(--accent)" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2" ry="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg>
+        <span>Export Aesthetic Story Card</span>
+      </div>
+      <button type="button" class="emc-close-btn" id="export-card-close" aria-label="Close export modal">&times;</button>
+    </div>
+
+    <!-- Format & Palette Controls -->
+    <div class="emc-controls">
+      <div class="emc-control-group">
+        <span class="emc-group-label">Aspect Ratio</span>
+        <div class="emc-ratio-btns">
+          <button type="button" class="emc-ratio-btn active-ratio" data-ratio="story">9:16 Story (IG/TikTok)</button>
+          <button type="button" class="emc-ratio-btn" data-ratio="square">1:1 Square (Feed)</button>
+        </div>
+      </div>
+      <div class="emc-control-group">
+        <span class="emc-group-label">Color Theme</span>
+        <div class="emc-theme-chips" id="emc-theme-chips">
+          <button type="button" class="emc-theme-chip active-theme" data-theme="slate" title="Obsidian Slate"><span></span> Slate</button>
+          <button type="button" class="emc-theme-chip" data-theme="emerald" title="Emerald Forest"><span></span> Emerald</button>
+          <button type="button" class="emc-theme-chip" data-theme="midnight" title="Midnight Deep"><span></span> Midnight</button>
+          <button type="button" class="emc-theme-chip" data-theme="rose" title="Rose Dusk"><span></span> Dusk</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Canvas Preview Stage -->
+    <div class="emc-preview-container">
+      <canvas id="export-quote-canvas" class="export-quote-canvas" width="1080" height="1920"></canvas>
+    </div>
+
+    <!-- Download Action -->
+    <div class="emc-footer">
+      <button type="button" class="emc-download-btn" id="export-download-btn">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+        <span>Download Card (PNG)</span>
+      </button>
+    </div>
+  </div>
+</div>
+
+<!-- SET NO-CONTACT TRACKER START DATE MODAL -->
+<div id="set-tracker-modal" class="fullscreen-modal hidden" role="dialog" aria-modal="true" aria-label="Set Recovery Start Date">
+  <div class="tracker-modal-card">
+    <div class="tmc-header">
+      <div class="tmc-title">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="var(--accent)" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+        <span>Set Recovery Start Date</span>
+      </div>
+      <button type="button" class="tmc-close-btn" id="set-tracker-close" aria-label="Close modal">&times;</button>
+    </div>
+
+    <p class="tmc-desc">When did you start your no-contact or healing journey? Your streak counter and milestone badges will calculate automatically from this moment.</p>
+
+    <div class="tmc-form-group">
+      <label for="tracker-date-input" class="tmc-label">Start Date &amp; Time</label>
+      <input type="datetime-local" id="tracker-date-input" class="tmc-date-input" />
+    </div>
+
+    <div class="tmc-actions">
+      <button type="button" class="tmc-btn-cancel" id="set-tracker-cancel">Cancel</button>
+      <button type="button" class="tmc-btn-save" id="set-tracker-save">Save Start Date</button>
+    </div>
+  </div>
+</div>
+
+<script src="app.js?v=24"></script>
+</body>
+</html>
