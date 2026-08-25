@@ -1,5 +1,11 @@
-# Shattered — robots.txt
-User-agent: *
+ï»¿User-agent: *
 Allow: /
+Allow: /api/reels
+Allow: /api/advice-news
+Disallow: /api/auth/
+Disallow: /api/messages/
+Disallow: /data/
 
-Sitemap: https://shattered.app/sitemap.xml
+# Sitemaps
+Sitemap: https://menstuff-eight.vercel.app/sitemap.xml
+Sitemap: https://sonder.app/sitemap.xml

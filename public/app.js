@@ -929,6 +929,57 @@ document.addEventListener('DOMContentLoaded', () => {
     setupImageAttach();
   };
 
+  const PANE_SEO_META = {
+    feed: {
+      title: 'Community Stories & Anonymous Reflections | Sonder',
+      desc: 'Read authentic, unfiltered stories of love, heartbreak, and resilience from an anonymous community with zero judgment.'
+    },
+    explore: {
+      title: 'Explore Trending Topics & Perspectives | Sonder',
+      desc: 'Discover heartfelt stories across grief, hope, letting go, self-worth, and healing from voices around the world.'
+    },
+    reels: {
+      title: 'Video Wisdom & Healing Reels | Sonder',
+      desc: 'Watch vertical video reflections, bite-sized relationship wisdom, grounding breathwork, and emotional insights.'
+    },
+    advice: {
+      title: 'Relationship Advice & Real-Life Wisdom News | Sonder',
+      desc: 'Curated articles, research-backed advice, and actionable takeaways on boundaries, attachment styles, and healing.'
+    },
+    messages: {
+      title: 'Private Encrypted Messages & Friends Circle | Sonder',
+      desc: 'Connect in private one-on-one chats with trusted friends and compassionate listeners in a safe, encrypted space.'
+    },
+    healing: {
+      title: 'Healing Hub & Streak Milestone Counter | Sonder',
+      desc: 'Track your no-contact streaks, emotional recovery milestones, daily mood check-ins, and box breathing exercises.'
+    },
+    music: {
+      title: 'Binaural & Emotional Soundscapes | Sonder',
+      desc: 'Calming lo-fi beats, ambient theta waves, and reflective piano soundscapes curated for deep emotional relief.'
+    },
+    diary: {
+      title: 'Encrypted Private Diary & Unsent Letters | Sonder',
+      desc: 'Write unsent letters and process your emotions in a private, encrypted digital diary stored securely on your device.'
+    },
+    saved: {
+      title: 'Saved Stories & Bookmarked Wisdom | Sonder',
+      desc: 'Access your collection of saved reflections, advice articles, and favorite community moments.'
+    },
+    about: {
+      title: 'About Sonder & Anonymous Privacy Charter | Sonder',
+      desc: 'Learn about Sonder’s mission to build an empathetic, judgment-free sanctuary for emotional healing.'
+    },
+    contact: {
+      title: 'Contact Support & Community Feedback | Sonder',
+      desc: 'Get in touch with the Sonder team for community feedback, privacy inquiries, and support.'
+    },
+    profile: {
+      title: 'My Anonymous Profile & Insights | Sonder',
+      desc: 'Manage your anonymous avatar, bio, community milestones, and privacy settings.'
+    }
+  };
+
   const switchPane = (paneId) => {
     const targetPane = $(`pane-${paneId}`);
     if (!targetPane) return;
@@ -937,15 +988,34 @@ document.addEventListener('DOMContentLoaded', () => {
     S.activePane = paneId;
     window.scrollTo(0,0);
 
-    // Sync all nav buttons & links
+    // Dynamic SEO Title & Meta Description Update
+    const meta = PANE_SEO_META[paneId] || PANE_SEO_META.feed;
+    document.title = meta.title;
+    const descEl = document.querySelector('meta[name="description"]');
+    if (descEl) descEl.setAttribute('content', meta.desc);
+    const ogTitle = document.querySelector('meta[property="og:title"]');
+    if (ogTitle) ogTitle.setAttribute('content', meta.title);
+    const ogDesc = document.querySelector('meta[property="og:description"]');
+    if (ogDesc) ogDesc.setAttribute('content', meta.desc);
+
+    // Sync all nav buttons & links with accessibility attributes
     qa('.ig-nav-item').forEach(b => {
-      b.classList.toggle('active-nav', b.dataset.pane === paneId);
+      const isActive = b.dataset.pane === paneId;
+      b.classList.toggle('active-nav', isActive);
+      if (isActive) b.setAttribute('aria-current', 'page');
+      else b.removeAttribute('aria-current');
     });
     qa('.ib-btn').forEach(b => {
-      b.classList.toggle('active-ib', b.dataset.pane === paneId);
+      const isActive = b.dataset.pane === paneId;
+      b.classList.toggle('active-ib', isActive);
+      if (isActive) b.setAttribute('aria-current', 'page');
+      else b.removeAttribute('aria-current');
     });
     qa('.top-nav-link').forEach(l => {
-      l.classList.toggle('active-top-nav', l.dataset.pane === paneId);
+      const isActive = l.dataset.pane === paneId;
+      l.classList.toggle('active-top-nav', isActive);
+      if (isActive) l.setAttribute('aria-current', 'page');
+      else l.removeAttribute('aria-current');
     });
 
     if (location.hash.replace('#', '') !== paneId) {
