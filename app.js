@@ -557,6 +557,10 @@ document.addEventListener('DOMContentLoaded', () => {
       const tabSignin = $('tab-mode-signin');
       const tabRegister = $('tab-mode-register');
       const toggleLink = $('returning-toggle-btn');
+      const titleEl = $('rac-title') || document.querySelector('.rac-title');
+      const subEl = $('rac-sub') || document.querySelector('.rac-sub');
+      const btnText = $('enter-btn-text');
+      const btnEl = $('enter-btn');
       
       if (tabSignin) {
         tabSignin.classList.toggle('active-tab', mode === 'signin');
@@ -568,19 +572,21 @@ document.addEventListener('DOMContentLoaded', () => {
       }
 
       if (mode === 'register') {
-        if (enterBtnText) enterBtnText.innerText = 'Create Account';
-        const titleEl = document.querySelector('.rac-title');
-        if (titleEl) titleEl.innerHTML = 'Create your <span class="rac-title-bold">account</span>';
-        const subEl = document.querySelector('.rac-sub');
+        if (btnText) btnText.innerText = 'Create Account';
+        else if (btnEl) btnEl.innerText = 'Create Account';
+        if (titleEl) titleEl.innerHTML = 'Create your <span class="rac-title-bold" id="rac-title-bold">account</span>';
         if (subEl) subEl.innerText = 'Join our supportive anonymous community.';
         if (toggleLink) toggleLink.innerText = 'Already have an account? Sign in';
+        if (passInput) passInput.autocomplete = 'new-password';
+        console.log('[Sonder Auth] Switched mode to: CREATE ACCOUNT');
       } else {
-        if (enterBtnText) enterBtnText.innerText = 'Sign in';
-        const titleEl = document.querySelector('.rac-title');
-        if (titleEl) titleEl.innerHTML = 'Welcome <span class="rac-title-bold">back</span>';
-        const subEl = document.querySelector('.rac-sub');
+        if (btnText) btnText.innerText = 'Sign in';
+        else if (btnEl) btnEl.innerText = 'Sign in';
+        if (titleEl) titleEl.innerHTML = 'Welcome <span class="rac-title-bold" id="rac-title-bold">back</span>';
         if (subEl) subEl.innerText = 'Sign in to your account below.';
         if (toggleLink) toggleLink.innerText = 'Need an account? Create one';
+        if (passInput) passInput.autocomplete = 'current-password';
+        console.log('[Sonder Auth] Switched mode to: SIGN IN');
       }
     };
 
@@ -629,6 +635,11 @@ document.addEventListener('DOMContentLoaded', () => {
         setAuthMode(nextMode);
         emailInput?.focus();
       };
+    }
+
+    // Check URL Hash on initial landing render
+    if (window.location.hash === '#register' || window.location.hash === '#create-account') {
+      setAuthMode('register');
     }
 
     // Form submission handler

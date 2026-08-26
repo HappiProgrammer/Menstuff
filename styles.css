@@ -75,6 +75,13 @@
 
   --sidebar-w: 240px;
   --right-w: 320px;
+
+  /* Responsive vars */
+  --bottom-nav-height: 65px;
+  --z-nav: 100;
+  --z-overlay: 500;
+  --z-modal: 1000;
+  --z-toast: 2000;
 }
 
 /* ── Reset ── */
@@ -84,7 +91,7 @@ body {
   font-family: var(--font-sans);
   background: var(--bg);
   color: var(--text);
-  min-height: 100vh;
+  min-height: 100dvh;
   overflow-x: hidden;
   -webkit-font-smoothing: antialiased;
   line-height: 1.5;
@@ -93,7 +100,7 @@ a { color: inherit; text-decoration: none; }
 button { cursor: pointer; font-family: var(--font-sans); }
 input, textarea, select { font-family: var(--font-sans); }
 .hidden { display: none !important; }
-.page { min-height: 100vh; display: flex; flex-direction: column; }
+.page { min-height: 100dvh; display: flex; flex-direction: column; }
 .page.active { display: flex; }
 
 /* ── Scrollbar ── */
@@ -106,13 +113,14 @@ input, textarea, select { font-family: var(--font-sans); }
    REGISTER / LANDING PAGE — Visual Reference Design
    ===================================================== */
 #landing-page {
-  min-height: 100vh;
+  min-height: 100dvh;
   display: flex;
   align-items: center;
   justify-content: center;
   padding: 40px 20px;
   position: relative;
-  overflow: hidden;
+  overflow-x: hidden;
+  overflow-y: auto;
   background-color: #bcc8d4;
   background-image: radial-gradient(circle at 50% 30%, rgba(255,255,255,0.4) 0%, transparent 70%), url('register-bg.jpg');
   background-size: cover;
@@ -133,7 +141,7 @@ input, textarea, select { font-family: var(--font-sans); }
   animation: floatP linear infinite; opacity: 0;
 }
 @keyframes floatP {
-  0%   { transform: translateY(100vh) rotate(0); opacity: 0; }
+  0%   { transform: translateY(100dvh) rotate(0); opacity: 0; }
   10%  { opacity: 0.6; }
   90%  { opacity: 0.15; }
   100% { transform: translateY(-20px) rotate(360deg); opacity: 0; }
@@ -587,7 +595,7 @@ input, textarea, select { font-family: var(--font-sans); }
 #app-page {
   display: grid;
   grid-template-columns: var(--sidebar-w) minmax(0, 1fr) var(--right-w);
-  min-height: 100vh;
+  min-height: 100dvh;
   width: 100%;
 }
 
@@ -595,14 +603,14 @@ input, textarea, select { font-family: var(--font-sans); }
 .ig-sidebar {
   position: sticky;
   top: 0;
-  height: 100vh;
+  height: 100dvh;
   width: var(--sidebar-w);
   border-right: 1px solid var(--border);
   background: var(--bg);
   display: flex;
   flex-direction: column;
   padding: 24px 12px 14px;
-  z-index: 100;
+  z-index: var(--z-nav);
   overflow-y: auto;
 }
 .ig-logo { display: flex; align-items: center; gap: 10px; padding: 0 12px 24px; }
@@ -651,7 +659,7 @@ input, textarea, select { font-family: var(--font-sans); }
 .sound-dropdown {
   position: absolute; bottom: calc(100% + 6px); left: 0;
   background: var(--surface2); border: 1px solid var(--border2);
-  border-radius: var(--r-sm); padding: 4px; width: 150px; z-index: 200;
+  border-radius: var(--r-sm); padding: 4px; width: 150px; z-index: var(--z-modal);
 }
 .sound-opt {
   display: block; width: 100%; text-align: left;
@@ -695,7 +703,7 @@ input, textarea, select { font-family: var(--font-sans); }
 .ig-main {
   min-width: 0;
   width: 100%;
-  min-height: 100vh;
+  min-height: 100dvh;
   border-right: 1px solid var(--border);
   background: var(--bg);
 }
@@ -885,7 +893,7 @@ input, textarea, select { font-family: var(--font-sans); }
 .ig-right {
   position: sticky;
   top: 0;
-  height: 100vh;
+  height: 100dvh;
   width: var(--right-w);
   border-left: 1px solid var(--border);
   background: var(--bg);
@@ -1003,11 +1011,12 @@ input, textarea, select { font-family: var(--font-sans); }
   position: fixed; bottom: 0; left: 0; right: 0;
   background: var(--bg); border-top: 1px solid var(--border);
   padding: 8px 0 env(safe-area-inset-bottom, 4px);
-  z-index: 500;
+  z-index: var(--z-overlay);
   justify-content: space-around;
 }
 .ib-btn {
   background: none; border: none; color: var(--text3); padding: 8px 12px;
+  min-width: 48px; min-height: 48px;
   display: flex; align-items: center; justify-content: center;
   transition: color var(--t-fast);
 }
@@ -1429,7 +1438,7 @@ input, textarea, select { font-family: var(--font-sans); }
   background: rgba(18,18,24,0.96); backdrop-filter: blur(16px);
   border: 1px solid var(--border2); border-radius: var(--r-lg);
   padding: 8px 12px; display: flex; align-items: center; justify-content: space-between; gap: 12px;
-  box-shadow: 0 10px 30px rgba(0,0,0,0.6); z-index: 800;
+  box-shadow: 0 10px 30px rgba(0,0,0,0.6); z-index: var(--z-modal);
   animation: miniPlayerIn 0.3s cubic-bezier(0.16, 1, 0.3, 1);
 }
 @keyframes miniPlayerIn { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
@@ -1598,7 +1607,7 @@ input, textarea, select { font-family: var(--font-sans); }
   position: fixed; inset: 0;
   background: rgba(13,19,26,0.88);
   backdrop-filter: blur(8px);
-  z-index: 1000; display: flex; align-items: flex-start; justify-content: center;
+  z-index: var(--z-modal); display: flex; align-items: flex-start; justify-content: center;
   padding: 40px 20px; overflow-y: auto;
   animation: fadeIn 0.2s ease;
 }
@@ -1667,7 +1676,7 @@ input, textarea, select { font-family: var(--font-sans); }
 .story-viewer {
   position: fixed; inset: 0; background: rgba(13,19,26,0.94);
   backdrop-filter: blur(10px);
-  z-index: 2000; display: flex; align-items: center; justify-content: center;
+  z-index: var(--z-toast); display: flex; align-items: center; justify-content: center;
   animation: fadeIn 0.2s ease;
 }
 .story-viewer.hidden { display: none !important; }
@@ -1817,7 +1826,7 @@ input, textarea, select { font-family: var(--font-sans); }
   border-radius: var(--r-sm); padding: 10px 22px;
   display: flex; align-items: center; gap: 8px; font-size: 13px; font-weight: 500;
   box-shadow: 0 10px 30px rgba(0,0,0,0.5);
-  z-index: 9999; opacity: 0; transition: all 0.3s ease; pointer-events: none;
+  z-index: var(--z-toast); opacity: 0; transition: all 0.3s ease; pointer-events: none;
 }
 .toast.show { opacity: 1; transform: translateX(-50%) translateY(0); }
 
@@ -1827,7 +1836,7 @@ input, textarea, select { font-family: var(--font-sans); }
   border-radius: var(--r-sm); padding: 10px 20px;
   display: flex; align-items: center; gap: 8px; font-size: 13px;
   box-shadow: 0 10px 30px rgba(0,0,0,0.5);
-  z-index: 9999; opacity: 0; transition: all 0.4s ease; pointer-events: none;
+  z-index: var(--z-toast); opacity: 0; transition: all 0.4s ease; pointer-events: none;
 }
 .live-notif.show { opacity: 1; transform: translateX(-50%) translateY(0); }
 .live-notif-dot {
@@ -2254,7 +2263,7 @@ button:focus-visible, a:focus-visible, input:focus-visible, textarea:focus-visib
    MESSAGES / DM PANE
    ===================================================== */
 .dm-layout {
-  display: flex; height: calc(100vh - 65px);
+  display: flex; height: calc(100dvh - 65px);
   overflow: hidden;
   width: 100%;
 }
@@ -2404,7 +2413,7 @@ button:focus-visible, a:focus-visible, input:focus-visible, textarea:focus-visib
    DOUBLE-TAP HEART BURST
    ===================================================== */
 .heart-burst-overlay {
-  position: fixed; pointer-events: none; z-index: 9999;
+  position: fixed; pointer-events: none; z-index: var(--z-toast);
   opacity: 0; transform: scale(0);
   transition: none;
   display: flex; align-items: center; justify-content: center;
@@ -2819,7 +2828,7 @@ button:focus-visible, a:focus-visible, input:focus-visible, textarea:focus-visib
 
 .dm-container {
   display: flex;
-  height: calc(100vh - 120px);
+  height: calc(100dvh - 120px);
   max-height: 760px;
   min-height: 520px;
   background: var(--surface);
@@ -3670,7 +3679,7 @@ button:focus-visible, a:focus-visible, input:focus-visible, textarea:focus-visib
 /* Responsive Behavior for DMs */
 @media (max-width: 768px) {
   .dm-container {
-    height: calc(100vh - 140px);
+    height: calc(100dvh - 140px);
   }
 
   .dm-sidebar {
@@ -4130,8 +4139,8 @@ button:focus-visible, a:focus-visible, input:focus-visible, textarea:focus-visib
 }
 
 .breath-ring-wrap {
-  width: 170px;
-  height: 170px;
+  width: 70vmin;
+  height: 70vmin;
   position: relative;
   display: flex;
   align-items: center;
@@ -4148,8 +4157,8 @@ button:focus-visible, a:focus-visible, input:focus-visible, textarea:focus-visib
 }
 
 .breath-circle {
-  width: 130px;
-  height: 130px;
+  width: calc(70vmin - 40px);
+  height: calc(70vmin - 40px);
   border-radius: 50%;
   background: linear-gradient(135deg, rgba(0, 199, 149, 0.2), rgba(56, 189, 248, 0.2));
   border: 2px solid var(--accent);
@@ -4969,7 +4978,7 @@ button:focus-visible, a:focus-visible, input:focus-visible, textarea:focus-visib
   width: 310px;
   padding: 10px;
   box-shadow: 0 12px 36px rgba(0, 0, 0, 0.6);
-  z-index: 100;
+  z-index: var(--z-nav);
   animation: popoverFadeIn 0.2s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
@@ -5016,7 +5025,7 @@ button:focus-visible, a:focus-visible, input:focus-visible, textarea:focus-visib
   overflow-y: auto;
 }
 
-.dm-ep-btn {
+.dm-ep-btn { min-width: 48px; min-height: 48px; /* touch */
   background: none;
   border: none;
   font-size: 20px;
@@ -5138,7 +5147,7 @@ button:focus-visible, a:focus-visible, input:focus-visible, textarea:focus-visib
   position: relative;
   width: 100%;
   max-width: 440px;
-  height: calc(100vh - 20px);
+  height: calc(100dvh - 20px);
   max-height: 840px;
   margin: 0 auto;
   background: #000000;
@@ -5150,8 +5159,8 @@ button:focus-visible, a:focus-visible, input:focus-visible, textarea:focus-visib
 @media (max-width: 768px) {
   .reels-viewport-wrapper {
     max-width: 100%;
-    height: calc(100vh - 105px);
-    max-height: 100vh;
+    height: calc(100dvh - 105px);
+    max-height: 100dvh;
     border-radius: 0;
   }
 }
@@ -5179,7 +5188,7 @@ button:focus-visible, a:focus-visible, input:focus-visible, textarea:focus-visib
 
 .reel-card {
   width: 100%;
-  height: calc(100vh - 20px);
+  height: calc(100dvh - 20px);
   max-height: 840px;
   scroll-snap-align: start;
   scroll-snap-stop: always;
@@ -5193,8 +5202,8 @@ button:focus-visible, a:focus-visible, input:focus-visible, textarea:focus-visib
 
 @media (max-width: 768px) {
   .reel-card {
-    height: calc(100vh - 105px);
-    max-height: 100vh;
+    height: calc(100dvh - 105px);
+    max-height: 100dvh;
   }
 }
 
@@ -5772,7 +5781,7 @@ html {
   }
 
   body {
-    padding-bottom: calc(65px + env(safe-area-inset-bottom, 8px));
+    padding-bottom: calc(var(--bottom-nav-height) + env(safe-area-inset-bottom, 16px));
   }
 
   /* ── 1. Landing & Auth Page Mobile Optimization ── */
@@ -5781,68 +5790,6 @@ html {
     align-items: center;
     justify-content: center;
   }
-
-  .register-stage {
-    width: 100%;
-    max-width: 100%;
-    padding: 0;
-  }
-
-  .register-split-card {
-    flex-direction: column;
-    width: 100%;
-    min-height: auto;
-    border-radius: 20px;
-    box-shadow: 0 16px 40px rgba(0, 0, 0, 0.4);
-    overflow: hidden;
-  }
-
-  .register-auth-card {
-    flex: 1;
-    width: 100%;
-    border-radius: 20px;
-    padding: 28px 20px 24px;
-    box-shadow: none;
-  }
-
-  .rac-header {
-    margin-bottom: 18px;
-  }
-
-  .rac-title {
-    font-size: 23px;
-  }
-
-  .rac-sub {
-    font-size: 12.5px;
-  }
-
-  .rac-mode-tabs {
-    margin-bottom: 16px;
-  }
-
-  .rac-tab {
-    font-size: 12.5px;
-    padding: 9px 8px;
-    min-height: 44px;
-  }
-
-  .rac-input {
-    padding: 13px 14px;
-    border-radius: 9px;
-  }
-
-  .rac-submit-btn {
-    min-height: 48px;
-    font-size: 15px;
-    border-radius: 9px;
-  }
-
-  /* Compact hero banner on small mobile */
-  .register-hero-card {
-    display: none; /* Hide heavy image card on small mobile for instant auth experience */
-  }
-
   /* ── 2. Top Header & Bottom Bar Navigation ── */
   .mobile-top-bar {
     display: flex;
@@ -5904,7 +5851,7 @@ html {
     backdrop-filter: blur(16px);
     border-top: 1px solid var(--border);
     padding: 2px 6px calc(2px + env(safe-area-inset-bottom, 6px));
-    z-index: 100;
+    z-index: var(--z-nav);
   }
 
   .ib-btn {
