@@ -3,6 +3,10 @@
  */
 
 document.addEventListener('DOMContentLoaded', () => {
+  // Storage Keys
+  const SONDER_SESSION_KEY = 'sonder_v4';
+  const SONDER_MUSIC_SOURCE_KEY = 'sonder_music_source';
+
   // ─── STATE ──────────────────────────────────────────────────────────
   const S = {
     user: {
@@ -341,7 +345,7 @@ document.addEventListener('DOMContentLoaded', () => {
   ];
 
   const saveData = () => {
-    localStorage.setItem('sonder_v4', JSON.stringify({
+    localStorage.setItem(SONDER_SESSION_KEY, JSON.stringify({
       user: S.user,
       diary: S.diary,
       follows: S.follows,
@@ -355,14 +359,14 @@ document.addEventListener('DOMContentLoaded', () => {
   };
 
   const loadData = () => {
-    const d = localStorage.getItem('sonder_v4') || localStorage.getItem('shattered_v3');
+    const d = localStorage.getItem(SONDER_SESSION_KEY) || localStorage.getItem('shattered_v3'); // Keep fallback for older sessions once
     if (d) {
       let parsed = {};
       try {
         parsed = JSON.parse(d);
       } catch (err) {
         console.warn('[Sonder Auth] Error parsing localStorage data, resetting session:', err);
-        localStorage.removeItem('sonder_v4');
+        localStorage.removeItem(SONDER_SESSION_KEY);
       }
       S.user = parsed.user || { id: null, joined: null, avatar: null, moods: [], bio: '', followers: 0, following: 0 };
       if (!S.user.avatar || !AVATARS.includes(S.user.avatar)) {
@@ -870,7 +874,7 @@ document.addEventListener('DOMContentLoaded', () => {
       try {
         await fetch(getApiUrl('/api/auth/logout'), { method: 'POST' });
       } catch (e) {}
-      localStorage.removeItem('sonder_v4');
+      localStorage.removeItem(SONDER_SESSION_KEY);
       localStorage.removeItem('shattered_v3');
       S.user = { id: null, joined: null, avatar: null, moods: [], bio: '', followers: 0, following: 0 };
       $('app-page').classList.add('hidden');
@@ -2204,7 +2208,7 @@ document.addEventListener('DOMContentLoaded', () => {
     renderVideoSkeletons();
 
     try {
-      const response = await fetch(`/api/youtube-search?q=${encodeURIComponent(query)}&maxResults=12`);
+      const response = await fetch(getApiUrl(`/api/youtube-search?q=${encodeURIComponent(query)}&maxResults=12`));
       if (response.ok) {
         const json = await response.json();
         if (json.items && json.items.length > 0) {
@@ -2531,7 +2535,7 @@ document.addEventListener('DOMContentLoaded', () => {
         pane.classList.toggle('hidden', pane.id !== `pane-source-${sourceKey}`);
         pane.classList.toggle('active-source-pane', pane.id === `pane-source-${sourceKey}`);
       });
-      try { localStorage.setItem('shattered_music_source', sourceKey); } catch(e){}
+      try { localStorage.setItem(SONDER_MUSIC_SOURCE_KEY, sourceKey); } catch(e){}
     };
 
     qa('.source-tab-btn').forEach(btn => {
@@ -2540,7 +2544,7 @@ document.addEventListener('DOMContentLoaded', () => {
       });
     });
 
-    const savedSource = localStorage.getItem('shattered_music_source') || 'direct';
+    const savedSource = localStorage.getItem(SONDER_MUSIC_SOURCE_KEY) || 'direct';
     switchMusicSource(savedSource);
 
     // 2. Direct Audio Engine Setup
@@ -4061,7 +4065,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // Notify backend
     try {
-      fetch('/api/messages/read', {
+      fetch(getApiUrl('/api/messages/read'), {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ threadId })
@@ -4276,7 +4280,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
   const syncMessageToServer = (threadId, message) => {
     try {
-      fetch('/api/messages/send', {
+      fetch(getApiUrl('/api/messages/send'), {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ threadId, message })
