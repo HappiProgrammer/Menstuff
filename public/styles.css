@@ -78,10 +78,31 @@
 
   /* Responsive vars */
   --bottom-nav-height: 65px;
+  /* ── Unified Z-Index System ── */
+  --z-base: 1;
+  --z-card-overlay: 10;
+  --z-sticky-header: 50;
+  --z-header: 75;
   --z-nav: 100;
+  --z-floating-btn: 150;
+  --z-drawer: 200;
+  --z-popover: 300;
+  --z-modal-backdrop: 500;
+  --z-modal: 600;
+  --z-toast: 1000;
   --z-overlay: 500;
-  --z-modal: 1000;
-  --z-toast: 2000;
+
+  /* ── Mobile Spacing & Touch Standards ── */
+  --tap-min: 48px;
+  --touch-target-min: 48px;
+  --sp-xxs: 2px;
+  --sp-xs: 4px;
+  --sp-sm: 8px;
+  --sp-md: 16px;
+  --sp-lg: 24px;
+  --sp-xl: 32px;
+  --bottom-nav-height: 60px;
+  --top-bar-height: 56px;
 }
 
 /* ── Reset ── */
@@ -97,7 +118,7 @@ body {
   line-height: 1.5;
 }
 a { color: inherit; text-decoration: none; }
-button { cursor: pointer; font-family: var(--font-sans); }
+button { cursor: pointer; font-family: var(--font-sans); appearance: none; -webkit-appearance: none; background: transparent; border: none; }
 input, textarea, select { font-family: var(--font-sans); }
 .hidden { display: none !important; }
 .page { min-height: 100dvh; display: flex; flex-direction: column; }
@@ -710,8 +731,20 @@ input, textarea, select { font-family: var(--font-sans); }
 .ig-pane { display: flex; flex-direction: column; width: 100%; }
 .ig-pane.hidden { display: none !important; }
 
-.feed-inner { max-width: 630px; width: 100%; margin: 0 auto; padding: 0 20px 60px; }
-.pane-inner { max-width: 720px; width: 100%; margin: 0 auto; padding: 24px 24px 60px; }
+.feed-inner {
+  max-width: 630px;
+  width: 100%;
+  margin: 0 auto;
+  padding: 0 16px calc(var(--bottom-nav-height) + env(safe-area-inset-bottom, 16px) + 20px);
+  box-sizing: border-box;
+}
+.pane-inner {
+  max-width: 720px;
+  width: 100%;
+  margin: 0 auto;
+  padding: 24px 16px calc(var(--bottom-nav-height) + env(safe-area-inset-bottom, 16px) + 20px);
+  box-sizing: border-box;
+}
 .pane-title { font-family: var(--font-serif); font-size: 24px; font-weight: 700; }
 .pane-sub { font-size: 14px; color: var(--text2); margin-top: 4px; margin-bottom: 24px; }
 
@@ -3822,7 +3855,7 @@ button:focus-visible, a:focus-visible, input:focus-visible, textarea:focus-visib
 .dpc-actions {
   display: flex;
   align-items: center;
-  gap: 10px;
+  gap: 8px;
   flex-wrap: wrap;
 }
 
@@ -5763,8 +5796,13 @@ html {
   -webkit-tap-highlight-color: transparent;
 }
 
+
+/* ==========================================================================
+   COMPREHENSIVE ANDROID MOBILE LAYOUT OVERHAUL (360px - 430px & Tablets)
+   Edge-to-edge, Zero Overlap, 48x48dp Touch Targets, dvh Viewports
+   ========================================================================== */
 @media (max-width: 768px) {
-  /* Prevent iOS zoom on input focus by guaranteeing 16px minimum */
+  /* Prevent browser automatic zoom on input focus */
   input[type="text"],
   input[type="email"],
   input[type="password"],
@@ -5774,39 +5812,38 @@ html {
     font-size: 16px !important;
   }
 
-  /* Safe Area Variables */
   :root {
     --sidebar-w: 0px;
     --right-w: 0px;
   }
 
   body {
-    padding-bottom: calc(var(--bottom-nav-height) + env(safe-area-inset-bottom, 16px));
+    padding-bottom: 0 !important;
+    overflow-x: hidden;
   }
 
-  /* ── 1. Landing & Auth Page Mobile Optimization ── */
-  #landing-page {
-    padding: 16px 12px;
-  }
-  /* ── 2. Top Header & Bottom Bar Navigation ── */
+  /* ── 1. Top Header & Bottom Bar Navigation ── */
   .mobile-top-bar {
     display: flex;
     align-items: center;
     justify-content: space-between;
-    height: 54px;
+    height: var(--top-bar-height);
     padding: 0 14px;
     background: rgba(13, 19, 26, 0.95);
     backdrop-filter: blur(16px);
+    -webkit-backdrop-filter: blur(16px);
     border-bottom: 1px solid var(--border);
     position: sticky;
     top: 0;
-    z-index: 90;
+    z-index: var(--z-header);
   }
 
   .mobile-brand {
     display: flex;
     align-items: center;
     gap: 8px;
+    cursor: pointer;
+    min-height: 48px;
   }
 
   .mobile-brand-title {
@@ -5819,14 +5856,27 @@ html {
   .mobile-top-actions {
     display: flex;
     align-items: center;
+    gap: 8px;
+  }
+
+  .sos-pill-btn {
+    min-height: 42px;
+    min-width: 48px;
+    display: inline-flex;
+    align-items: center;
     gap: 6px;
+    padding: 6px 12px;
+    border-radius: 999px;
+    font-size: 12px;
+    font-weight: 600;
+    touch-action: manipulation;
   }
 
   .mobile-icon-btn {
-    width: 40px;
-    height: 40px;
-    min-width: 40px;
-    min-height: 40px;
+    width: 48px;
+    height: 48px;
+    min-width: 48px;
+    min-height: 48px;
     border-radius: 50%;
     background: var(--surface);
     border: 1px solid var(--border);
@@ -5834,6 +5884,7 @@ html {
     display: flex;
     align-items: center;
     justify-content: center;
+    touch-action: manipulation;
   }
 
   .ig-bottom-nav {
@@ -5844,18 +5895,21 @@ html {
     bottom: 0;
     left: 0;
     right: 0;
-    height: 60px;
+    height: calc(var(--bottom-nav-height) + env(safe-area-inset-bottom, 8px));
     background: rgba(13, 19, 26, 0.96);
     backdrop-filter: blur(16px);
+    -webkit-backdrop-filter: blur(16px);
     border-top: 1px solid var(--border);
-    padding: 2px 6px calc(2px + env(safe-area-inset-bottom, 6px));
+    padding: 2px 4px calc(2px + env(safe-area-inset-bottom, 8px));
     z-index: var(--z-nav);
+    box-sizing: border-box;
   }
 
   .ib-btn {
     flex: 1;
     height: 100%;
     min-height: 48px;
+    min-width: 48px;
     background: none;
     border: none;
     color: var(--text3);
@@ -5866,6 +5920,7 @@ html {
     gap: 2px;
     font-size: 10px;
     cursor: pointer;
+    touch-action: manipulation;
     transition: color var(--t-fast);
   }
 
@@ -5877,24 +5932,120 @@ html {
     background: linear-gradient(135deg, var(--accent), #25e2af) !important;
     color: #06110e !important;
     border-radius: 50% !important;
-    width: 42px !important;
-    height: 42px !important;
-    min-width: 42px !important;
-    min-height: 42px !important;
-    flex: 0 0 42px !important;
+    width: 48px !important;
+    height: 48px !important;
+    min-width: 48px !important;
+    min-height: 48px !important;
+    flex: 0 0 48px !important;
     display: flex !important;
     align-items: center !important;
     justify-content: center !important;
     box-shadow: 0 4px 14px rgba(0, 199, 149, 0.4) !important;
-    transform: translateY(-5px);
+    transform: translateY(-4px);
+    touch-action: manipulation;
   }
 
-  /* ── 3. Instagram Reels & Stories Video Feed ── */
+  /* ── 2. Landing & Authentication Split Card ── */
+  #landing-page {
+    min-height: 100dvh;
+    height: auto;
+    padding: 16px 12px calc(24px + env(safe-area-inset-bottom, 16px));
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow-y: auto;
+  }
+
+  .register-stage {
+    width: 100%;
+    max-width: 100%;
+    padding: 0;
+  }
+
+  .register-split-card {
+    flex-direction: column;
+    width: 100%;
+    max-width: 100%;
+    border-radius: 20px;
+    min-height: auto;
+    overflow: hidden;
+  }
+
+  .register-hero-card {
+    padding: 20px 16px;
+    min-height: auto;
+  }
+
+  .rhc-headline {
+    font-size: clamp(20px, 6vw, 26px);
+  }
+
+  .rhc-subheadline {
+    font-size: 13.5px;
+  }
+
+  .rhc-imagery-wrap {
+    max-height: 120px;
+    margin-top: 8px;
+  }
+
+  .register-auth-card {
+    padding: 20px 16px;
+    width: 100%;
+  }
+
+  .rac-mode-tabs {
+    min-height: 48px;
+    display: flex;
+    gap: 8px;
+    margin-bottom: 16px;
+  }
+
+  .rac-tab {
+    flex: 1;
+    min-height: 48px;
+    font-size: 14px;
+    font-weight: 600;
+    border-radius: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    touch-action: manipulation;
+  }
+
+  .rac-field {
+    margin-bottom: 14px;
+  }
+
+  .rac-input {
+    min-height: 48px;
+    font-size: 16px !important;
+    padding: 12px 14px;
+    border-radius: 12px;
+    width: 100%;
+  }
+
+  .rac-submit-btn, #enter-btn {
+    min-height: 48px;
+    font-size: 15px;
+    font-weight: 700;
+    border-radius: 12px;
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    touch-action: manipulation;
+    margin-top: 8px;
+  }
+
+  /* ── 3. Reels Video Feed (Edge-to-Edge & Mobile Optimized) ── */
   #pane-reels {
-    height: calc(100dvh - 54px - 60px);
-    max-height: calc(100dvh - 54px - 60px);
+    height: calc(100dvh - var(--top-bar-height) - var(--bottom-nav-height) - env(safe-area-inset-bottom, 8px));
+    max-height: calc(100dvh - var(--top-bar-height) - var(--bottom-nav-height) - env(safe-area-inset-bottom, 8px));
     width: 100%;
     background: #000000;
+    overflow: hidden;
+    position: relative;
   }
 
   .reels-viewport-wrapper {
@@ -5903,78 +6054,151 @@ html {
     height: 100%;
     max-height: 100%;
     border-radius: 0;
+    border: none;
     box-shadow: none;
   }
 
-  .reel-card {
+  .reels-feed-container {
+    height: 100%;
+    scroll-snap-type: y mandatory;
+    overflow-y: scroll;
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: none;
+  }
+
+  .reels-card, .reel-card {
     width: 100%;
-    height: calc(100dvh - 54px - 60px);
-    max-height: calc(100dvh - 54px - 60px);
+    height: calc(100dvh - var(--top-bar-height) - var(--bottom-nav-height) - env(safe-area-inset-bottom, 8px));
+    max-height: calc(100dvh - var(--top-bar-height) - var(--bottom-nav-height) - env(safe-area-inset-bottom, 8px));
+    min-height: 100%;
+    scroll-snap-align: start;
+    scroll-snap-stop: always;
+    position: relative;
+    border-radius: 0;
   }
 
-  .reel-action-bar {
-    right: 10px;
-    bottom: 30px;
-    gap: 14px;
+  .reel-video {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    z-index: 1;
   }
 
-  .reel-act-icon-wrap {
-    width: 44px;
-    height: 44px;
+  .reel-action-bar, .reels-actions {
+    position: absolute;
+    right: 12px;
+    bottom: 24px;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    z-index: 20;
   }
 
-  .reel-meta-bottom {
-    left: 12px;
-    right: 70px;
-    bottom: 16px;
+  .reel-act-icon-wrap, .reel-action-btn, .reels-action-btn {
+    width: 48px;
+    height: 48px;
+    min-width: 48px;
+    min-height: 48px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    touch-action: manipulation;
+  }
+
+  .reel-meta-bottom, .reels-caption-wrap {
+    position: absolute;
+    left: 14px;
+    right: 72px; /* Leaves clear space so captions NEVER collide with action buttons */
+    bottom: 18px;
+    z-index: 15;
+    max-height: 120px;
+    overflow: hidden;
   }
 
   .reel-caption-text {
-    font-size: 12.5px;
-    max-height: 44px;
+    font-size: 13px;
+    max-height: 48px;
+    line-height: 1.45;
   }
 
   .reels-floating-mute-btn {
-    top: 10px;
-    right: 10px;
-    padding: 5px 10px;
-    font-size: 10.5px;
+    top: 12px;
+    right: 12px;
+    min-height: 44px;
+    min-width: 44px;
+    padding: 6px 12px;
+    font-size: 11px;
+    z-index: 25;
+    touch-action: manipulation;
   }
 
-  .reels-comments-modal-container {
+  .reels-comments-modal-container, .reels-comments-card {
+    width: 100%;
+    max-width: 100%;
     max-height: 82dvh;
     border-radius: 20px 20px 0 0;
+    padding-bottom: calc(12px + env(safe-area-inset-bottom, 8px));
   }
 
   /* ── 4. Direct Messages & Private Chat ── */
   #pane-messages {
     padding: 0 !important;
+    height: calc(100dvh - var(--top-bar-height) - var(--bottom-nav-height) - env(safe-area-inset-bottom, 8px));
+    max-height: calc(100dvh - var(--top-bar-height) - var(--bottom-nav-height) - env(safe-area-inset-bottom, 8px));
+    overflow: hidden;
   }
 
   .dm-container {
-    height: calc(100dvh - 54px - 60px);
-    max-height: calc(100dvh - 54px - 60px);
+    width: 100%;
+    height: 100%;
+    max-height: 100%;
     border-radius: 0;
     border: none;
+    display: flex;
+    flex-direction: column;
     grid-template-columns: 1fr;
   }
 
-  /* When a chat is active on mobile, hide the thread list sidebar */
-  .dm-container.dm-active .dm-inbox-sidebar {
-    display: none;
+  /* Mobile thread list / active conversation toggle */
+  .dm-container.thread-open #dm-sidebar,
+  .dm-container.thread-open .dm-sidebar {
+    display: none !important;
   }
 
-  /* When no chat is active, hide the conversation view */
-  .dm-container:not(.dm-active) .dm-conversation-main {
-    display: none;
+  .dm-container.thread-open #dm-main,
+  .dm-container.thread-open .dm-main {
+    display: flex !important;
+    width: 100% !important;
+    height: 100% !important;
+    flex: 1;
+    flex-direction: column;
+  }
+
+  .dm-container:not(.thread-open) #dm-sidebar,
+  .dm-container:not(.thread-open) .dm-sidebar {
+    display: flex !important;
+    width: 100% !important;
+    height: 100% !important;
+    flex: 1;
+    flex-direction: column;
+  }
+
+  .dm-container:not(.thread-open) #dm-main,
+  .dm-container:not(.thread-open) .dm-main {
+    display: none !important;
   }
 
   .dm-back-btn {
     display: flex !important;
     align-items: center;
     justify-content: center;
-    width: 36px;
-    height: 36px;
+    width: 48px !important;
+    height: 48px !important;
+    min-width: 48px !important;
+    min-height: 48px !important;
     border-radius: 50%;
     background: var(--surface2);
     border: 1px solid var(--border);
@@ -5982,57 +6206,97 @@ html {
     cursor: pointer;
     margin-right: 8px;
     flex-shrink: 0;
+    touch-action: manipulation;
   }
 
-  .dm-inbox-sidebar {
-    width: 100%;
-    border-right: none;
+  .dm-thread-head {
+    height: 56px;
+    min-height: 56px;
+    padding: 0 10px;
+    display: flex;
+    align-items: center;
+    background: var(--surface);
+    border-bottom: 1px solid var(--border);
+    z-index: var(--z-sticky-header);
   }
 
-  .dm-conversation-main {
-    width: 100%;
+  .dm-messages {
+    flex: 1;
+    overflow-y: auto;
+    -webkit-overflow-scrolling: touch;
+    padding: 14px 12px;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
   }
 
   .dm-msg-body-wrap {
     max-width: 86%;
+    word-break: break-word;
   }
 
   .dm-msg-bubble {
-    font-size: 13.5px;
-    padding: 9px 13px;
+    font-size: 14px;
+    padding: 10px 14px;
+    border-radius: 16px;
   }
 
-  .dm-chat-input-row {
+  .dm-input-row, .dm-chat-input-row {
     padding: 8px 10px calc(8px + env(safe-area-inset-bottom, 4px));
-    gap: 6px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    background: var(--surface);
+    border-top: 1px solid var(--border);
+    position: relative;
+  }
+
+  .dm-composer-tool-btn,
+  .dm-voice-btn,
+  .dm-send-btn,
+  .dm-icon-btn {
+    width: 48px !important;
+    height: 48px !important;
+    min-width: 48px !important;
+    min-height: 48px !important;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    touch-action: manipulation;
   }
 
   .dm-chat-input {
-    padding: 9px 12px;
-    font-size: 14px;
+    min-height: 48px;
+    font-size: 16px !important;
+    padding: 10px 14px;
+    border-radius: 12px;
+    flex: 1;
   }
 
-  .dm-icon-btn {
-    width: 38px;
-    height: 38px;
-    min-width: 38px;
-    min-height: 38px;
-  }
-
-  .dm-send-btn {
-    width: 38px;
-    height: 38px;
-    min-width: 38px;
-    min-height: 38px;
+  .dm-emoji-popover {
+    position: absolute;
+    bottom: 64px;
+    left: 8px;
+    right: 8px;
+    width: calc(100% - 16px);
+    max-width: calc(100vw - 16px);
+    max-height: 240px;
+    z-index: var(--z-popover);
+    background: var(--surface);
+    border: 1px solid var(--border2);
+    border-radius: 16px;
+    box-shadow: 0 12px 36px rgba(0, 0, 0, 0.7);
   }
 
   /* ── 5. Home Feed & Story Cards ── */
   .feed-inner {
-    padding: 0 12px 60px;
+    padding: 0 12px calc(var(--bottom-nav-height) + env(safe-area-inset-bottom, 16px) + 20px) !important;
   }
 
   .pane-inner {
-    padding: 16px 12px 60px;
+    padding: 16px 12px calc(var(--bottom-nav-height) + env(safe-area-inset-bottom, 16px) + 20px) !important;
   }
 
   .stories-scroll-wrap {
@@ -6040,14 +6304,15 @@ html {
   }
 
   .story-ring-wrap {
-    width: 56px;
-    height: 56px;
+    width: 58px;
+    height: 58px;
   }
 
   .post-card {
     padding: 16px 14px;
-    border-radius: 14px;
+    border-radius: 16px;
     margin-bottom: 14px;
+    width: 100%;
   }
 
   .post-title {
@@ -6055,88 +6320,537 @@ html {
   }
 
   .post-body {
-    font-size: 13.5px;
+    font-size: 14px;
     line-height: 1.65;
   }
 
   .ig-post-actions-row {
-    gap: 2px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 6px;
+    margin-top: 10px;
   }
 
   .ig-post-action-btn {
-    padding: 6px 6px;
-    font-size: 11.5px;
-    min-height: 40px;
+    min-height: 48px;
+    min-width: 48px;
+    padding: 8px 10px;
+    font-size: 12px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 4px;
+    touch-action: manipulation;
   }
 
-  /* ── 6. Relationship Advice & News ── */
-  .advice-hero-card {
-    padding: 18px 16px;
-    border-radius: 14px;
+  /* ── 6. SOS Impulse Cooldown Modal & Breathing Circle ── */
+  #sos-modal {
+    position: fixed;
+    inset: 0;
+    z-index: var(--z-modal);
+    background: rgba(8, 12, 18, 0.96);
+    backdrop-filter: blur(16px);
+    -webkit-backdrop-filter: blur(16px);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 12px;
+    overflow-y: auto;
   }
 
-  .ahc-quote {
-    font-size: 16px;
+  .sos-modal-card {
+    width: 100%;
+    max-width: 440px;
+    max-height: calc(100dvh - 24px);
+    overflow-y: auto;
+    -webkit-overflow-scrolling: touch;
+    background: #0d1217;
+    border: 1px solid var(--border2);
+    border-radius: 20px;
+    padding: 20px 16px;
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.8);
+  }
+
+  .sos-close-btn {
+    width: 48px;
+    height: 48px;
+    min-width: 48px;
+    min-height: 48px;
+    font-size: 28px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    touch-action: manipulation;
+  }
+
+  .breath-ring-wrap {
+    width: clamp(160px, 46vw, 220px) !important;
+    height: clamp(160px, 46vw, 220px) !important;
+    margin: 12px auto !important;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+  }
+
+  .breath-circle {
+    width: 100% !important;
+    height: 100% !important;
+    border-radius: 50%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+  }
+
+  .breath-phase-label {
+    font-size: 15px;
+    font-weight: 700;
+  }
+
+  .breath-seconds {
+    font-size: 28px;
+    font-weight: 800;
+  }
+
+  .sos-anchors-wrap {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    width: 100%;
+  }
+
+  .sos-anchor-item {
+    padding: 12px 14px;
+    border-radius: 12px;
+    font-size: 13.5px;
     line-height: 1.5;
   }
 
-  .advice-grid {
-    grid-template-columns: 1fr;
-    gap: 14px;
+  .sos-footer-actions {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    width: 100%;
+    margin-top: 4px;
   }
 
-  .advice-card {
-    padding: 16px 14px;
-    border-radius: 14px;
+  .sos-journal-btn,
+  .sos-done-btn {
+    width: 100%;
+    min-height: 48px;
+    font-size: 15px;
+    font-weight: 600;
+    border-radius: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    touch-action: manipulation;
   }
 
   /* ── 7. Healing Hub & Sobriety Tracker ── */
+  .tracker-hero-card {
+    padding: 16px 14px;
+    border-radius: 16px;
+    width: 100%;
+  }
+
+  .thc-top-row {
+    flex-direction: column;
+    gap: 12px;
+    align-items: flex-start;
+  }
+
+  .thc-actions-row {
+    width: 100%;
+    display: flex;
+    gap: 8px;
+    flex-wrap: wrap;
+  }
+
+  .thc-btn-secondary,
+  .thc-btn-shield {
+    flex: 1;
+    min-height: 48px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+    padding: 10px 14px;
+    font-size: 13px;
+    font-weight: 600;
+    border-radius: 12px;
+    touch-action: manipulation;
+  }
+
+  .thc-counter-box {
+    padding: 16px 12px;
+    border-radius: 14px;
+    margin: 14px 0;
+    text-align: center;
+  }
+
+  .thc-days-num {
+    font-size: clamp(36px, 12vw, 54px);
+    font-weight: 800;
+    line-height: 1;
+  }
+
   .streak-timer-grid {
+    display: grid;
     grid-template-columns: repeat(4, 1fr) !important;
     gap: 6px !important;
+    width: 100%;
   }
 
   .st-card {
     padding: 10px 4px !important;
+    min-width: 0;
+    overflow: hidden;
   }
 
   .st-num {
-    font-size: clamp(17px, 5.5vw, 24px) !important;
+    font-size: clamp(16px, 5vw, 22px) !important;
   }
 
   .st-label {
     font-size: 9.5px !important;
   }
 
-  .mood-grid {
-    grid-template-columns: repeat(3, 1fr);
-    gap: 8px;
+  .milestones-grid, .thc-milestones-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(130px, 1fr));
+    gap: 10px;
+    width: 100%;
   }
 
-  /* ── 8. Modals Bottom Sheet Transition ── */
+  .milestone-badge-card {
+    min-height: 80px;
+    padding: 12px 10px;
+    border-radius: 12px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+  }
+
+  .mood-grid, .mood-picker-row {
+    display: grid;
+    grid-template-columns: repeat(5, 1fr);
+    gap: 6px;
+    width: 100%;
+  }
+
+  .mood-btn {
+    min-height: 48px;
+    min-width: 48px;
+    padding: 8px 4px;
+    font-size: 20px;
+    border-radius: 12px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 4px;
+    touch-action: manipulation;
+  }
+
+  /* ── 8. Music Room & Sound Mixer ── */
+  .music-source-tabs, #music-source-tabs {
+    display: flex;
+    gap: 8px;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: none;
+    padding: 4px 0 12px;
+    width: 100%;
+  }
+
+  .music-tab-btn, .mst-btn {
+    flex-shrink: 0;
+    white-space: nowrap;
+    min-height: 48px;
+    padding: 10px 16px;
+    font-size: 13.5px;
+    font-weight: 600;
+    border-radius: 999px;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    touch-action: manipulation;
+  }
+
+  .ambient-mixer-grid, .sound-mixer-grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 12px;
+    width: 100%;
+  }
+
+  .sound-card, .sound-opt-card {
+    padding: 14px 16px;
+    border-radius: 14px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 14px;
+    min-height: 56px;
+  }
+
+  .sound-play-toggle-btn {
+    width: 48px;
+    height: 48px;
+    min-width: 48px;
+    min-height: 48px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    touch-action: manipulation;
+    flex-shrink: 0;
+  }
+
+  input[type="range"].sound-volume-slider,
+  input[type="range"] {
+    height: 32px;
+    min-height: 32px;
+    cursor: pointer;
+    touch-action: manipulation;
+  }
+
+  .yt-mini-player {
+    position: fixed;
+    bottom: calc(var(--bottom-nav-height) + env(safe-area-inset-bottom, 8px) + 8px);
+    left: 12px;
+    right: 12px;
+    width: auto;
+    max-width: none;
+    z-index: var(--z-popover);
+    border-radius: 16px;
+    padding: 10px 14px;
+  }
+
+  /* ── 9. Relationship Advice & News Hub ── */
+  .advice-hero-card, .live-advice-card {
+    padding: 18px 14px;
+    border-radius: 16px;
+    width: 100%;
+  }
+
+  .ahc-actions, .live-advice-actions {
+    display: flex;
+    gap: 8px;
+    margin-top: 12px;
+  }
+
+  .ahc-action-btn, #refresh-advice-btn, #copy-advice-btn {
+    flex: 1;
+    min-height: 48px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+    padding: 10px 14px;
+    font-size: 13px;
+    font-weight: 600;
+    border-radius: 12px;
+    touch-action: manipulation;
+  }
+
+  .advice-chips, #advice-chips {
+    display: flex;
+    gap: 8px;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: none;
+    padding: 4px 0 10px;
+    width: 100%;
+  }
+
+  .advice-chip {
+    flex-shrink: 0;
+    min-height: 44px;
+    padding: 8px 14px;
+    font-size: 13px;
+    border-radius: 999px;
+    display: inline-flex;
+    align-items: center;
+    touch-action: manipulation;
+  }
+
+  .advice-grid, #advice-grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 14px;
+    width: 100%;
+  }
+
+  .advice-card {
+    padding: 16px 14px;
+    border-radius: 14px;
+    width: 100%;
+  }
+
+  /* ── 10. Quote Card Exporter Modal ── */
+  #export-card-modal {
+    position: fixed;
+    inset: 0;
+    z-index: var(--z-modal);
+    background: rgba(8, 12, 18, 0.95);
+    backdrop-filter: blur(16px);
+    -webkit-backdrop-filter: blur(16px);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 12px;
+    overflow-y: auto;
+  }
+
+  .export-modal-card {
+    width: 100%;
+    max-width: 440px;
+    max-height: calc(100dvh - 24px);
+    overflow-y: auto;
+    -webkit-overflow-scrolling: touch;
+    background: #0d1217;
+    border: 1px solid var(--border2);
+    border-radius: 20px;
+    padding: 20px 16px;
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+  }
+
+  .emc-preview-container {
+    width: 100%;
+    max-height: clamp(200px, 38vh, 320px);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: #05080c;
+    border-radius: 14px;
+    padding: 8px;
+    overflow: hidden;
+  }
+
+  #export-quote-canvas {
+    max-width: 100%;
+    max-height: clamp(190px, 36vh, 300px);
+    width: auto;
+    height: auto;
+    object-fit: contain;
+    border-radius: 10px;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.6);
+  }
+
+  .emc-ratio-btns, .emc-theme-chips {
+    display: flex;
+    gap: 8px;
+    flex-wrap: wrap;
+    width: 100%;
+  }
+
+  .emc-ratio-btn {
+    flex: 1;
+    min-height: 48px;
+    padding: 10px 14px;
+    font-size: 13px;
+    font-weight: 600;
+    border-radius: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    touch-action: manipulation;
+  }
+
+  .emc-theme-chip {
+    min-height: 44px;
+    min-width: 44px;
+    padding: 8px 12px;
+    border-radius: 10px;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    touch-action: manipulation;
+  }
+
+  .emc-download-btn, #export-download-btn {
+    width: 100%;
+    min-height: 48px;
+    font-size: 15px;
+    font-weight: 700;
+    border-radius: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    touch-action: manipulation;
+  }
+
+  /* ── 11. Modals & Bottom Sheets Standardized ── */
   .fullscreen-modal {
+    position: fixed;
+    inset: 0;
+    background: rgba(10, 14, 20, 0.88);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    z-index: var(--z-modal);
+    display: flex;
     align-items: flex-end;
+    justify-content: center;
     padding: 0;
+    overflow-y: auto;
   }
 
   .write-modal-card,
   .post-modal-card,
   .story-viewer-card,
-  .sos-modal-card {
+  .new-dm-modal-card,
+  .add-friend-modal-card,
+  .tracker-modal-card,
+  .diary-modal-card {
     width: 100%;
     max-width: 100%;
     border-radius: 20px 20px 0 0;
     max-height: 90dvh;
-    border-bottom: none;
+    overflow-y: auto;
+    -webkit-overflow-scrolling: touch;
+    padding: 20px 16px calc(24px + env(safe-area-inset-bottom, 16px));
     border-left: none;
     border-right: none;
+    border-bottom: none;
   }
 
-  .sos-breathing-ring {
-    width: min(220px, 60vw) !important;
-    height: min(220px, 60vw) !important;
+  /* ── 12. Toasts & Notifications Positioning ── */
+  .toast {
+    position: fixed;
+    bottom: calc(var(--bottom-nav-height) + env(safe-area-inset-bottom, 8px) + 16px);
+    left: 50%;
+    transform: translateX(-50%) translateY(16px);
+    max-width: calc(100vw - 32px);
+    min-height: 44px;
+    padding: 10px 18px;
+    border-radius: 12px;
+    z-index: var(--z-toast);
+    pointer-events: none;
+  }
+
+  .live-notif {
+    position: fixed;
+    top: calc(var(--top-bar-height) + 12px);
+    left: 50%;
+    transform: translateX(-50%) translateY(-60px);
+    max-width: calc(100vw - 32px);
+    min-height: 44px;
+    padding: 10px 18px;
+    border-radius: 12px;
+    z-index: var(--z-toast);
+    pointer-events: none;
   }
 }
-
-
-
+}
