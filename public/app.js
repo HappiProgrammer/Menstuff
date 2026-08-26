@@ -170,7 +170,28 @@ document.addEventListener('DOMContentLoaded', () => {
   };
 
   // ─── INIT & STORAGE ───────────────────────────────────────────────
+  const setupVisualViewportKeyboard = () => {
+    if (!window.visualViewport) return;
+    const updateViewport = () => {
+      const vh = window.visualViewport.height;
+      const windowH = window.innerHeight;
+      const keyboardH = Math.max(0, windowH - vh);
+      document.documentElement.style.setProperty('--keyboard-height', `${keyboardH}px`);
+
+      const activeEl = document.activeElement;
+      if (activeEl && (activeEl.tagName === 'INPUT' || activeEl.tagName === 'TEXTAREA')) {
+        setTimeout(() => {
+          activeEl.scrollIntoView({ block: 'nearest', behavior: 'smooth' });
+        }, 100);
+      }
+    };
+
+    window.visualViewport.addEventListener('resize', updateViewport);
+    window.visualViewport.addEventListener('scroll', updateViewport);
+  };
+
   const init = async () => {
+    setupVisualViewportKeyboard();
     // Check server authentication session first via httpOnly cookie / token
     try {
       const res = await fetch(getApiUrl('/api/auth/me'), { credentials: 'include' });
@@ -3427,8 +3448,20 @@ document.addEventListener('DOMContentLoaded', () => {
   };
 
   // Synthesized Web Audio feedback chimes
+  const triggerHaptic = (type = 'light') => {
+    try {
+      if (!navigator.vibrate) return;
+      if (type === 'light') navigator.vibrate(12);
+      else if (type === 'medium') navigator.vibrate(24);
+      else if (type === 'success') navigator.vibrate([15, 30, 20]);
+      else if (type === 'pulse') navigator.vibrate(35);
+      else if (type === 'double') navigator.vibrate([20, 40, 20]);
+    } catch (e) {}
+  };
+
   const playChime = (type = 'send') => {
     try {
+      triggerHaptic(type === 'send' || type === 'like' ? 'medium' : (type === 'breathe' ? 'pulse' : 'light'));
       const AudioCtx = window.AudioContext || window.webkitAudioContext;
       if (!AudioCtx) return;
       const ctx = new AudioCtx();
@@ -3439,6 +3472,17 @@ document.addEventListener('DOMContentLoaded', () => {
       const gain = ctx.createGain();
       osc.connect(gain);
       gain.connect(ctx.destination);
+
+      if (type === 'breathe') {
+        // Soothing 432Hz ambient sine chime for box breathing phase shifts
+        osc.type = 'sine';
+        osc.frequency.setValueAtTime(432, ctx.currentTime);
+        gain.gain.setValueAtTime(0.04, ctx.currentTime);
+        gain.gain.exponentialRampToValueAtTime(0.0001, ctx.currentTime + 1.2);
+        osc.start();
+        osc.stop(ctx.currentTime + 1.2);
+        return;
+      }
 
       if (type === 'send') {
         osc.type = 'sine';
@@ -4103,8 +4147,13 @@ document.addEventListener('DOMContentLoaded', () => {
               <span class="dm-voice-bar" style="height:16px"></span>
               <span class="dm-voice-bar" style="height:12px"></span>
               <span class="dm-voice-bar" style="height:7px"></span>
+              <span class="dm-voice-bar" style="height:10px"></span>
+              <span class="dm-voice-bar" style="height:14px"></span>
+              <span class="dm-voice-bar" style="height:12px"></span>
+              <span class="dm-voice-bar" style="height:6px"></span>
+              <span class="dm-voice-bar" style="height:10px"></span>
             </div>
-            <span style="font-size:11px;opacity:0.85;margin-left:4px;">${m.duration || '0:14'}</span>
+            <span class="dm-voice-time">${m.duration || '0:14'}</span>
           </div>
         `;
       } else {
