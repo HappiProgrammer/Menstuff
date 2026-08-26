@@ -336,7 +336,13 @@ document.addEventListener('DOMContentLoaded', () => {
   const loadData = () => {
     const d = localStorage.getItem('sonder_v4') || localStorage.getItem('shattered_v3');
     if (d) {
-      const parsed = JSON.parse(d);
+      let parsed = {};
+      try {
+        parsed = JSON.parse(d);
+      } catch (err) {
+        console.warn('[Sonder Auth] Error parsing localStorage data, resetting session:', err);
+        localStorage.removeItem('sonder_v4');
+      }
       S.user = parsed.user || { id: null, joined: null, avatar: null, moods: [], bio: '', followers: 0, following: 0 };
       if (!S.user.avatar || !AVATARS.includes(S.user.avatar)) {
         S.user.avatar = getAvatar();
@@ -502,6 +508,7 @@ document.addEventListener('DOMContentLoaded', () => {
   const PASSWORD_RULE_REGEX = /^(?=.*[0-9!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?]).{8,}$/;
 
   const setupLanding = () => {
+    console.log('[DEBUG] setupLanding called');
     let authMode = 'signin'; // Default to Sign In
 
     const errorBanner = $('rac-error-banner');
@@ -801,6 +808,7 @@ document.addEventListener('DOMContentLoaded', () => {
         e.preventDefault();
         handleAuthSubmit();
       };
+      console.log('[DEBUG] enter-btn wired successfully');
     }
 
     // Particles
@@ -839,8 +847,9 @@ document.addEventListener('DOMContentLoaded', () => {
     // Logout handling
     const handleLogout = async () => {
       try {
-        await fetch('/api/auth/logout', { method: 'POST' });
+        await fetch(getApiUrl('/api/auth/logout'), { method: 'POST' });
       } catch (e) {}
+      localStorage.removeItem('sonder_v4');
       localStorage.removeItem('shattered_v3');
       S.user = { id: null, joined: null, avatar: null, moods: [], bio: '', followers: 0, following: 0 };
       $('app-page').classList.add('hidden');
@@ -850,6 +859,7 @@ document.addEventListener('DOMContentLoaded', () => {
       showToast('Logged out successfully.');
     };
 
+    if ($('logout-btn')) $('logout-btn').onclick = handleLogout;
     if ($('logout-profile-btn')) $('logout-profile-btn').onclick = handleLogout;
     if ($('right-logout-btn')) $('right-logout-btn').onclick = handleLogout;
     
@@ -914,16 +924,7 @@ document.addEventListener('DOMContentLoaded', () => {
       $('wm-char').innerText = e.target.value.length;
     });
 
-    // Logout
-    const logout = () => {
-      localStorage.removeItem('shattered_v3');
-      location.reload();
-    };
-    $('logout-btn').onclick = logout;
-    $('right-logout-btn').onclick = logout;
-    // Profile logout button
-    const profLogout = $('logout-profile-btn');
-    if (profLogout) profLogout.onclick = logout;
+
 
     // Filter
     $('filter-select').addEventListener('change', renderFeed);
@@ -3111,12 +3112,6 @@ document.addEventListener('DOMContentLoaded', () => {
       };
     }
 
-    // Logout
-    const profLogout = $('logout-profile-btn');
-    if (profLogout) profLogout.onclick = () => {
-      localStorage.removeItem('shattered_v3');
-      location.reload();
-    };
   };
 
   // ─── EXPLORE PANE ─────────────────────────────────────────────────
@@ -3529,15 +3524,22 @@ document.addEventListener('DOMContentLoaded', () => {
     if (addFriendBtn) addFriendBtn.onclick = openAddFriendModal;
     if (ntsStartBtn) ntsStartBtn.onclick = openNewDMModal;
 
-    // Mobile back button
+    // Mobile back button (returns to conversation thread list)
     const backBtn = $('dm-back-btn');
     if (backBtn) {
       backBtn.onclick = () => {
-        const container = $('dm-container');
-        if (container) container.classList.remove('thread-open');
         activeDmThreadId = null;
         S.activeDmThread = null;
-        renderDMInbox();
+        const container = $('dm-container');
+        if (container) {
+          container.classList.remove('dm-active');
+          container.classList.remove('thread-open');
+        }
+        const nts = $('dm-no-thread-selected');
+        const threadView = $('dm-thread');
+        if (nts) nts.classList.remove('hidden');
+        if (threadView) threadView.classList.add('hidden');
+        renderDMInbox($('dm-search-input')?.value || '');
       };
     }
 
@@ -3677,24 +3679,7 @@ document.addEventListener('DOMContentLoaded', () => {
       };
     }
 
-    // Mobile Back Button (returns to conversation thread list)
-    const backBtn = $('dm-back-btn');
-    if (backBtn) {
-      backBtn.onclick = () => {
-        activeDmThreadId = null;
-        S.activeDmThread = null;
-        const container = $('dm-container');
-        if (container) {
-          container.classList.remove('dm-active');
-          container.classList.remove('thread-open');
-        }
-        const nts = $('dm-no-thread-selected');
-        const threadView = $('dm-thread');
-        if (nts) nts.classList.remove('hidden');
-        if (threadView) threadView.classList.add('hidden');
-        renderDMInbox($('dm-search-input')?.value || '');
-      };
-    }
+    // Mobile back button already initialized above
 
     // Quick empathy chips in composer
     qa('.dm-emp-chip').forEach(btn => {

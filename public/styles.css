@@ -115,8 +115,8 @@ input, textarea, select { font-family: var(--font-sans); }
 #landing-page {
   min-height: 100dvh;
   display: flex;
-  align-items: center;
-  justify-content: center;
+  flex-direction: column;
+  /* Removed align/justify center to fix scroll clipping on small heights */
   padding: 40px 20px;
   position: relative;
   overflow-x: hidden;
@@ -577,7 +577,7 @@ input, textarea, select { font-family: var(--font-sans); }
     padding: 8px 6px;
   }
   .rac-input {
-    min-height: 46px;
+    min-height: 48px;
     font-size: 16px;
     padding: 12px 14px;
     box-sizing: border-box;
@@ -5787,8 +5787,6 @@ html {
   /* ── 1. Landing & Auth Page Mobile Optimization ── */
   #landing-page {
     padding: 16px 12px;
-    align-items: center;
-    justify-content: center;
   }
   /* ── 2. Top Header & Bottom Bar Navigation ── */
   .mobile-top-bar {
