@@ -1,5 +1,58 @@
 [
   {
+    "id": "p_1787841971478_5a371b",
+    "userId": "Explorer#1010",
+    "avatar": "<svg></svg>",
+    "title": "Longing under the stars in Explore",
+    "body": "I looked up at Orion and wondered if you were looking up too.",
+    "emotion": "longing",
+    "date": "2026-08-27T14:46:11.478Z",
+    "reacts": {
+      "love": 0,
+      "cry": 0,
+      "angry": 0,
+      "healing": 0,
+      "peace": 0
+    },
+    "comments": [],
+    "imageUrl": null,
+    "gradient": [
+      "#0d1a2b",
+      "#1a3a5c"
+    ],
+    "isMine": true
+  },
+  {
+    "id": "p_1787841970524_4dfeba",
+    "userId": "SilentStar#9921",
+    "avatar": "<svg></svg>",
+    "title": "Testing Heartbreak Story 1787841970485",
+    "body": "This is an end-to-end verification of story creation and persistence.",
+    "emotion": "heartbreak",
+    "date": "2026-08-27T14:46:10.524Z",
+    "reacts": {
+      "love": 1,
+      "cry": 0,
+      "angry": 0,
+      "healing": 0,
+      "peace": 0
+    },
+    "comments": [
+      {
+        "id": "c_1787841970586",
+        "user": "VelvetEcho#4092",
+        "text": "Beautiful and resilient reflection.",
+        "date": "2026-08-27T14:46:10.586Z"
+      }
+    ],
+    "imageUrl": null,
+    "gradient": [
+      "#0d1a2b",
+      "#1a3a5c"
+    ],
+    "isMine": true
+  },
+  {
     "id": "p_1787839570154_6dacab",
     "userId": "Explorer#1010",
     "avatar": "<svg></svg>",

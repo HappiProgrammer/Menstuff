@@ -218,5 +218,15 @@
     "avatar": null,
     "createdAt": "2026-08-27T14:23:17.218Z",
     "bio": ""
+  },
+  {
+    "id": "u_1787841962115_25581172",
+    "email": "sonder_seeker_1787841961156@shattered.io",
+    "username": "SonderSeeker#404#8595",
+    "passwordHash": "$2a$12$LRkdMG2QvV1ap3X5gB5uZeeO7vCrFECH82uZrcNUTTqe2Ow0crIA6",
+    "role": "user",
+    "avatar": null,
+    "createdAt": "2026-08-27T14:46:02.115Z",
+    "bio": ""
   }
 ]
