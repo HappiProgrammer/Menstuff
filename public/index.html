@@ -411,36 +411,11 @@
           </div>
         </div>
 
-        <!-- Mobile Feature Quick-Navigation Hub -->
-        <div class="mobile-quick-hub" aria-label="Feature quick navigation">
-          <button type="button" class="hub-chip" data-pane="healing">
-            <span>🌿 Healing Hub</span>
-          </button>
-          <button type="button" class="hub-chip" data-pane="advice">
-            <span>📰 Advice &amp; News</span>
-          </button>
-          <button type="button" class="hub-chip" data-pane="music">
-            <span>🎵 Music Room</span>
-          </button>
-          <button type="button" class="hub-chip" data-pane="diary">
-            <span>🔒 Private Diary</span>
-          </button>
-          <button type="button" class="hub-chip" data-pane="saved">
-            <span>🔖 Saved</span>
-          </button>
-          <button type="button" class="hub-chip" data-pane="about">
-            <span>ℹ️ About</span>
-          </button>
-          <button type="button" class="hub-chip" data-pane="contact">
-            <span>💬 Contact</span>
-          </button>
-        </div>
-
         <!-- 24-Hour Daily Community Prompt Card -->
         <div class="daily-prompt-card" id="daily-prompt-card">
           <div class="dpc-top">
             <div class="dpc-badge">
-              <span class="live-dot-inline"></span> Daily Sonder Question &bull; Resets at Midnight
+              <span class="live-dot-inline"></span> Daily Reflection
             </div>
             <span class="dpc-countdown" id="dpc-countdown">Resets in 9h 42m</span>
           </div>
@@ -1323,42 +1298,17 @@
           <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polygon points="16.24 7.76 14.12 14.12 7.76 16.24 9.88 9.88 16.24 7.76"/></svg>
           Explore
         </div>
-        <p class="pane-sticky-sub">Discover stories from the community.</p>
+        <p class="pane-sticky-sub">Discover curated articles, news, and perspectives.</p>
       </div>
       <div class="pane-inner pane-inner--explore">
-        <!-- Mobile Quick-Navigation Hub -->
-        <div class="mobile-quick-hub" aria-label="Feature quick navigation">
-          <button type="button" class="hub-chip" data-pane="healing">
-            <span>🌿 Healing Hub</span>
-          </button>
-          <button type="button" class="hub-chip" data-pane="advice">
-            <span>📰 Advice &amp; News</span>
-          </button>
-          <button type="button" class="hub-chip" data-pane="music">
-            <span>🎵 Music Room</span>
-          </button>
-          <button type="button" class="hub-chip" data-pane="diary">
-            <span>🔒 Private Diary</span>
-          </button>
-          <button type="button" class="hub-chip" data-pane="saved">
-            <span>🔖 Saved</span>
-          </button>
-          <button type="button" class="hub-chip" data-pane="about">
-            <span>ℹ️ About</span>
-          </button>
-          <button type="button" class="hub-chip" data-pane="contact">
-            <span>💬 Contact</span>
-          </button>
-        </div>
-
         <div class="explore-filters" id="explore-filters">
-          <button class="explore-chip active-chip" data-emotion="all">All</button>
-          <button class="explore-chip" data-emotion="heartbreak">💔 Heartbreak</button>
-          <button class="explore-chip" data-emotion="betrayal">🗡 Betrayal</button>
-          <button class="explore-chip" data-emotion="longing">🌙 Longing</button>
-          <button class="explore-chip" data-emotion="healing">🌿 Healing</button>
-          <button class="explore-chip" data-emotion="anger">🔥 Anger</button>
-          <button class="explore-chip" data-emotion="acceptance">🕊 Acceptance</button>
+          <button class="explore-chip active-chip" data-category="all">All Topics</button>
+          <button class="explore-chip" data-category="relationships">💬 Relationships &amp; Trust</button>
+          <button class="explore-chip" data-category="psychology">🧠 Psychology &amp; Mindset</button>
+          <button class="explore-chip" data-category="healing">🌿 Personal Growth</button>
+          <button class="explore-chip" data-category="communication">🗣️ Communication</button>
+          <button class="explore-chip" data-category="breakup">💔 Moving On</button>
+          <button class="explore-chip" data-category="advice">📰 Real-Life News</button>
         </div>
         <div class="explore-grid" id="explore-grid" role="list" aria-label="Explore posts"></div>
         <div class="empty-state hidden" id="empty-explore">
@@ -1850,10 +1800,12 @@
         <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
       </button>
     </div>
+    <img id="sv-bg-img" class="sv-bg-image hidden" alt="Story visual" />
     <div class="sv-content">
       <div class="sv-emotion" id="sv-emotion"></div>
       <h2 class="sv-title" id="sv-title"></h2>
       <p class="sv-body" id="sv-body"></p>
+      <div id="sv-article-wrap" class="sv-article-wrap"></div>
     </div>
     <div class="sv-tap-zones">
       <div class="sv-tap-prev" id="sv-tap-prev"></div>

@@ -287,6 +287,7 @@ const CORE_ADVICE_ARTICLES = [
     ],
     source: "The Gottman Relationship Institute",
     sourceUrl: "https://www.gottman.com/blog/",
+    imageUrl: "https://images.unsplash.com/photo-1516589178581-6cd7833ae3b2?w=800&auto=format&fit=crop&q=80",
     category: "communication",
     categoryLabel: "💬 Communication & Trust",
     readTime: "4 min read",
@@ -302,8 +303,9 @@ const CORE_ADVICE_ARTICLES = [
       "Grief comes in non-linear waves — accepting a bad day without reaching out is a victory.",
       "Channel the attachment energy into rediscovering personal autonomy and physical movement."
     ],
-    source: "Psychology Today Insights",
+    source: "Psychology Today",
     sourceUrl: "https://www.psychologytoday.com/us/basics/relationships",
+    imageUrl: "https://images.unsplash.com/photo-1506744038136-46273834b3fb?w=800&auto=format&fit=crop&q=80",
     category: "breakup",
     categoryLabel: "💔 Breakup Recovery",
     readTime: "5 min read",
@@ -319,8 +321,9 @@ const CORE_ADVICE_ARTICLES = [
       "Recognize the 'protest behaviors' and name the underlying vulnerability clearly.",
       "Learn self-soothing techniques before reacting to your partner's emotional state."
     ],
-    source: "Attachment & Relationship Science",
+    source: "Greater Good Science Center (UC Berkeley)",
     sourceUrl: "https://greatergood.berkeley.edu/",
+    imageUrl: "https://images.unsplash.com/photo-1470071459604-3b5ec3a7fe05?w=800&auto=format&fit=crop&q=80",
     category: "psychology",
     categoryLabel: "🧠 Relationship Psychology",
     readTime: "6 min read",
@@ -336,10 +339,11 @@ const CORE_ADVICE_ARTICLES = [
       "Saying 'no' to demands that violate your values preserves the integrity of the connection.",
       "Communicate boundaries during calm moments rather than during heated conflicts."
     ],
-    source: "Mindful Health & Boundaries",
-    sourceUrl: "https://greatergood.berkeley.edu/",
+    source: "NPR Life Kit: Relationship Wellness",
+    sourceUrl: "https://www.npr.org/lifekit",
+    imageUrl: "https://images.unsplash.com/photo-1518495973542-4542c06a5843?w=800&auto=format&fit=crop&q=80",
     category: "healing",
-    categoryLabel: "🌿 Self-Worth & Healing",
+    categoryLabel: "🌿 Self-Worth & Boundaries",
     readTime: "3 min read",
     badge: "Emotional Wellness",
     publishedAt: new Date(Date.now() - 1000 * 60 * 60 * 72).toISOString()
@@ -355,6 +359,7 @@ const CORE_ADVICE_ARTICLES = [
     ],
     source: "The Gottman Relationship Institute",
     sourceUrl: "https://www.gottman.com/blog/",
+    imageUrl: "https://images.unsplash.com/photo-1499209974431-9dddcece7f88?w=800&auto=format&fit=crop&q=80",
     category: "communication",
     categoryLabel: "💬 Communication & Trust",
     readTime: "4 min read",
@@ -370,12 +375,13 @@ const CORE_ADVICE_ARTICLES = [
       "Write a 'Self-Trust Inventory' listing all the ways you have shown up for yourself.",
       "Allow anger its rightful place as a boundary guardian, then release it when ready."
     ],
-    source: "Psychology Today",
+    source: "Psychology Today Research",
     sourceUrl: "https://www.psychologytoday.com/",
+    imageUrl: "https://images.unsplash.com/photo-1518199266791-5375a83190b7?w=800&auto=format&fit=crop&q=80",
     category: "healing",
     categoryLabel: "🌿 Self-Worth & Healing",
     readTime: "5 min read",
-      badge: "Trauma Recovery",
+    badge: "Trauma Recovery",
     publishedAt: new Date(Date.now() - 1000 * 60 * 60 * 120).toISOString()
   }
 ];

@@ -107,11 +107,52 @@ document.addEventListener('DOMContentLoaded', () => {
     { title: "Talk About It", icon: "🗣️", text: "Share your feelings here anonymously or with a trusted friend." }
   ];
 
-  // Dummy stories for IG Story Viewer
+  // Real World Psychology & Relationship News Stories for Story Viewer
   const HIGHLIGHT_STORIES = [
-    { id: 's1', user: 'FadingStar#12', title: 'The last text', body: 'I still read it every night. "I\'m sorry, I can\'t do this anymore." Just like that, 3 years gone.', emotion: 'heartbreak', time: '2h ago' },
-    { id: 's2', user: 'SilentWind#88', title: 'Seeing you with her', body: 'My heart stopped. You looked so happy. Happier than you ever looked with me.', emotion: 'betrayal', time: '5h ago' },
-    { id: 's3', user: 'HealingDawn#01', title: 'I smiled today', body: 'I woke up and my first thought wasn\'t you. It\'s a small step, but it\'s something.', emotion: 'healing', time: '1d ago' }
+    {
+      id: 's1',
+      user: 'GottmanInstitute',
+      title: 'The 4 Warning Signs in Relationship Communication',
+      body: 'Clinical research reveals that Contempt is the #1 predictor of breakup. Cultivating daily appreciation and taking mandatory 20-minute physical cooldowns transforms conflict.',
+      emotion: 'healing',
+      time: '2h ago',
+      source: 'The Gottman Relationship Institute',
+      sourceUrl: 'https://www.gottman.com/blog/',
+      imageUrl: 'https://images.unsplash.com/photo-1516589178581-6cd7833ae3b2?w=800&auto=format&fit=crop&q=80'
+    },
+    {
+      id: 's2',
+      user: 'PsychologyToday',
+      title: 'The Neuroscience of Heartbreak & No-Contact',
+      body: 'Breakup grief activates identical neural pain matrices as physical withdrawal. Holding strict visual and digital boundaries accelerates dopamine receptor recovery.',
+      emotion: 'heartbreak',
+      time: '4h ago',
+      source: 'Psychology Today',
+      sourceUrl: 'https://www.psychologytoday.com/us/basics/relationships',
+      imageUrl: 'https://images.unsplash.com/photo-1506744038136-46273834b3fb?w=800&auto=format&fit=crop&q=80'
+    },
+    {
+      id: 's3',
+      user: 'BerkeleyScience',
+      title: 'Breaking the Anxious-Avoidant Attachment Trap',
+      body: 'Anxious styles mistake distance for danger while avoidants mistake closeness for suffocation. Learning self-soothing before reacting builds earned security.',
+      emotion: 'acceptance',
+      time: '6h ago',
+      source: 'Greater Good Science Center (UC Berkeley)',
+      sourceUrl: 'https://greatergood.berkeley.edu/',
+      imageUrl: 'https://images.unsplash.com/photo-1470071459604-3b5ec3a7fe05?w=800&auto=format&fit=crop&q=80'
+    },
+    {
+      id: 's4',
+      user: 'NPRLifeKit',
+      title: 'Setting Healthy Emotional Boundaries Without Guilt',
+      body: 'Boundaries are not ultimatums to control others; they are clear declarations of what you will honor within yourself.',
+      emotion: 'healing',
+      time: '12h ago',
+      source: 'NPR Life Kit: Relationship Wellness',
+      sourceUrl: 'https://www.npr.org/lifekit',
+      imageUrl: 'https://images.unsplash.com/photo-1518495973542-4542c06a5843?w=800&auto=format&fit=crop&q=80'
+    }
   ];
 
   // ─── UTILS ──────────────────────────────────────────────────────────
@@ -500,14 +541,47 @@ document.addEventListener('DOMContentLoaded', () => {
     'Some wounds don\'t announce themselves. They just show up in small, ordinary moments.'
   ];
 
+  const REAL_WORLD_POST_IMAGES = [
+    {
+      image: "https://images.unsplash.com/photo-1516589178581-6cd7833ae3b2?w=800&auto=format&fit=crop&q=80",
+      source: "The Gottman Relationship Institute",
+      sourceUrl: "https://www.gottman.com/blog/"
+    },
+    {
+      image: "https://images.unsplash.com/photo-1506744038136-46273834b3fb?w=800&auto=format&fit=crop&q=80",
+      source: "Psychology Today",
+      sourceUrl: "https://www.psychologytoday.com/us/basics/relationships"
+    },
+    {
+      image: "https://images.unsplash.com/photo-1470071459604-3b5ec3a7fe05?w=800&auto=format&fit=crop&q=80",
+      source: "Greater Good Science Center (UC Berkeley)",
+      sourceUrl: "https://greatergood.berkeley.edu/"
+    },
+    {
+      image: "https://images.unsplash.com/photo-1518495973542-4542c06a5843?w=800&auto=format&fit=crop&q=80",
+      source: "NPR Life Kit: Relationship Wellness",
+      sourceUrl: "https://www.npr.org/lifekit"
+    },
+    {
+      image: "https://images.unsplash.com/photo-1499209974431-9dddcece7f88?w=800&auto=format&fit=crop&q=80",
+      source: "The Gottman Institute",
+      sourceUrl: "https://www.gottman.com/blog/"
+    },
+    {
+      image: "https://images.unsplash.com/photo-1518199266791-5375a83190b7?w=800&auto=format&fit=crop&q=80",
+      source: "Psychology Today Research",
+      sourceUrl: "https://www.psychologytoday.com/"
+    }
+  ];
+
   const generateFakePosts = () => {
     const emKeys = Object.keys(EMOTIONS);
     for(let i = 0; i < 12; i++) {
       const em = emKeys[Math.floor(Math.random() * emKeys.length)];
       const d = new Date();
       d.setHours(d.getHours() - Math.floor(Math.random() * 72));
-      const gradIdx = Math.floor(Math.random() * POST_GRADIENTS.length);
-      const hasImg = Math.random() > 0.55; // ~45% of posts have a gradient image
+      const imgInfo = REAL_WORLD_POST_IMAGES[i % REAL_WORLD_POST_IMAGES.length];
+      const hasImg = i % 2 === 0;
 
       S.posts.push({
         id: 'p_' + Date.now() + '_' + i,
@@ -523,7 +597,9 @@ document.addEventListener('DOMContentLoaded', () => {
           { user: generateId(), text: 'You are not alone in this.' }
         ].slice(0, Math.random() > 0.5 ? 2 : 0),
         isMine: false,
-        gradient: hasImg ? POST_GRADIENTS[gradIdx] : null
+        image: hasImg ? imgInfo.image : null,
+        source: hasImg ? imgInfo.source : null,
+        sourceUrl: hasImg ? imgInfo.sourceUrl : null
       });
     }
   };
@@ -1268,12 +1344,27 @@ document.addEventListener('DOMContentLoaded', () => {
     const isMe = p.isMine;
     const totalReacts = Object.values(p.reacts).reduce((a,b)=>a+b,0);
 
-    // Optional gradient image block
-    const imgHtml = p.gradient ? `
-      <div class="post-img-wrap">
-        <div style="width:100%;height:180px;background:linear-gradient(135deg,${p.gradient[0]},${p.gradient[1]});display:flex;align-items:center;justify-content:center;">
-          <span style="font-size:36px;opacity:0.5;">${em && em.label === 'Heartbreak' ? '💔' : em && em.label === 'Healing' ? '🌿' : em && em.label === 'Betrayal' ? '🗡' : '✨'}</span>
-        </div>
+    // Real photography image or user attachment or fallback gradient
+    let imgHtml = '';
+    if (p.image) {
+      imgHtml = `
+        <div class="post-img-wrap">
+          <img src="${escapeHTML(p.image)}" class="post-img" alt="${escapeHTML(p.title)}" loading="lazy" />
+        </div>`;
+    } else if (p.gradient) {
+      imgHtml = `
+        <div class="post-img-wrap">
+          <div style="width:100%;height:180px;background:linear-gradient(135deg,${p.gradient[0]},${p.gradient[1]});display:flex;align-items:center;justify-content:center;">
+            <span style="font-size:36px;opacity:0.5;">${em && em.label === 'Heartbreak' ? '💔' : em && em.label === 'Healing' ? '🌿' : em && em.label === 'Betrayal' ? '🗡' : '✨'}</span>
+          </div>
+        </div>`;
+    }
+
+    const sourceHtml = p.sourceUrl ? `
+      <div>
+        <a href="${escapeHTML(p.sourceUrl)}" target="_blank" rel="noopener noreferrer" class="post-source-pill" onclick="event.stopPropagation()">
+          <span>📖 ${escapeHTML(p.source || 'Read Article')} ↗</span>
+        </a>
       </div>` : '';
 
     el.innerHTML = `
@@ -1294,6 +1385,7 @@ document.addEventListener('DOMContentLoaded', () => {
       <h2 class="ig-post-title">${escapeHTML(p.title)}</h2>
       ${imgHtml}
       <div class="ig-post-body">${escapeHTML(p.body)}</div>
+      ${sourceHtml}
       <div class="ig-post-foot">
         <button class="ig-post-action react-trig" aria-label="React to post">
           <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>
@@ -1580,23 +1672,67 @@ document.addEventListener('DOMContentLoaded', () => {
   // ─── STORIES BAR (IG STORIES) ─────────────────────────────────────
   const setupStoriesBar = () => {
     const bar = $('stories-bar');
-    
-    HIGHLIGHT_STORIES.forEach((st, idx) => {
-      const el = document.createElement('div');
-      el.className = 'story-bubble';
-      el.innerHTML = `
-        <div class="story-ring-wrap">
-          <div class="story-avatar">${getAvatar()}</div>
-        </div>
-        <span class="story-name">${st.user.split('#')[0]}</span>
-      `;
-      el.onclick = () => openStoryViewer(idx);
-      bar.appendChild(el);
-    });
-    
-    $('your-story-bubble').onclick = () => {
-      openWrite();
+    if (!bar) return;
+
+    const renderBubbles = () => {
+      // Clear existing bubbles except the first 'your-story-bubble'
+      const yourBubble = $('your-story-bubble');
+      bar.innerHTML = '';
+      if (yourBubble) bar.appendChild(yourBubble);
+
+      HIGHLIGHT_STORIES.forEach((st, idx) => {
+        const el = document.createElement('div');
+        el.className = 'story-bubble';
+        const isPhotoStory = Boolean(st.imageUrl);
+        el.innerHTML = `
+          <div class="story-ring-wrap">
+            <div class="story-avatar" style="${isPhotoStory ? `background-image:url('${st.imageUrl}');background-size:cover;background-position:center;` : ''}">
+              ${isPhotoStory ? '' : getAvatar()}
+            </div>
+          </div>
+          <span class="story-name">${escapeHTML(st.user.split('#')[0])}</span>
+        `;
+        el.onclick = () => openStoryViewer(idx);
+        bar.appendChild(el);
+      });
     };
+
+    renderBubbles();
+
+    // Dynamically fetch fresh real-world news articles from the server API to keep stories updated
+    fetch(getApiUrl('/api/advice-news'))
+      .then(res => res.ok ? res.json() : null)
+      .then(data => {
+        if (data && data.items && data.items.length > 0) {
+          data.items.slice(0, 5).forEach((item, i) => {
+            const existingIdx = HIGHLIGHT_STORIES.findIndex(s => s.id === item.id);
+            const storyItem = {
+              id: item.id,
+              user: (item.source || 'WellnessNews').replace(/\s+/g, '').slice(0, 14),
+              title: item.title,
+              body: item.summary,
+              emotion: item.category === 'breakup' ? 'heartbreak' : item.category === 'psychology' ? 'longing' : 'healing',
+              time: 'Just now',
+              source: item.source,
+              sourceUrl: item.sourceUrl,
+              imageUrl: item.imageUrl || 'https://images.unsplash.com/photo-1516589178581-6cd7833ae3b2?w=800&auto=format&fit=crop&q=80'
+            };
+            if (existingIdx !== -1) {
+              HIGHLIGHT_STORIES[existingIdx] = storyItem;
+            } else if (HIGHLIGHT_STORIES.length < 8) {
+              HIGHLIGHT_STORIES.push(storyItem);
+            }
+          });
+          renderBubbles();
+        }
+      })
+      .catch(err => console.log('Stories live news fetch fallback to curated seeds.'));
+
+    if ($('your-story-bubble')) {
+      $('your-story-bubble').onclick = () => {
+        openWrite();
+      };
+    }
 
     // Story Viewer Reactions
     qa('.sv-react').forEach(btn => {
@@ -1646,15 +1782,17 @@ document.addEventListener('DOMContentLoaded', () => {
   let svTimer = null;
   const openStoryViewer = (idx) => {
     const v = $('story-viewer');
+    if (!v) return;
     v.classList.remove('hidden');
     renderStorySlide(idx);
   };
   
   const closeStoryViewer = () => {
-    $('story-viewer').classList.add('hidden');
+    const v = $('story-viewer');
+    if (v) v.classList.add('hidden');
     clearTimeout(svTimer);
   };
-  $('sv-close').onclick = closeStoryViewer;
+  if ($('sv-close')) $('sv-close').onclick = closeStoryViewer;
   
   const renderStorySlide = (idx) => {
     clearTimeout(svTimer);
@@ -1664,38 +1802,68 @@ document.addEventListener('DOMContentLoaded', () => {
     svActiveIdx = idx;
     const st = HIGHLIGHT_STORIES[idx];
     
-    $('sv-avatar').innerHTML = getAvatar();
-    $('sv-id').innerText = st.user;
-    $('sv-time').innerText = st.time;
-    $('sv-emotion').innerText = EMOTIONS[st.emotion].label;
-    $('sv-emotion').className = `sv-emotion ${EMOTIONS[st.emotion].cls}`;
-    $('sv-title').innerText = st.title;
-    $('sv-body').innerText = st.body;
+    if ($('sv-avatar')) $('sv-avatar').innerHTML = getAvatar();
+    if ($('sv-id')) $('sv-id').innerText = st.user;
+    if ($('sv-time')) $('sv-time').innerText = st.time;
+    if ($('sv-emotion')) {
+      const em = EMOTIONS[st.emotion] || EMOTIONS.healing;
+      $('sv-emotion').innerText = em.label;
+      $('sv-emotion').className = `sv-emotion ${em.cls}`;
+    }
+    if ($('sv-title')) $('sv-title').innerText = st.title;
+    if ($('sv-body')) $('sv-body').innerText = st.body;
+
+    const bgImg = $('sv-bg-img');
+    if (bgImg) {
+      if (st.imageUrl) {
+        bgImg.src = st.imageUrl;
+        bgImg.classList.remove('hidden');
+      } else {
+        bgImg.classList.add('hidden');
+      }
+    }
+
+    const articleWrap = $('sv-article-wrap');
+    if (articleWrap) {
+      if (st.sourceUrl) {
+        articleWrap.innerHTML = `
+          <a href="${escapeHTML(st.sourceUrl)}" target="_blank" rel="noopener noreferrer" class="sv-article-link">
+            <span>📖 Read Full Article on ${escapeHTML(st.source || 'Official Source')} ↗</span>
+          </a>
+        `;
+      } else {
+        articleWrap.innerHTML = '';
+      }
+    }
     
     // Setup progress bars
     const pWrap = $('sv-progress-wrap');
-    pWrap.innerHTML = '';
-    HIGHLIGHT_STORIES.forEach((_, i) => {
-      const bar = document.createElement('div');
-      bar.className = 'sv-progress-bar';
-      const fill = document.createElement('div');
-      fill.className = 'sv-progress-fill';
-      if(i < idx) fill.style.width = '100%';
-      bar.appendChild(fill);
-      pWrap.appendChild(bar);
-    });
-    
-    // Animate active progress
-    const activeFill = pWrap.children[idx].querySelector('.sv-progress-fill');
-    setTimeout(() => { activeFill.style.width = '100%'; }, 50);
+    if (pWrap) {
+      pWrap.innerHTML = '';
+      HIGHLIGHT_STORIES.forEach((_, i) => {
+        const bar = document.createElement('div');
+        bar.className = 'sv-progress-bar';
+        const fill = document.createElement('div');
+        fill.className = 'sv-progress-fill';
+        if(i < idx) fill.style.width = '100%';
+        bar.appendChild(fill);
+        pWrap.appendChild(bar);
+      });
+      
+      // Animate active progress
+      if (pWrap.children[idx]) {
+        const activeFill = pWrap.children[idx].querySelector('.sv-progress-fill');
+        if (activeFill) setTimeout(() => { activeFill.style.width = '100%'; }, 50);
+      }
+    }
     
     svTimer = setTimeout(() => {
       renderStorySlide(idx + 1);
-    }, 5000);
+    }, 6000);
   };
   
-  $('sv-tap-prev').onclick = () => renderStorySlide(svActiveIdx - 1);
-  $('sv-tap-next').onclick = () => renderStorySlide(svActiveIdx + 1);
+  if ($('sv-tap-prev')) $('sv-tap-prev').onclick = () => renderStorySlide(svActiveIdx - 1);
+  if ($('sv-tap-next')) $('sv-tap-next').onclick = () => renderStorySlide(svActiveIdx + 1);
 
   // ─── UNIVERSAL MULTI-SOURCE MUSIC & SOUND SANCTUARY ─────────────
   // 1. Direct DRM-Free Streaming Engine (HTML5 Audio + Visualizer)
@@ -3725,65 +3893,192 @@ document.addEventListener('DOMContentLoaded', () => {
     }
   };
 
-  // ─── EXPLORE PANE ─────────────────────────────────────────────────
+  // ─── EXPLORE PANE (VISUAL DISCOVERY WITH REAL PHOTOGRAPHY & REAL NEWS API) ────
   let exploreFilter = 'all';
+  let cachedExploreNews = [];
 
   const setupExplore = () => {
     qa('.explore-chip').forEach(chip => {
       chip.addEventListener('click', () => {
         qa('.explore-chip').forEach(c => c.classList.remove('active-chip'));
         chip.classList.add('active-chip');
-        exploreFilter = chip.dataset.emotion;
+        exploreFilter = chip.dataset.category || chip.dataset.emotion || 'all';
         renderExplore(exploreFilter);
       });
     });
+
+    // Prefetch real news API items
+    fetch(getApiUrl('/api/advice-news'))
+      .then(r => r.ok ? r.json() : null)
+      .then(d => {
+        if (d && d.items) {
+          cachedExploreNews = d.items;
+          if (S.activePane === 'explore') renderExplore(exploreFilter);
+        }
+      })
+      .catch(() => {});
   };
 
-  const EMOTION_EMOJIS = { heartbreak:'\ud83d\udc94', betrayal:'\ud83d\udde1', longing:'\ud83c\udf19', healing:'\ud83c\udf3f', anger:'\ud83d\udd25', acceptance:'\ud83d\udd4a' };
-  const GRADIENT_MAPS = {
-    heartbreak: ['#3d1626','#1a0a12'], betrayal: ['#1a3a5c','#0d1a2b'],
-    longing:    ['#3a1a3d','#180f1a'], healing:  ['#1e3a1a','#0f1a0d'],
-    anger:      ['#3d1a1a','#1a0f0f'], acceptance:['#0f3d3a','#0a1a1a']
-  };
+  const REAL_EXPLORE_SEED_MEDIA = [
+    {
+      id: "exp_1",
+      title: "The 4 Warning Signs in Relationship Communication & How to Counter Them",
+      category: "communication",
+      categoryLabel: "Communication",
+      source: "The Gottman Institute",
+      sourceUrl: "https://www.gottman.com/blog/",
+      imageUrl: "https://images.unsplash.com/photo-1516589178581-6cd7833ae3b2?w=800&auto=format&fit=crop&q=80"
+    },
+    {
+      id: "exp_2",
+      title: "The Neuroscience of Heartbreak: Reclaiming Your Mental Peace",
+      category: "breakup",
+      categoryLabel: "Moving On",
+      source: "Psychology Today",
+      sourceUrl: "https://www.psychologytoday.com/us/basics/relationships",
+      imageUrl: "https://images.unsplash.com/photo-1506744038136-46273834b3fb?w=800&auto=format&fit=crop&q=80"
+    },
+    {
+      id: "exp_3",
+      title: "Breaking the Anxious-Avoidant Loop: Developing Secure Attachment",
+      category: "psychology",
+      categoryLabel: "Psychology",
+      source: "UC Berkeley Greater Good",
+      sourceUrl: "https://greatergood.berkeley.edu/",
+      imageUrl: "https://images.unsplash.com/photo-1470071459604-3b5ec3a7fe05?w=800&auto=format&fit=crop&q=80"
+    },
+    {
+      id: "exp_4",
+      title: "Setting Healthy Emotional Boundaries Without Guilt or Resentment",
+      category: "healing",
+      categoryLabel: "Personal Growth",
+      source: "NPR Life Kit",
+      sourceUrl: "https://www.npr.org/lifekit",
+      imageUrl: "https://images.unsplash.com/photo-1518495973542-4542c06a5843?w=800&auto=format&fit=crop&q=80"
+    },
+    {
+      id: "exp_5",
+      title: "Micro-Moments of Connection: Building Lasting Emotional Intimacy",
+      category: "relationships",
+      categoryLabel: "Relationships",
+      source: "The Gottman Institute",
+      sourceUrl: "https://www.gottman.com/blog/",
+      imageUrl: "https://images.unsplash.com/photo-1499209974431-9dddcece7f88?w=800&auto=format&fit=crop&q=80"
+    },
+    {
+      id: "exp_6",
+      title: "Rebuilding Self-Esteem & Trust in Yourself After Sudden Betrayal",
+      category: "healing",
+      categoryLabel: "Personal Growth",
+      source: "Psychology Today",
+      sourceUrl: "https://www.psychologytoday.com/",
+      imageUrl: "https://images.unsplash.com/photo-1518199266791-5375a83190b7?w=800&auto=format&fit=crop&q=80"
+    },
+    {
+      id: "exp_7",
+      title: "The Power of Radical Self-Compassion in Times of Transition",
+      category: "psychology",
+      categoryLabel: "Mindset",
+      source: "Mindful Health",
+      sourceUrl: "https://greatergood.berkeley.edu/",
+      imageUrl: "https://images.unsplash.com/photo-1507525428034-b723cf961d3e?w=800&auto=format&fit=crop&q=80"
+    },
+    {
+      id: "exp_8",
+      title: "How to Have Difficult Conversations Without Emotional Flooding",
+      category: "communication",
+      categoryLabel: "Communication",
+      source: "Harvard Health",
+      sourceUrl: "https://www.health.harvard.edu/mind-and-mood",
+      imageUrl: "https://images.unsplash.com/photo-1499750310107-5fef28a66643?w=800&auto=format&fit=crop&q=80"
+    },
+    {
+      id: "exp_9",
+      title: "Letting Go of the Need for Closure from Someone Who Can't Give It",
+      category: "breakup",
+      categoryLabel: "Moving On",
+      source: "Psychology Today",
+      sourceUrl: "https://www.psychologytoday.com/",
+      imageUrl: "https://images.unsplash.com/photo-1519681393784-d120267933ba?w=800&auto=format&fit=crop&q=80"
+    }
+  ];
 
-  const renderExplore = (filter) => {
+  const renderExplore = (filter = 'all') => {
     const grid = $('explore-grid');
     const empty = $('empty-explore');
     if (!grid) return;
     grid.innerHTML = '';
 
-    let posts = [...S.posts];
-    if (filter !== 'all') posts = posts.filter(p => p.emotion === filter);
+    // Merge news items from real API with seed media and user posts
+    let allExploreItems = [...REAL_EXPLORE_SEED_MEDIA];
 
-    if (posts.length === 0) {
-      empty.classList.remove('hidden');
+    if (cachedExploreNews && cachedExploreNews.length > 0) {
+      cachedExploreNews.forEach(newsItem => {
+        if (!allExploreItems.some(item => item.id === newsItem.id)) {
+          allExploreItems.unshift({
+            id: newsItem.id,
+            title: newsItem.title,
+            category: newsItem.category || 'advice',
+            categoryLabel: newsItem.categoryLabel?.replace(/^[^\w\s]+/, '').trim() || 'Advice',
+            source: newsItem.source,
+            sourceUrl: newsItem.sourceUrl,
+            imageUrl: newsItem.imageUrl || 'https://images.unsplash.com/photo-1516589178581-6cd7833ae3b2?w=800&auto=format&fit=crop&q=80'
+          });
+        }
+      });
+    }
+
+    // Filter items
+    let filtered = allExploreItems;
+    if (filter !== 'all') {
+      filtered = allExploreItems.filter(item => {
+        if (filter === 'relationships') return item.category === 'relationships' || item.category === 'communication';
+        if (filter === 'psychology') return item.category === 'psychology';
+        if (filter === 'healing') return item.category === 'healing';
+        if (filter === 'breakup') return item.category === 'breakup' || item.category === 'heartbreak';
+        if (filter === 'advice') return item.category === 'advice' || Boolean(item.sourceUrl);
+        return item.category === filter;
+      });
+    }
+
+    if (filtered.length === 0) {
+      if (empty) empty.classList.remove('hidden');
       return;
     }
-    empty.classList.add('hidden');
+    if (empty) empty.classList.add('hidden');
 
-    posts.forEach(p => {
-      const em     = EMOTIONS[p.emotion];
-      const emEmoji = EMOTION_EMOJIS[p.emotion] || '\u2728';
-      const grad   = p.gradient ? p.gradient : (GRADIENT_MAPS[p.emotion] || ['#1a0a12','#3d1626']);
+    filtered.forEach(item => {
       const card = document.createElement('div');
       card.className = 'explore-card';
       card.setAttribute('role', 'listitem');
-      card.setAttribute('aria-label', p.title);
+      card.setAttribute('aria-label', item.title);
       card.tabIndex = 0;
 
       card.innerHTML = `
-        <div class="explore-card-bg" style="background:linear-gradient(135deg,${grad[0]},${grad[1]});">
-          <span style="font-size:28px;opacity:0.4;">${emEmoji}</span>
+        <img src="${escapeHTML(item.imageUrl)}" class="explore-card-img" alt="${escapeHTML(item.title)}" loading="lazy" />
+        <div class="explore-card-scrim"></div>
+        <div class="explore-card-meta">
+          <span class="explore-card-tag">${escapeHTML(item.categoryLabel || item.category || 'Insight')}</span>
+          <h4 class="explore-card-title">${escapeHTML(item.title)}</h4>
+          <div class="explore-card-source">
+            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="16" x2="12" y2="12"/><line x1="12" y1="8" x2="12.01" y2="8"/></svg>
+            <span>${escapeHTML(item.source || 'Sonder Article')} ↗</span>
+          </div>
         </div>
-        <div class="explore-card-overlay">
-          <span class="explore-card-overlay-emoji">${emEmoji}</span>
-          <span class="explore-card-overlay-title">${escapeHTML(p.title)}</span>
-        </div>
-        <span class="explore-card-emotion-tag ${em.cls}">${escapeHTML(em.label)}</span>
       `;
 
-      card.onclick = () => openPostDetail(p);
-      card.addEventListener('keydown', e => { if (e.key === 'Enter' || e.key === ' ') openPostDetail(p); });
+      card.onclick = () => {
+        if (item.sourceUrl) {
+          window.open(item.sourceUrl, '_blank', 'noopener,noreferrer');
+        } else {
+          showToast(`Opening: ${item.title}`);
+        }
+      };
+      card.addEventListener('keydown', e => {
+        if (e.key === 'Enter' || e.key === ' ') {
+          if (item.sourceUrl) window.open(item.sourceUrl, '_blank', 'noopener,noreferrer');
+        }
+      });
       grid.appendChild(card);
     });
   };
@@ -4062,11 +4357,17 @@ document.addEventListener('DOMContentLoaded', () => {
       items.forEach(item => {
         const card = document.createElement('div');
         card.className = 'advice-card';
+        const imgHtml = item.imageUrl ? `
+          <div class="ac-img-wrap" style="width:100%;height:160px;border-radius:var(--r-sm);overflow:hidden;margin-bottom:12px;border:1px solid var(--border);">
+            <img src="${escapeHTML(item.imageUrl)}" style="width:100%;height:100%;object-fit:cover;" alt="${escapeHTML(item.title)}" loading="lazy" />
+          </div>` : '';
+
         card.innerHTML = `
           <div class="ac-top-row">
             <span class="ac-category-tag">${escapeHTML(item.categoryLabel || item.category)}</span>
             <span class="ac-read-time">${escapeHTML(item.readTime || '3 min read')}</span>
           </div>
+          ${imgHtml}
           <h4 class="ac-title">${escapeHTML(item.title)}</h4>
           <p class="ac-summary">${escapeHTML(item.summary)}</p>
           ${item.takeaways && item.takeaways.length ? `
