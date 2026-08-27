@@ -375,14 +375,14 @@ const CORE_ADVICE_ARTICLES = [
     category: "healing",
     categoryLabel: "🌿 Self-Worth & Healing",
     readTime: "5 min read",
-    badge: "Trauma Recovery",
+      badge: "Trauma Recovery",
     publishedAt: new Date(Date.now() - 1000 * 60 * 60 * 120).toISOString()
   }
 ];
 
-function fetchHttpsJson(url) {
+function fetchHttpsJson(url, timeoutMs = 3500) {
   return new Promise((resolve, reject) => {
-    https.get(url, (res) => {
+    const req = https.get(url, (res) => {
       let raw = '';
       res.on('data', chunk => raw += chunk);
       res.on('end', () => {
@@ -392,7 +392,12 @@ function fetchHttpsJson(url) {
           resolve({ status: res.statusCode, data: null, error: err.message });
         }
       });
-    }).on('error', err => reject(err));
+    });
+    req.setTimeout(timeoutMs, () => {
+      req.destroy();
+      reject(new Error('Request timeout'));
+    });
+    req.on('error', err => reject(err));
   });
 }
 
@@ -493,6 +498,172 @@ app.get('/api/advice-news', async (req, res) => {
   } catch (err) {
     console.error('Error in /api/advice-news:', err.message);
     return res.status(500).json({ error: 'Failed to retrieve relationship advice updates.' });
+  }
+});
+
+// POST /api/contact - Submit feedback & contact message
+app.post('/api/contact', (req, res) => {
+  try {
+    const { name, email, message } = req.body;
+
+    if (!message || typeof message !== 'string' || !message.trim()) {
+      return res.status(400).json({ error: 'Message cannot be empty.' });
+    }
+
+    const cleanEmail = (email && typeof email === 'string') ? email.trim() : '';
+    if (cleanEmail && !EMAIL_REGEX.test(cleanEmail)) {
+      return res.status(400).json({ error: 'Please enter a valid email address.' });
+    }
+
+    const cleanName = (name && typeof name === 'string') ? name.trim() : 'Anonymous';
+    console.log(`[Contact Submission] From: ${cleanName} <${cleanEmail || 'no-email'}> | Msg: "${message.trim().substring(0, 60)}..."`);
+
+    return res.status(201).json({
+      success: true,
+      message: 'Message sent! Thank you for reaching out.'
+    });
+  } catch (err) {
+    console.error('Error handling /api/contact:', err.message);
+    return res.status(500).json({ error: 'Failed to send message. Please try again later.' });
+  }
+});
+
+// ══════════════════════════════════════════════════════════════════════
+// DIRECT MESSAGES & FRIENDS API
+// ══════════════════════════════════════════════════════════════════════
+const messagesStore = new Map();
+
+// POST /api/messages/send - Send DM message in a thread
+app.post('/api/messages/send', (req, res) => {
+  try {
+    const { threadId, message } = req.body;
+    if (!threadId || !message) {
+      return res.status(400).json({ error: 'threadId and message are required.' });
+    }
+
+    if (!messagesStore.has(threadId)) {
+      messagesStore.set(threadId, []);
+    }
+    const threadMsgs = messagesStore.get(threadId);
+    threadMsgs.push(message);
+
+    console.log(`[DM] Sent to thread ${threadId}: "${(message.text || '').substring(0, 40)}" (Total msgs: ${threadMsgs.length})`);
+    return res.status(200).json({
+      success: true,
+      messageId: message.id,
+      threadId: threadId,
+      count: threadMsgs.length
+    });
+  } catch (err) {
+    console.error('Error handling /api/messages/send:', err.message);
+    return res.status(500).json({ error: 'Failed to send message.' });
+  }
+});
+
+// GET /api/messages/threads/:threadId - Retrieve message thread history
+app.get('/api/messages/threads/:threadId', (req, res) => {
+  try {
+    const { threadId } = req.params;
+    const messages = messagesStore.get(threadId) || [];
+    return res.json({
+      success: true,
+      threadId,
+      messages
+    });
+  } catch (err) {
+    return res.status(500).json({ error: 'Failed to retrieve messages.' });
+  }
+});
+
+// ══════════════════════════════════════════════════════════════════════
+// STORIES & ANONYMOUS COMMUNITY FEED API
+// ══════════════════════════════════════════════════════════════════════
+const storiesDb = require('./db/stories');
+
+// GET /api/stories - Retrieve all community stories with optional filter & search
+app.get('/api/stories', (req, res) => {
+  try {
+    const { emotion, q } = req.query;
+    let stories = storiesDb.readStories();
+
+    if (emotion && emotion !== 'all') {
+      stories = stories.filter(s => s.emotion === emotion);
+    }
+
+    if (q && typeof q === 'string' && q.trim()) {
+      const term = q.toLowerCase().trim();
+      stories = stories.filter(s =>
+        (s.title || '').toLowerCase().includes(term) ||
+        (s.body || '').toLowerCase().includes(term) ||
+        (s.userId || '').toLowerCase().includes(term)
+      );
+    }
+
+    return res.json({ success: true, count: stories.length, stories });
+  } catch (err) {
+    console.error('Error fetching stories:', err.message);
+    return res.status(500).json({ error: 'Failed to retrieve stories.' });
+  }
+});
+
+// POST /api/stories - Publish a new community story
+app.post('/api/stories', (req, res) => {
+  try {
+    const { title, body, emotion, isAnon, userId, avatar, imageUrl } = req.body;
+
+    if (!body || typeof body !== 'string' || !body.trim()) {
+      return res.status(400).json({ error: 'Story body cannot be empty.' });
+    }
+
+    const story = storiesDb.createStory({
+      title: (title || '').trim() || 'Untitled Reflection',
+      body: body.trim(),
+      emotion: emotion || 'heartbreak',
+      userId: isAnon ? (userId || 'Anonymous') : 'Ghost',
+      avatar: avatar || null,
+      imageUrl: imageUrl || null
+    });
+
+    return res.status(201).json({ success: true, story });
+  } catch (err) {
+    console.error('Error creating story:', err.message);
+    return res.status(500).json({ error: 'Failed to create story.' });
+  }
+});
+
+// POST /api/stories/:id/react - React to a story
+app.post('/api/stories/:id/react', (req, res) => {
+  try {
+    const { reaction } = req.body;
+    const updated = storiesDb.reactToStory(req.params.id, reaction || 'love');
+    if (!updated) {
+      return res.status(404).json({ error: 'Story not found.' });
+    }
+    return res.json({ success: true, story: updated });
+  } catch (err) {
+    console.error('Error reacting to story:', err.message);
+    return res.status(500).json({ error: 'Failed to update reaction.' });
+  }
+});
+
+// POST /api/stories/:id/comment - Comment on a story
+app.post('/api/stories/:id/comment', (req, res) => {
+  try {
+    const { user, text } = req.body;
+    if (!text || typeof text !== 'string' || !text.trim()) {
+      return res.status(400).json({ error: 'Comment text is required.' });
+    }
+    const result = storiesDb.addCommentToStory(req.params.id, {
+      user: user || 'Anonymous Member',
+      text: text.trim()
+    });
+    if (!result) {
+      return res.status(404).json({ error: 'Story not found.' });
+    }
+    return res.status(201).json({ success: true, ...result });
+  } catch (err) {
+    console.error('Error adding comment to story:', err.message);
+    return res.status(500).json({ error: 'Failed to add comment.' });
   }
 });
 

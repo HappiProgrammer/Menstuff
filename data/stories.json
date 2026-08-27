@@ -1,0 +1,205 @@
+[
+  {
+    "id": "p_1787839570154_6dacab",
+    "userId": "Explorer#1010",
+    "avatar": "<svg></svg>",
+    "title": "Longing under the stars in Explore",
+    "body": "I looked up at Orion and wondered if you were looking up too.",
+    "emotion": "longing",
+    "date": "2026-08-27T14:06:10.154Z",
+    "reacts": {
+      "love": 0,
+      "cry": 0,
+      "angry": 0,
+      "healing": 0,
+      "peace": 0
+    },
+    "comments": [],
+    "imageUrl": null,
+    "gradient": [
+      "#0d0d1a",
+      "#1a1a3d"
+    ],
+    "isMine": true
+  },
+  {
+    "id": "p_1787839491654_518e0d",
+    "userId": "SilentStar#9921",
+    "avatar": "<svg></svg>",
+    "title": "Testing Heartbreak Story 1787839491613",
+    "body": "This is an end-to-end verification of story creation and persistence.",
+    "emotion": "heartbreak",
+    "date": "2026-08-27T14:04:51.654Z",
+    "reacts": {
+      "love": 1,
+      "cry": 0,
+      "angry": 0,
+      "healing": 0,
+      "peace": 0
+    },
+    "comments": [
+      {
+        "id": "c_1787839491717",
+        "user": "VelvetEcho#4092",
+        "text": "Beautiful and resilient reflection.",
+        "date": "2026-08-27T14:04:51.717Z"
+      }
+    ],
+    "imageUrl": null,
+    "gradient": [
+      "#0f1a0d",
+      "#1e3a1a"
+    ],
+    "isMine": true
+  },
+  {
+    "id": "p_seed_1",
+    "userId": "VelvetEcho#4092",
+    "avatar": "<svg width=\"18\" height=\"18\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"1.8\" stroke-linecap=\"round\" stroke-linejoin=\"round\"><circle cx=\"12\" cy=\"7\" r=\"4\"/><path d=\"M5.5 21v-2a6.5 6.5 0 0 1 13 0v2\"/></svg>",
+    "title": "The last message I never sent",
+    "body": "I typed it out a hundred times. I deleted every single draft. Maybe that was the right choice — silence sometimes holds more dignity than begging to be understood.",
+    "emotion": "heartbreak",
+    "date": "2026-08-27T11:04:51.588Z",
+    "reacts": {
+      "love": 38,
+      "cry": 14,
+      "angry": 2,
+      "healing": 9,
+      "peace": 7
+    },
+    "comments": [
+      {
+        "user": "SolitaryWanderer#8812",
+        "text": "You saved your own peace by not sending it. Proud of you."
+      },
+      {
+        "user": "QuietRain#1943",
+        "text": "Closure is something you give yourself. Sending love."
+      }
+    ],
+    "gradient": [
+      "#1a0a12",
+      "#3d1626"
+    ]
+  },
+  {
+    "id": "p_seed_2",
+    "userId": "SolitaryWanderer#8812",
+    "avatar": "<svg width=\"18\" height=\"18\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"1.8\" stroke-linecap=\"round\" stroke-linejoin=\"round\"><path d=\"M7 7.5a5 5 0 0 1 10 0v1H7V7.5z\"/><circle cx=\"12\" cy=\"10\" r=\"3\"/><path d=\"M5.5 21v-2a6.5 6.5 0 0 1 13 0v2\"/></svg>",
+    "title": "Seeing you with her in the coffee shop",
+    "body": "My chest tightened for five seconds. But then I looked at my own hands, drank my coffee, and realized that my world didn't end. Growth is quiet.",
+    "emotion": "acceptance",
+    "date": "2026-08-27T02:04:51.588Z",
+    "reacts": {
+      "love": 52,
+      "cry": 4,
+      "angry": 1,
+      "healing": 28,
+      "peace": 19
+    },
+    "comments": [
+      {
+        "user": "Luna_Glow#7710",
+        "text": "This gives me so much hope for my own journey."
+      }
+    ],
+    "gradient": [
+      "#0a1a1a",
+      "#0f3d3a"
+    ]
+  },
+  {
+    "id": "p_seed_3",
+    "userId": "QuietRain#1943",
+    "avatar": "<svg width=\"18\" height=\"18\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"1.8\" stroke-linecap=\"round\" stroke-linejoin=\"round\"><circle cx=\"12\" cy=\"7\" r=\"4\"/><path d=\"M5.5 21v-2a6.5 6.5 0 0 1 13 0v2\"/><circle cx=\"9.5\" cy=\"7\" r=\"1.3\"/><circle cx=\"14.5\" cy=\"7\" r=\"1.3\"/><line x1=\"10.8\" y1=\"7\" x2=\"13.2\" y2=\"7\"/></svg>",
+    "title": "Betrayal from the one who promised safety",
+    "body": "The hardest part isn't that the relationship ended. It's grieving the version of them they convinced you they were. Rebuilding trust in my own intuition now.",
+    "emotion": "betrayal",
+    "date": "2026-08-26T14:04:51.588Z",
+    "reacts": {
+      "love": 44,
+      "cry": 21,
+      "angry": 18,
+      "healing": 12,
+      "peace": 5
+    },
+    "comments": [
+      {
+        "user": "MidnightThinker#3301",
+        "text": "Your intuition was never broken, they were just skilled at distortion."
+      }
+    ],
+    "gradient": [
+      "#0d1a2b",
+      "#1a3a5c"
+    ]
+  },
+  {
+    "id": "p_seed_4",
+    "userId": "Luna_Glow#7710",
+    "avatar": "<svg width=\"18\" height=\"18\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"1.8\" stroke-linecap=\"round\" stroke-linejoin=\"round\"><path d=\"M12 2a5 5 0 0 0-5 5v1a5 5 0 0 0 10 0V7a5 5 0 0 0-5-5z\"/><path d=\"M4 21v-2a7 7 0 0 1 14 0v2\"/></svg>",
+    "title": "Day 45 of No-Contact: I woke up smiling",
+    "body": "For the first month, waking up felt like remembering a car crash. Today, the morning air just felt clean and full of possibility. To anyone struggling in week 1: hold on.",
+    "emotion": "healing",
+    "date": "2026-08-26T02:04:51.588Z",
+    "reacts": {
+      "love": 67,
+      "cry": 2,
+      "angry": 0,
+      "healing": 45,
+      "peace": 31
+    },
+    "comments": [
+      {
+        "user": "VelvetEcho#4092",
+        "text": "Day 12 here, reading this just made my whole week lighter."
+      }
+    ],
+    "gradient": [
+      "#0f1a0d",
+      "#1e3a1a"
+    ]
+  },
+  {
+    "id": "p_seed_5",
+    "userId": "MidnightThinker#3301",
+    "avatar": "<svg width=\"18\" height=\"18\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"1.8\" stroke-linecap=\"round\" stroke-linejoin=\"round\"><circle cx=\"12\" cy=\"8\" r=\"3.5\"/><path d=\"M5.5 21v-1.8a6.5 6.5 0 0 1 13 0v1.8\"/><path d=\"M6 10a6 6 0 0 1 12 0v2a2 2 0 0 1-2 2h-1v-4h3\"/><path d=\"M6 12H5a2 2 0 0 1-2-2v-1a6 6 0 0 1 3-4.5\"/></svg>",
+    "title": "Why anger was the turning point in my healing",
+    "body": "I spent months feeling sad and accommodating. Once I let myself feel healthy anger, I remembered what I deserved. Anger was the guardian of my self-respect.",
+    "emotion": "anger",
+    "date": "2026-08-25T14:04:51.588Z",
+    "reacts": {
+      "love": 31,
+      "cry": 3,
+      "angry": 25,
+      "healing": 19,
+      "peace": 8
+    },
+    "comments": [],
+    "gradient": [
+      "#1a0f0f",
+      "#3d1a1a"
+    ]
+  },
+  {
+    "id": "p_seed_6",
+    "userId": "FadingStar#1299",
+    "avatar": "<svg width=\"18\" height=\"18\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"1.8\" stroke-linecap=\"round\" stroke-linejoin=\"round\"><circle cx=\"12\" cy=\"7\" r=\"4\"/><path d=\"M5.5 21v-2a6.5 6.5 0 0 1 13 0v2\"/></svg>",
+    "title": "The playlist I finally unstarred",
+    "body": "We made it on a road trip two summers ago. Tonight I deleted the download. A small click, but a massive exhale.",
+    "emotion": "longing",
+    "date": "2026-08-25T02:04:51.588Z",
+    "reacts": {
+      "love": 29,
+      "cry": 11,
+      "angry": 1,
+      "healing": 14,
+      "peace": 12
+    },
+    "comments": [],
+    "gradient": [
+      "#180f1a",
+      "#3a1a3d"
+    ]
+  }
+]

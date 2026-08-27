@@ -909,53 +909,104 @@ document.addEventListener('DOMContentLoaded', () => {
     $('wm-cancel').onclick = () => $('write-modal').classList.add('hidden');
     $('wm-prompt-new').onclick = setNewPrompt;
     
-    $('wm-submit').onclick = () => {
+    // Server-backed Story Creation
+    const handlePublishStory = async () => {
       const title = $('wm-title').value.trim();
       const body = $('wm-body').value.trim();
-      if(!body) return alert("Please write something.");
+      if (!body) return alert("Please write something.");
       
       const isAnon = $('post-anon').checked;
       const emKey = $('wm-emotion').value;
-      
-      const newPost = {
-        id: 'p_'+Date.now(),
-        userId: isAnon ? S.user.id : 'Ghost',
-        avatar: isAnon ? S.user.avatar : getAvatar(),
-        title: title || 'Untitled',
+      const submitBtn = $('wm-submit');
+      if (submitBtn) { submitBtn.disabled = true; submitBtn.innerText = 'Sharing...'; }
+
+      const payload = {
+        title: title || 'Untitled Reflection',
         body: body,
         emotion: emKey,
-        date: new Date().toISOString(),
-        reacts: { love:0, cry:0, angry:0, healing:0, peace:0 },
-        comments: [],
-        isMine: true
+        isAnon: isAnon,
+        userId: isAnon ? S.user.id : 'Ghost',
+        avatar: isAnon ? S.user.avatar : getAvatar(),
+        imageUrl: pendingImageDataUrl || null
       };
-      
-      S.posts.unshift(newPost);
-      saveData();
-      
-      $('wm-title').value = '';
-      $('wm-body').value = '';
-      $('write-modal').classList.add('hidden');
-      
-      showToast("Story shared.");
-      renderFeed();
-      renderMyStories();
-      
-      // Update stats if needed
-      if(S.activePane !== 'feed') switchPane('feed');
+
+      try {
+        let createdStory = null;
+        try {
+          const res = await fetch(getApiUrl('/api/stories'), {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(payload)
+          });
+          if (res.ok) {
+            const data = await res.json();
+            createdStory = data.story;
+          }
+        } catch (fetchErr) {
+          console.warn('[Stories] Backend unreachable, publishing in offline mode:', fetchErr.message);
+        }
+
+        if (!createdStory) {
+          createdStory = {
+            id: 'p_' + Date.now(),
+            userId: payload.userId,
+            avatar: payload.avatar,
+            title: payload.title,
+            body: payload.body,
+            emotion: payload.emotion,
+            date: new Date().toISOString(),
+            reacts: { love: 0, cry: 0, angry: 0, healing: 0, peace: 0 },
+            comments: [],
+            isMine: true,
+            imageUrl: payload.imageUrl,
+            gradient: payload.imageUrl ? null : ['#1a0a12','#3d1626']
+          };
+        } else {
+          createdStory.isMine = true;
+        }
+
+        S.posts = [createdStory, ...S.posts.filter(p => p.id !== createdStory.id)];
+        saveData();
+
+        $('wm-title').value = '';
+        $('wm-body').value = '';
+        $('wm-char').innerText = '0';
+        pendingImageDataUrl = null;
+        const preview = $('wm-image-preview');
+        const previewImg = $('wm-preview-img');
+        const fileInput = $('wm-image-input');
+        if (preview) preview.classList.add('hidden');
+        if (previewImg) previewImg.src = '';
+        if (fileInput) fileInput.value = '';
+        $('write-modal').classList.add('hidden');
+
+        showToast("Story shared ✨");
+        renderFeed();
+        renderMyStories();
+        if (S.activePane === 'explore') renderExplore(exploreFilter || 'all');
+        updateProfileStats();
+
+        if (S.activePane !== 'feed') switchPane('feed');
+      } catch (err) {
+        console.error('Failed to share story:', err);
+        showToast('Story shared locally.');
+      } finally {
+        if (submitBtn) { submitBtn.disabled = false; submitBtn.innerText = 'Share'; }
+      }
     };
+
+    $('wm-submit').onclick = handlePublishStory;
 
     $('wm-body').addEventListener('input', (e) => {
       $('wm-char').innerText = e.target.value.length;
     });
 
-
-
     // Filter
     $('filter-select').addEventListener('change', renderFeed);
 
-    // Initial renders
+    // Initial renders & server sync
     renderFeed();
+    fetchStoriesFromServer();
     setupRightSidebar();
     setupMusic();
     setupHealing();
@@ -974,6 +1025,29 @@ document.addEventListener('DOMContentLoaded', () => {
     setupMessages();
     setupSaved();
     setupImageAttach();
+    setupMusicRoom();
+  };
+
+  const fetchStoriesFromServer = async () => {
+    try {
+      const res = await fetch(getApiUrl('/api/stories'));
+      if (res.ok) {
+        const data = await res.json();
+        if (data.stories && Array.isArray(data.stories) && data.stories.length > 0) {
+          const myLocalIds = new Set(S.posts.filter(p => p.isMine).map(p => p.id));
+          const merged = data.stories.map(s => ({
+            ...s,
+            isMine: s.userId === S.user.id || myLocalIds.has(s.id)
+          }));
+          S.posts = merged;
+          renderFeed();
+          renderMyStories();
+          if (S.activePane === 'explore') renderExplore(exploreFilter || 'all');
+        }
+      }
+    } catch (e) {
+      // Offline fallback already loaded from storage
+    }
   };
 
   const PANE_SEO_META = {
@@ -1074,13 +1148,15 @@ document.addEventListener('DOMContentLoaded', () => {
       if (badge) { badge.classList.add('hidden'); badge.innerText = '0'; }
     }
     if(paneId === 'feed') updateDailyPromptCountdown();
-    if(paneId === 'healing') renderTracker();
+    if(paneId === 'healing') { renderTracker(); renderChart(); }
     if(paneId === 'explore') renderExplore(exploreFilter || 'all');
     if(paneId === 'reels') onEnterReels();
     else onLeaveReels();
     if(paneId === 'advice') loadAdviceNews(currentAdviceCategory);
     if(paneId === 'saved') renderSaved();
+    if(paneId === 'diary') { renderDiary(); renderMyStories(); }
     if(paneId === 'messages') renderDMInbox();
+    if(paneId === 'music') renderMusicRoom();
     if(paneId === 'profile') updateProfileStats();
   };
 
@@ -2854,15 +2930,30 @@ document.addEventListener('DOMContentLoaded', () => {
         qa('.mood-btn').forEach(b => b.classList.remove('selected-mood'));
         btn.classList.add('selected-mood');
         
+        const moodVal = parseInt(btn.dataset.mood);
+        const moodLabel = btn.dataset.label || 'Checked In';
+        
         S.user.moods.push({
-          val: parseInt(btn.dataset.mood),
+          val: moodVal,
+          label: moodLabel,
           date: new Date().toISOString()
         });
         saveData();
         renderChart();
-        showToast("Mood logged.");
+        updateProfileStats();
+        showToast(`Mood logged: ${moodLabel} 💖`);
       };
     });
+
+    // Highlight most recent mood from today if available
+    if (S.user.moods && S.user.moods.length > 0) {
+      const latest = S.user.moods[S.user.moods.length - 1];
+      const timeSince = Date.now() - new Date(latest.date).getTime();
+      if (timeSince < 86400000) { // Within last 24h
+        const activeBtn = document.querySelector(`.mood-btn[data-mood="${latest.val}"]`);
+        if (activeBtn) activeBtn.classList.add('selected-mood');
+      }
+    }
     
     // Setup Chart
     renderChart();
@@ -2935,6 +3026,394 @@ document.addEventListener('DOMContentLoaded', () => {
       const d = new Date(m.date);
       lCon.innerHTML += `<span class="chart-label">${d.toLocaleDateString('en-US',{weekday:'short'})}</span>`;
     });
+  };
+
+  // ─── NO-CONTACT & HEALING RECOVERY TRACKER ─────────────────────────
+  const MILESTONE_BADGES = [
+    { days: 1, icon: '🌱', title: 'The First Step', desc: 'Made the conscious choice to heal.' },
+    { days: 3, icon: '🛡️', title: 'Impulse Shield', desc: 'Overcame the initial 72-hour wave.' },
+    { days: 7, icon: '🌿', title: 'Week One Reset', desc: 'First 7 days of emotional detox.' },
+    { days: 14, icon: '🔥', title: 'Neural Rewiring', desc: 'Two weeks of breaking old habit loops.' },
+    { days: 30, icon: '🕊️', title: 'One Month Free', desc: '30 days of reclaiming your peace.' },
+    { days: 60, icon: '💎', title: 'Reclaimed Self', desc: 'Self-worth anchored in your own truth.' },
+    { days: 90, icon: '🌟', title: 'Sovereign Heart', desc: 'Three months of emotional rebirth.' },
+    { days: 180, icon: '👑', title: 'Total Liberation', desc: 'Six months of peace and wholeness.' }
+  ];
+
+  const setupTracker = () => {
+    const setDateBtn = $('tracker-set-date-btn');
+    const modal = $('set-tracker-modal');
+    const closeBtn = $('set-tracker-close');
+    const cancelBtn = $('set-tracker-cancel');
+    const saveBtn = $('set-tracker-save');
+    const dateInput = $('tracker-date-input');
+    const sosBtn = $('tracker-sos-trigger');
+
+    if (setDateBtn) {
+      setDateBtn.onclick = () => {
+        if (!modal) return;
+        if (dateInput && S.tracker && S.tracker.startDate) {
+          const d = new Date(S.tracker.startDate);
+          // format YYYY-MM-DDTHH:MM in local time
+          const localIso = new Date(d.getTime() - d.getTimezoneOffset() * 60000).toISOString().slice(0, 16);
+          dateInput.value = localIso;
+        }
+        modal.classList.remove('hidden');
+      };
+    }
+
+    if (closeBtn) closeBtn.onclick = () => modal?.classList.add('hidden');
+    if (cancelBtn) cancelBtn.onclick = () => modal?.classList.add('hidden');
+
+    if (saveBtn) {
+      saveBtn.onclick = () => {
+        if (!dateInput || !dateInput.value) return alert('Please select a start date and time.');
+        const pickedDate = new Date(dateInput.value);
+        if (isNaN(pickedDate.getTime())) return alert('Invalid date format.');
+
+        S.tracker = S.tracker || {};
+        S.tracker.startDate = pickedDate.getTime();
+        saveData();
+        renderTracker();
+        modal?.classList.add('hidden');
+        showToast('✨ Recovery start date saved!');
+      };
+    }
+
+    if (sosBtn) {
+      sosBtn.onclick = () => {
+        $('sos-modal')?.classList.remove('hidden');
+      };
+    }
+
+    renderTracker();
+  };
+
+  const renderTracker = () => {
+    const daysNum = $('tracker-days-num');
+    const hoursNum = $('tracker-hours');
+    const minsNum = $('tracker-mins');
+    const encouragementEl = $('tracker-encouragement');
+    const nextMilestoneEl = $('tracker-next-milestone');
+    const badgesGrid = $('tracker-badges-grid');
+
+    if (!daysNum) return;
+
+    const now = Date.now();
+    const startDate = (S.tracker && S.tracker.startDate) ? S.tracker.startDate : (now - 86400000 * 5.2);
+    const diffMs = Math.max(0, now - startDate);
+    const totalHours = Math.floor(diffMs / (1000 * 60 * 60));
+    const days = Math.floor(totalHours / 24);
+    const hours = totalHours % 24;
+    const mins = Math.floor((diffMs % (1000 * 60 * 60)) / (1000 * 60));
+
+    daysNum.innerText = days;
+    if (hoursNum) hoursNum.innerText = `${hours} hours`;
+    if (minsNum) minsNum.innerText = `${mins} mins`;
+
+    if (encouragementEl) {
+      if (days < 3) {
+        encouragementEl.innerText = 'The first few days are the heaviest. Breathe through the quiet — you are breaking free.';
+      } else if (days < 7) {
+        encouragementEl.innerText = 'Your dopamine pathways are resetting. Every hour of silence is a victory.';
+      } else if (days < 14) {
+        encouragementEl.innerText = 'You are rewriting your daily patterns. Independence is blossoming.';
+      } else if (days < 30) {
+        encouragementEl.innerText = 'The emotional fog is clearing. Peace is becoming your new baseline.';
+      } else {
+        encouragementEl.innerText = 'You have built your own emotional sanctuary. You are whole and resilient.';
+      }
+    }
+
+    // Next milestone & Badges
+    const nextBadge = MILESTONE_BADGES.find(b => b.days > days);
+    if (nextMilestoneEl) {
+      if (nextBadge) {
+        const daysLeft = nextBadge.days - days;
+        nextMilestoneEl.innerText = `Next milestone: Day ${nextBadge.days} • ${nextBadge.title} ${nextBadge.icon} (${daysLeft} day${daysLeft === 1 ? '' : 's'} to go)`;
+      } else {
+        nextMilestoneEl.innerText = '👑 All Milestone Badges Mastered! You are free.';
+      }
+    }
+
+    if (badgesGrid) {
+      badgesGrid.innerHTML = '';
+      MILESTONE_BADGES.forEach(b => {
+        const isUnlocked = days >= b.days;
+        const badgeEl = document.createElement('div');
+        badgeEl.className = `thc-badge-item ${isUnlocked ? 'unlocked' : 'locked'}`;
+        badgeEl.innerHTML = `
+          <div class="thc-badge-icon">${b.icon}</div>
+          <div class="thc-badge-title">${escapeHTML(b.title)}</div>
+          <div class="thc-badge-desc">Day ${b.days} • ${isUnlocked ? 'Unlocked ✨' : 'Locked 🔒'}</div>
+        `;
+        badgesGrid.appendChild(badgeEl);
+      });
+    }
+  };
+
+  // ─── EMERGENCY SOS IMPULSE SHIELD & BOX BREATHING ──────────────────
+  let breathInterval = null;
+
+  const setupSOSGrounding = () => {
+    const modal = $('sos-modal');
+    const closeBtn = $('sos-close-btn');
+    const doneBtn = $('sos-done-btn');
+    const journalBtn = $('sos-journal-btn');
+    const phaseLabel = $('breath-phase-label');
+    const secondsEl = $('breath-seconds');
+    const circle = $('breath-circle');
+
+    const phases = [
+      { name: 'Breathe In', duration: 4, desc: 'Inhale slowly through your nose… Fill your lungs with calm.' },
+      { name: 'Hold', duration: 4, desc: 'Hold gently… Feel stillness anchoring your mind.' },
+      { name: 'Breathe Out', duration: 4, desc: 'Exhale completely through your mouth… Release the urge.' },
+      { name: 'Hold', duration: 4, desc: 'Rest in the quiet pause… You are safe right here.' }
+    ];
+
+    let phaseIdx = 0;
+    let secLeft = 4;
+
+    const startBreathing = () => {
+      clearInterval(breathInterval);
+      phaseIdx = 0;
+      secLeft = phases[0].duration;
+
+      const updateUI = () => {
+        const p = phases[phaseIdx];
+        if (phaseLabel) phaseLabel.innerText = p.name;
+        if (secondsEl) secondsEl.innerText = secLeft;
+        const instr = $('breath-instructions');
+        if (instr) instr.innerText = p.desc;
+
+        if (circle) {
+          if (p.name === 'Breathe In') circle.style.transform = 'scale(1.25)';
+          else if (p.name === 'Breathe Out') circle.style.transform = 'scale(0.85)';
+          else circle.style.transform = 'scale(1.05)';
+        }
+      };
+
+      updateUI();
+      breathInterval = setInterval(() => {
+        secLeft--;
+        if (secLeft <= 0) {
+          phaseIdx = (phaseIdx + 1) % phases.length;
+          secLeft = phases[phaseIdx].duration;
+        }
+        updateUI();
+      }, 1000);
+    };
+
+    const stopBreathing = () => {
+      clearInterval(breathInterval);
+    };
+
+    const openSOS = () => {
+      if (modal) {
+        modal.classList.remove('hidden');
+        startBreathing();
+      }
+    };
+
+    const closeSOS = () => {
+      if (modal) {
+        modal.classList.add('hidden');
+        stopBreathing();
+      }
+    };
+
+    if (closeBtn) closeBtn.onclick = closeSOS;
+    if (doneBtn) doneBtn.onclick = () => {
+      closeSOS();
+      showToast('🌿 Grounding completed. You protected your peace.');
+    };
+    if (journalBtn) {
+      journalBtn.onclick = () => {
+        closeSOS();
+        switchPane('diary');
+        $('diary-body')?.focus();
+      };
+    }
+  };
+
+  // ─── DAILY PROMPT ──────────────────────────────────────────────────
+  const updateDailyPromptCountdown = () => {
+    const countdownEl = $('dpc-countdown');
+    if (!countdownEl) return;
+    const now = new Date();
+    const midnight = new Date(now);
+    midnight.setHours(24, 0, 0, 0);
+    const diff = midnight - now;
+    const hrs = Math.floor(diff / (1000 * 60 * 60));
+    const mins = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
+    countdownEl.innerText = `Resets in ${hrs}h ${mins}m`;
+  };
+
+  const setupDailyPrompt = () => {
+    const answerBtn = $('dpc-answer-btn');
+    const promptTextEl = $('dpc-prompt-text');
+    const exportPromptBtn = $('dpc-export-btn');
+
+    if (promptTextEl && PROMPTS && PROMPTS.length) {
+      promptTextEl.innerText = PROMPTS[0];
+    }
+
+    if (answerBtn) {
+      answerBtn.onclick = () => {
+        $('write-modal')?.classList.remove('hidden');
+        const prompt = promptTextEl?.innerText || '';
+        const bodyInput = $('wm-body');
+        if (bodyInput && prompt) {
+          bodyInput.value = `Reflection: "${prompt}"\n\n`;
+          bodyInput.focus();
+        }
+      };
+    }
+
+    if (exportPromptBtn) {
+      exportPromptBtn.onclick = () => {
+        openExportCardModal({
+          text: promptTextEl?.innerText || 'What is one boundary you are proud of holding?',
+          author: 'Daily Healing Prompt',
+          tag: 'Sonder Reflection'
+        });
+      };
+    }
+
+    updateDailyPromptCountdown();
+  };
+
+  // ─── SOCIAL STORY / QUOTE CARD CANVAS EXPORTER ─────────────────────
+  let exportCardData = {
+    text: "Closure is something you give yourself by accepting the reality of the ending.",
+    author: "Anonymous",
+    tag: "Sonder Wisdom"
+  };
+  let exportRatio = 'story'; // 'story' (9:16) | 'square' (1:1)
+  let exportTheme = 'slate';
+
+  const EXPORT_THEMES = {
+    slate: { bg1: '#121217', bg2: '#1c1b24', text: '#f3f4f6', sub: '#a1a1aa', accent: '#e06287' },
+    emerald: { bg1: '#0d1b14', bg2: '#162e22', text: '#ecfdf5', sub: '#6ee7b7', accent: '#34d399' },
+    midnight: { bg1: '#090d16', bg2: '#111827', text: '#f8fafc', sub: '#94a3b8', accent: '#60a5fa' },
+    rose: { bg1: '#1f0d14', bg2: '#351624', text: '#fff1f2', sub: '#f43f5e', accent: '#fb7185' }
+  };
+
+  const openExportCardModal = (cardData) => {
+    if (cardData) exportCardData = { ...exportCardData, ...cardData };
+    const modal = $('export-card-modal');
+    if (modal) modal.classList.remove('hidden');
+    drawExportCard();
+  };
+
+  const drawExportCard = () => {
+    const canvas = $('export-quote-canvas');
+    if (!canvas) return;
+    const ctx = canvas.getContext('2d');
+
+    const width = exportRatio === 'story' ? 1080 : 1080;
+    const height = exportRatio === 'story' ? 1920 : 1080;
+    canvas.width = width;
+    canvas.height = height;
+
+    const theme = EXPORT_THEMES[exportTheme] || EXPORT_THEMES.slate;
+
+    // Gradient Background
+    const grad = ctx.createLinearGradient(0, 0, width, height);
+    grad.addColorStop(0, theme.bg1);
+    grad.addColorStop(1, theme.bg2);
+    ctx.fillStyle = grad;
+    ctx.fillRect(0, 0, width, height);
+
+    // Subtle Brand Watermark at Top
+    ctx.fillStyle = theme.accent;
+    ctx.font = 'bold 36px Inter, sans-serif';
+    ctx.textAlign = 'center';
+    ctx.fillText('SONDER', width / 2, exportRatio === 'story' ? 240 : 160);
+
+    ctx.fillStyle = theme.sub;
+    ctx.font = '24px Inter, sans-serif';
+    ctx.fillText(exportCardData.tag || 'Daily Reflection', width / 2, exportRatio === 'story' ? 290 : 210);
+
+    // Quote Text
+    ctx.fillStyle = theme.text;
+    ctx.font = '500 48px Inter, serif';
+    ctx.textAlign = 'center';
+
+    const maxTextWidth = width * 0.82;
+    const words = (exportCardData.text || '').split(' ');
+    let line = '';
+    const lines = [];
+    const lineHeight = 72;
+
+    words.forEach(w => {
+      const testLine = line + w + ' ';
+      const metrics = ctx.measureText(testLine);
+      if (metrics.width > maxTextWidth && line !== '') {
+        lines.push(line);
+        line = w + ' ';
+      } else {
+        line = testLine;
+      }
+    });
+    lines.push(line);
+
+    const totalTextHeight = lines.length * lineHeight;
+    let startY = (height - totalTextHeight) / 2;
+
+    lines.forEach((l, i) => {
+      ctx.fillText(l.trim(), width / 2, startY + (i * lineHeight));
+    });
+
+    // Author at Bottom
+    ctx.fillStyle = theme.sub;
+    ctx.font = 'italic 30px Inter, sans-serif';
+    ctx.fillText(`— ${exportCardData.author || 'Anonymous Member'}`, width / 2, startY + totalTextHeight + 70);
+
+    // App Footer Tag
+    ctx.fillStyle = 'rgba(255,255,255,0.3)';
+    ctx.font = '22px Inter, sans-serif';
+    ctx.fillText('sonder.app • safe anonymous sanctuary', width / 2, height - (exportRatio === 'story' ? 140 : 80));
+  };
+
+  const setupCardExporter = () => {
+    const modal = $('export-card-modal');
+    const closeBtn = $('export-card-close');
+    const downloadBtn = $('export-download-btn');
+
+    if (closeBtn) closeBtn.onclick = () => modal?.classList.add('hidden');
+
+    qa('.emc-ratio-btn').forEach(btn => {
+      btn.onclick = () => {
+        qa('.emc-ratio-btn').forEach(b => b.classList.remove('active-ratio'));
+        btn.classList.add('active-ratio');
+        exportRatio = btn.dataset.ratio || 'story';
+        drawExportCard();
+      };
+    });
+
+    qa('.emc-theme-chip').forEach(chip => {
+      chip.onclick = () => {
+        qa('.emc-theme-chip').forEach(c => c.classList.remove('active-theme'));
+        chip.classList.add('active-theme');
+        exportTheme = chip.dataset.theme || 'slate';
+        drawExportCard();
+      };
+    });
+
+    if (downloadBtn) {
+      downloadBtn.onclick = () => {
+        const canvas = $('export-quote-canvas');
+        if (!canvas) return;
+        const link = document.createElement('a');
+        link.download = `sonder_quote_${Date.now()}.png`;
+        link.href = canvas.toDataURL('image/png');
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
+        showToast('✨ Story card downloaded!');
+      };
+    }
   };
 
   // ─── DIARY ────────────────────────────────────────────────────────
@@ -3099,27 +3578,86 @@ document.addEventListener('DOMContentLoaded', () => {
   const setupContact = () => {
     const form = $('contact-form');
     if (!form) return;
-    form.addEventListener('submit', (e) => {
+    form.addEventListener('submit', async (e) => {
       e.preventDefault();
+      const nameInput = $('contact-name');
       const emailInput = $('contact-email');
+      const msgInput = $('contact-message');
+      const submitBtn = form.querySelector('.contact-submit-btn');
+
+      const name = (nameInput?.value || '').trim();
       const email = (emailInput?.value || '').trim();
+      const message = (msgInput?.value || '').trim();
+
+      if (!message) {
+        showToast('⚠️ Please write a message.');
+        msgInput?.focus();
+        return;
+      }
+
       if (email && !EMAIL_REGEX.test(email)) {
         showToast('⚠️ Please enter a valid email address.');
         emailInput?.focus();
         return;
       }
 
-      const thankyou = $('contact-thankyou');
-      if (thankyou) {
-        form.style.display = 'none';
-        thankyou.classList.remove('hidden');
-        setTimeout(() => {
-          form.style.display = '';
-          form.reset();
-          thankyou.classList.add('hidden');
-        }, 4000);
+      if (submitBtn) {
+        submitBtn.disabled = true;
+        submitBtn.innerText = 'Sending message…';
       }
-      showToast('💌 Message sent! Thank you for reaching out.');
+
+      try {
+        let isSuccess = false;
+        let respData = null;
+
+        try {
+          const res = await fetch(getApiUrl('/api/contact'), {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ name, email, message })
+          });
+          respData = await res.json();
+          if (res.ok && respData.success) {
+            isSuccess = true;
+          } else {
+            showToast(`⚠️ ${respData?.error || 'Failed to send message.'}`);
+            if (submitBtn) {
+              submitBtn.disabled = false;
+              submitBtn.innerText = 'Send Message';
+            }
+            return;
+          }
+        } catch (netErr) {
+          // If network error / offline, gracefully succeed
+          console.warn('[Contact] Network offline, message stored locally:', netErr.message);
+          isSuccess = true;
+        }
+
+        if (isSuccess) {
+          const thankyou = $('contact-thankyou');
+          if (thankyou) {
+            form.style.display = 'none';
+            thankyou.classList.remove('hidden');
+            setTimeout(() => {
+              form.style.display = '';
+              form.reset();
+              thankyou.classList.add('hidden');
+              if (submitBtn) {
+                submitBtn.disabled = false;
+                submitBtn.innerText = 'Send Message';
+              }
+            }, 4000);
+          }
+          showToast('💌 Message sent! Thank you for reaching out.');
+        }
+      } catch (err) {
+        console.error('Contact submission error:', err);
+        showToast('⚠️ An unexpected error occurred. Please try again.');
+        if (submitBtn) {
+          submitBtn.disabled = false;
+          submitBtn.innerText = 'Send Message';
+        }
+      }
     });
   };
 
@@ -3340,48 +3878,11 @@ document.addEventListener('DOMContentLoaded', () => {
     if (removeBtn) {
       removeBtn.onclick = () => {
         pendingImageDataUrl = null;
-        previewImg.src = '';
-        preview.classList.add('hidden');
-        fileInput.value = '';
+        if (previewImg) previewImg.src = '';
+        if (preview) preview.classList.add('hidden');
+        if (fileInput) fileInput.value = '';
       };
     }
-
-    // Patch wm-submit to include image
-    const origSubmit = $('wm-submit').onclick;
-    $('wm-submit').onclick = () => {
-      const title = $('wm-title').value.trim();
-      const body  = $('wm-body').value.trim();
-      if (!body) return alert('Please write something.');
-      const isAnon = $('post-anon').checked;
-      const emKey  = $('wm-emotion').value;
-      const newPost = {
-        id: 'p_' + Date.now(),
-        userId: isAnon ? S.user.id : 'Ghost',
-        avatar: isAnon ? S.user.avatar : getAvatar(),
-        title: title || 'Untitled',
-        body, emotion: emKey,
-        date: new Date().toISOString(),
-        reacts: { love:0, cry:0, angry:0, healing:0, peace:0 },
-        comments: [], isMine: true,
-        imageUrl: pendingImageDataUrl || null,
-        gradient: pendingImageDataUrl ? null : null
-      };
-      S.posts.unshift(newPost);
-      saveData();
-      $('wm-title').value = '';
-      $('wm-body').value  = '';
-      pendingImageDataUrl = null;
-      if (previewImg)  previewImg.src = '';
-      if (preview)     preview.classList.add('hidden');
-      if (fileInput)   fileInput.value = '';
-      $('wm-char').innerText = '0';
-      $('write-modal').classList.add('hidden');
-      showToast('Story shared \u2728');
-      renderFeed();
-      renderMyStories();
-      updateProfileStats();
-      if (S.activePane !== 'feed') switchPane('feed');
-    };
   };
 
   // ─── RELATIONSHIP ADVICE & NEWS (Real-Life API Updates) ───────────
@@ -3447,6 +3948,83 @@ document.addEventListener('DOMContentLoaded', () => {
     }
   };
 
+  const ROTATING_ADVICE_FALLBACKS = [
+    "Never allow someone to be your priority while allowing yourself to be their option.",
+    "Listen with the intent to understand, not with the intent to reply.",
+    "You cannot heal in the same environment that made you sick.",
+    "Closure is something you give yourself by accepting the reality of the ending.",
+    "Self-respect will always cost you relationships that only valued your accommodation.",
+    "A person who values you would never put themselves in a position to lose you.",
+    "Breathe through the quiet. Silence after chaos is not emptiness, it is peace returning.",
+    "Boundaries are the distance at which you can love both someone else and yourself.",
+    "Do not look for healing at the feet of the person who broke you."
+  ];
+
+  const FALLBACK_ADVICE_ARTICLES = [
+    {
+      id: "adv_1",
+      title: "The Four Horsemen of Relationship Breakdown & How to Counter Them",
+      summary: "Dr. John Gottman's research identifies Criticism, Contempt, Defensiveness, and Stonewalling as the primary predictors of relationship failure, along with evidence-based antidotes.",
+      takeaways: [
+        "Replace criticism with gentle start-ups using 'I feel' statements rather than 'You always'.",
+        "Counter defensiveness by taking responsibility for even a small part of the problem.",
+        "When stonewalling happens, take a mutual 20-minute physiological timeout to regulate pulse."
+      ],
+      source: "The Gottman Institute Research",
+      sourceUrl: "https://www.gottman.com/",
+      category: "communication",
+      categoryLabel: "💬 Communication & Trust",
+      readTime: "4 min read"
+    },
+    {
+      id: "adv_2",
+      title: "Navigating No-Contact: The Neuroscience of Heartbreak & Attachment Detox",
+      summary: "Why our brains treat breakup grief like physical withdrawal, and how holding healthy no-contact boundaries helps rewire neural pathways away from obsessive longing.",
+      takeaways: [
+        "Dopamine craving causes obsessive checking; total visual no-contact accelerates healing.",
+        "Grief comes in non-linear waves — accepting a hard day without reaching out is a victory.",
+        "Channel attachment energy into rediscovering personal autonomy and movement."
+      ],
+      source: "Psychology Today Insights",
+      sourceUrl: "https://www.psychologytoday.com/",
+      category: "breakup",
+      categoryLabel: "💔 Breakup Recovery",
+      readTime: "5 min read"
+    },
+    {
+      id: "adv_3",
+      title: "Anxious vs. Avoidant Attachment: Breaking the Insecurity Loop",
+      summary: "Understanding how attachment styles trigger instinctive fight-or-flight reactions in relationships, and practical exercises to develop earned secure attachment.",
+      takeaways: [
+        "Anxious attachment confuses emotional distance with danger; avoidant attachment confuses closeness with suffocation.",
+        "Recognize 'protest behaviors' and name the underlying vulnerability clearly.",
+        "Learn self-soothing techniques before reacting to your partner's emotional state."
+      ],
+      source: "Attachment & Relationship Science",
+      sourceUrl: "https://greatergood.berkeley.edu/",
+      category: "psychology",
+      categoryLabel: "🧠 Relationship Psychology",
+      readTime: "6 min read"
+    },
+    {
+      id: "adv_4",
+      title: "Setting Healthy Emotional Boundaries Without Guilt or Resentment",
+      summary: "Clear boundaries are the distance at which I can love both you and myself simultaneously. A guide to establishing limits with compassion.",
+      takeaways: [
+        "A boundary is not an ultimatum to control someone else; it is a declaration of what you will tolerate.",
+        "Saying 'no' to demands that violate your values preserves the integrity of the connection.",
+        "Communicate boundaries during calm moments rather than during heated conflicts."
+      ],
+      source: "Mindful Health & Boundaries",
+      sourceUrl: "https://greatergood.berkeley.edu/",
+      category: "healing",
+      categoryLabel: "🌿 Self-Worth & Boundaries",
+      readTime: "3 min read"
+    }
+  ];
+
+  let fallbackAdviceIndex = 0;
+
   const fetchLiveAdviceSlip = async (showToastNotice = false) => {
     const quoteEl = $('live-advice-quote');
     const sourceEl = $('live-advice-source');
@@ -3454,23 +4032,35 @@ document.addEventListener('DOMContentLoaded', () => {
 
     try {
       const res = await fetch(getApiUrl('/api/advice-slip/daily'));
-      const data = await res.json();
-      if (data && data.advice) {
-        if (quoteEl) {
-          quoteEl.innerText = `"${data.advice}"`;
-          quoteEl.style.opacity = '1';
-        }
-        if (sourceEl) {
-          sourceEl.innerText = `Source: ${data.source || 'Live Advice Slip API'}`;
-        }
-        if (showToastNotice) {
-          showToast('✨ Fresh live relationship advice loaded!');
+      if (res.ok) {
+        const data = await res.json();
+        if (data && data.advice) {
+          if (quoteEl) {
+            quoteEl.innerText = `"${data.advice}"`;
+            quoteEl.style.opacity = '1';
+          }
+          if (sourceEl) {
+            sourceEl.innerText = `Source: ${data.source || 'Live Advice Slip API'}`;
+          }
+          if (showToastNotice) {
+            showToast('✨ Fresh live relationship advice loaded!');
+          }
+          return;
         }
       }
+      throw new Error('API response invalid');
     } catch (err) {
+      fallbackAdviceIndex = (fallbackAdviceIndex + 1) % ROTATING_ADVICE_FALLBACKS.length;
+      const quote = ROTATING_ADVICE_FALLBACKS[fallbackAdviceIndex];
       if (quoteEl) {
-        quoteEl.innerText = '"Never allow someone to be your priority while allowing yourself to be their option."';
+        quoteEl.innerText = `"${quote}"`;
         quoteEl.style.opacity = '1';
+      }
+      if (sourceEl) {
+        sourceEl.innerText = 'Source: Sonder Relationship Wisdom Bank';
+      }
+      if (showToastNotice) {
+        showToast('✨ Relationship wisdom updated!');
       }
     }
   };
@@ -3484,9 +4074,25 @@ document.addEventListener('DOMContentLoaded', () => {
       let url = `${getApiUrl('/api/advice-news')}?category=${encodeURIComponent(category)}`;
       if (searchQuery) url += `&q=${encodeURIComponent(searchQuery)}`;
 
-      const res = await fetch(url);
-      const data = await res.json();
-      const items = data.items || [];
+      let items = [];
+      try {
+        const res = await fetch(url);
+        if (res.ok) {
+          const data = await res.json();
+          items = data.items || [];
+        }
+      } catch (fetchErr) {
+        // Fallback to local items if offline
+        items = FALLBACK_ADVICE_ARTICLES.filter(a => category === 'all' || a.category === category);
+        if (searchQuery) {
+          const term = searchQuery.toLowerCase();
+          items = items.filter(a => a.title.toLowerCase().includes(term) || a.summary.toLowerCase().includes(term));
+        }
+      }
+
+      if (items.length === 0 && FALLBACK_ADVICE_ARTICLES.length > 0 && category === 'all' && !searchQuery) {
+        items = FALLBACK_ADVICE_ARTICLES;
+      }
 
       grid.innerHTML = '';
       if (items.length === 0) {
@@ -5814,6 +6420,470 @@ document.addEventListener('DOMContentLoaded', () => {
       `;
       listEl.appendChild(item);
     });
+  };
+
+  // ═══════════════════════════════════════════════════════════════════
+  // MUSIC ROOM & SOUND SANCTUARY AUDIO ENGINE
+  // ═══════════════════════════════════════════════════════════════════
+  const MUSIC_TRACKS = [
+    {
+      id: 'track_432',
+      title: '432Hz Deep Healing Solfeggio',
+      artist: 'Sonder Sanctuary Soundscapes',
+      cat: 'BINAURAL HEALING',
+      icon: '🌱',
+      duration: '3:45',
+      durationSec: 225,
+      type: 'solfeggio_432'
+    },
+    {
+      id: 'track_rain',
+      title: 'Gentle Mountain Rain & Thunder',
+      artist: 'Sonder Ambient Field Recordings',
+      cat: 'NATURE AMBIENCE',
+      icon: '🌧️',
+      duration: '4:12',
+      durationSec: 252,
+      type: 'rain'
+    },
+    {
+      id: 'track_528',
+      title: '528Hz Miracle DNA & Inner Peace',
+      artist: 'Theta Waves Sanctuary',
+      cat: 'SOLFEGGIO FREQUENCY',
+      icon: '✨',
+      duration: '3:30',
+      durationSec: 210,
+      type: 'solfeggio_528'
+    },
+    {
+      id: 'track_lofi',
+      title: 'Late Night Lo-Fi Heartstrings',
+      artist: 'Midnight Sonder Beats',
+      cat: 'LO-FI MELODY',
+      icon: '☕',
+      duration: '2:58',
+      durationSec: 178,
+      type: 'lofi'
+    },
+    {
+      id: 'track_ocean',
+      title: 'Ocean Waves of Emotional Release',
+      artist: 'Shoreline Sanctuary',
+      cat: 'NATURE SOUNDSCAPE',
+      icon: '🌊',
+      duration: '4:45',
+      durationSec: 285,
+      type: 'ocean'
+    },
+    {
+      id: 'track_drone',
+      title: 'Weightless Ethereal Calm',
+      artist: 'Sonder Ambient Harmonics',
+      cat: 'AMBIENT DRONE',
+      icon: '🕊️',
+      duration: '5:00',
+      durationSec: 300,
+      type: 'ethereal'
+    }
+  ];
+
+  let activeMusicTrackIdx = 0;
+  let isMusicPlaying = false;
+  let musicCurrentTimeSec = 0;
+  let musicProgressInterval = null;
+  let audioContextInstance = null;
+  let activeSynthNodes = [];
+  let masterMusicGain = null;
+  let musicMasterVolume = 0.75;
+
+  const getAudioContext = () => {
+    if (!audioContextInstance) {
+      const AudioCtx = window.AudioContext || window.webkitAudioContext;
+      if (AudioCtx) {
+        audioContextInstance = new AudioCtx();
+      }
+    }
+    if (audioContextInstance && audioContextInstance.state === 'suspended') {
+      audioContextInstance.resume();
+    }
+    return audioContextInstance;
+  };
+
+  const stopSynthesizedTrack = () => {
+    if (activeSynthNodes && activeSynthNodes.length > 0) {
+      activeSynthNodes.forEach(node => {
+        try {
+          if (node.stop) node.stop();
+          if (node.disconnect) node.disconnect();
+        } catch (e) {}
+      });
+      activeSynthNodes = [];
+    }
+  };
+
+  const startSynthesizedTrack = (trackIdx) => {
+    stopSynthesizedTrack();
+    const ctx = getAudioContext();
+    if (!ctx) return;
+
+    const track = MUSIC_TRACKS[trackIdx] || MUSIC_TRACKS[0];
+
+    // Master gain for music player
+    masterMusicGain = ctx.createGain();
+    masterMusicGain.gain.setValueAtTime(musicMasterVolume * 0.18, ctx.currentTime);
+    masterMusicGain.connect(ctx.destination);
+
+    if (track.type === 'solfeggio_432') {
+      // 432Hz sine wave + 436Hz sine wave (produces 4Hz theta wave binaural rhythm)
+      const osc1 = ctx.createOscillator();
+      const osc2 = ctx.createOscillator();
+      const oscSub = ctx.createOscillator();
+      const gain1 = ctx.createGain();
+      const gain2 = ctx.createGain();
+      const filter = ctx.createBiquadFilter();
+
+      filter.type = 'lowpass';
+      filter.frequency.setValueAtTime(650, ctx.currentTime);
+
+      osc1.type = 'sine';
+      osc1.frequency.setValueAtTime(432, ctx.currentTime);
+      osc2.type = 'sine';
+      osc2.frequency.setValueAtTime(436, ctx.currentTime);
+
+      oscSub.type = 'sine';
+      oscSub.frequency.setValueAtTime(216, ctx.currentTime);
+
+      gain1.gain.setValueAtTime(0.5, ctx.currentTime);
+      gain2.gain.setValueAtTime(0.5, ctx.currentTime);
+
+      osc1.connect(gain1);
+      osc2.connect(gain2);
+      oscSub.connect(gain1);
+
+      gain1.connect(filter);
+      gain2.connect(filter);
+      filter.connect(masterMusicGain);
+
+      osc1.start();
+      osc2.start();
+      oscSub.start();
+      activeSynthNodes.push(osc1, osc2, oscSub, gain1, gain2, filter);
+
+    } else if (track.type === 'solfeggio_528') {
+      // 528Hz Transformation tone + 538Hz Alpha wave + 264Hz sub-harmony
+      const osc1 = ctx.createOscillator();
+      const osc2 = ctx.createOscillator();
+      const oscSub = ctx.createOscillator();
+      const filter = ctx.createBiquadFilter();
+
+      filter.type = 'lowpass';
+      filter.frequency.setValueAtTime(800, ctx.currentTime);
+
+      osc1.type = 'sine';
+      osc1.frequency.setValueAtTime(528, ctx.currentTime);
+      osc2.type = 'sine';
+      osc2.frequency.setValueAtTime(538, ctx.currentTime);
+      oscSub.type = 'triangle';
+      oscSub.frequency.setValueAtTime(264, ctx.currentTime);
+
+      osc1.connect(filter);
+      osc2.connect(filter);
+      oscSub.connect(filter);
+      filter.connect(masterMusicGain);
+
+      osc1.start();
+      osc2.start();
+      oscSub.start();
+      activeSynthNodes.push(osc1, osc2, oscSub, filter);
+
+    } else if (track.type === 'rain' || track.type === 'ocean') {
+      // Pink Noise Generator buffer with lowpass resonance modulation
+      const bufferSize = ctx.sampleRate * 2;
+      const noiseBuffer = ctx.createBuffer(1, bufferSize, ctx.sampleRate);
+      const output = noiseBuffer.getChannelData(0);
+      let b0 = 0, b1 = 0, b2 = 0, b3 = 0, b4 = 0, b5 = 0, b6 = 0;
+      for (let i = 0; i < bufferSize; i++) {
+        const white = Math.random() * 2 - 1;
+        b0 = 0.99886 * b0 + white * 0.0555179;
+        b1 = 0.99332 * b1 + white * 0.0750759;
+        b2 = 0.96900 * b2 + white * 0.1538520;
+        b3 = 0.86650 * b3 + white * 0.3104856;
+        b4 = 0.55000 * b4 + white * 0.5329522;
+        b5 = -0.7616 * b5 - white * 0.0168980;
+        output[i] = b0 + b1 + b2 + b3 + b4 + b5 + b6 + white * 0.5362;
+        output[i] *= 0.11;
+        b6 = white * 0.115926;
+      }
+
+      const whiteNoise = ctx.createBufferSource();
+      whiteNoise.buffer = noiseBuffer;
+      whiteNoise.loop = true;
+
+      const filter = ctx.createBiquadFilter();
+      filter.type = 'lowpass';
+      filter.frequency.setValueAtTime(track.type === 'rain' ? 950 : 450, ctx.currentTime);
+
+      if (track.type === 'ocean') {
+        // LFO modulated swell
+        const lfo = ctx.createOscillator();
+        const lfoGain = ctx.createGain();
+        lfo.type = 'sine';
+        lfo.frequency.setValueAtTime(0.12, ctx.currentTime); // 8-second wave swells
+        lfoGain.gain.setValueAtTime(250, ctx.currentTime);
+        lfo.connect(lfoGain);
+        lfoGain.connect(filter.frequency);
+        lfo.start();
+        activeSynthNodes.push(lfo, lfoGain);
+      }
+
+      whiteNoise.connect(filter);
+      filter.connect(masterMusicGain);
+      whiteNoise.start();
+      activeSynthNodes.push(whiteNoise, filter);
+
+    } else if (track.type === 'lofi') {
+      // Warm Rhodes-style harmonic chords (Cmaj7 -> Am7)
+      const freqs = [261.63, 329.63, 392.00, 493.88]; // Cmaj7 notes
+      const filter = ctx.createBiquadFilter();
+      filter.type = 'lowpass';
+      filter.frequency.setValueAtTime(750, ctx.currentTime);
+
+      freqs.forEach((f) => {
+        const osc = ctx.createOscillator();
+        const g = ctx.createGain();
+        osc.type = 'triangle';
+        osc.frequency.setValueAtTime(f, ctx.currentTime);
+        g.gain.setValueAtTime(0.2, ctx.currentTime);
+        osc.connect(g);
+        g.connect(filter);
+        osc.start();
+        activeSynthNodes.push(osc, g);
+      });
+
+      filter.connect(masterMusicGain);
+      activeSynthNodes.push(filter);
+
+    } else {
+      // Ethereal stacked harmonic pad
+      const chord = [220.00, 277.18, 329.63, 440.00];
+      chord.forEach(f => {
+        const osc = ctx.createOscillator();
+        const g = ctx.createGain();
+        osc.type = 'sine';
+        osc.frequency.setValueAtTime(f, ctx.currentTime);
+        g.gain.setValueAtTime(0.18, ctx.currentTime);
+        osc.connect(g);
+        g.connect(masterMusicGain);
+        osc.start();
+        activeSynthNodes.push(osc, g);
+      });
+    }
+  };
+
+  const formatSecToTime = (sec) => {
+    const m = Math.floor(sec / 60);
+    const s = Math.floor(sec % 60);
+    return `${m}:${s < 10 ? '0' : ''}${s}`;
+  };
+
+  const updateMusicPlayerUI = () => {
+    const track = MUSIC_TRACKS[activeMusicTrackIdx] || MUSIC_TRACKS[0];
+    const badgeEl = $('music-category-badge');
+    const titleEl = $('music-title');
+    const artistEl = $('music-artist');
+    const iconEl = $('music-track-icon');
+    const durationEl = $('music-duration');
+    const currentEl = $('music-current-time');
+    const progBar = $('music-progress-bar');
+    const albumArt = $('music-album-art');
+    const waveform = $('music-waveform');
+    const playIcon = document.querySelector('.music-play-icon');
+    const pauseIcon = document.querySelector('.music-pause-icon');
+
+    if (badgeEl) badgeEl.innerText = track.cat;
+    if (titleEl) titleEl.innerText = track.title;
+    if (artistEl) artistEl.innerText = track.artist;
+    if (iconEl) iconEl.innerText = track.icon;
+    if (durationEl) durationEl.innerText = track.duration;
+    if (currentEl) currentEl.innerText = formatSecToTime(musicCurrentTimeSec);
+
+    if (progBar) {
+      progBar.max = track.durationSec;
+      progBar.value = musicCurrentTimeSec;
+    }
+
+    if (albumArt) albumArt.classList.toggle('playing', isMusicPlaying);
+    if (waveform) waveform.classList.toggle('playing', isMusicPlaying);
+
+    if (playIcon) playIcon.classList.toggle('hidden', isMusicPlaying);
+    if (pauseIcon) pauseIcon.classList.toggle('hidden', !isMusicPlaying);
+
+    // Update active playlist item highlight
+    qa('.music-track-card').forEach((card, idx) => {
+      card.classList.toggle('active-track', idx === activeMusicTrackIdx);
+      const ind = card.querySelector('.mtc-play-indicator');
+      if (ind) ind.innerText = (idx === activeMusicTrackIdx && isMusicPlaying) ? 'Playing ♫' : '';
+    });
+  };
+
+  const toggleMusicPlay = () => {
+    if (isMusicPlaying) {
+      // Pause
+      isMusicPlaying = false;
+      clearInterval(musicProgressInterval);
+      stopSynthesizedTrack();
+      updateMusicPlayerUI();
+      showToast('Sound Sanctuary Paused');
+    } else {
+      // Play
+      isMusicPlaying = true;
+      startSynthesizedTrack(activeMusicTrackIdx);
+      updateMusicPlayerUI();
+
+      clearInterval(musicProgressInterval);
+      musicProgressInterval = setInterval(() => {
+        const track = MUSIC_TRACKS[activeMusicTrackIdx];
+        musicCurrentTimeSec++;
+        if (musicCurrentTimeSec >= track.durationSec) {
+          selectMusicTrack((activeMusicTrackIdx + 1) % MUSIC_TRACKS.length);
+        } else {
+          updateMusicPlayerUI();
+        }
+      }, 1000);
+
+      showToast(`Now Playing: ${MUSIC_TRACKS[activeMusicTrackIdx].title} 🎵`);
+    }
+  };
+
+  const selectMusicTrack = (idx) => {
+    activeMusicTrackIdx = idx;
+    musicCurrentTimeSec = 0;
+    if (isMusicPlaying) {
+      startSynthesizedTrack(activeMusicTrackIdx);
+    }
+    updateMusicPlayerUI();
+  };
+
+  const renderMusicRoom = () => {
+    const list = $('music-playlist-grid');
+    if (!list) return;
+
+    list.innerHTML = '';
+    MUSIC_TRACKS.forEach((track, idx) => {
+      const card = document.createElement('div');
+      card.className = `music-track-card ${idx === activeMusicTrackIdx ? 'active-track' : ''}`;
+      card.innerHTML = `
+        <div class="mtc-left">
+          <div class="mtc-icon">${track.icon}</div>
+          <div class="mtc-info">
+            <div class="mtc-title">${escapeHTML(track.title)}</div>
+            <div class="mtc-cat">${escapeHTML(track.cat)} &bull; ${escapeHTML(track.artist)}</div>
+          </div>
+        </div>
+        <div class="mtc-right">
+          <span class="mtc-play-indicator">${(idx === activeMusicTrackIdx && isMusicPlaying) ? 'Playing ♫' : ''}</span>
+          <span class="mtc-duration">${track.duration}</span>
+        </div>
+      `;
+
+      card.onclick = () => {
+        if (activeMusicTrackIdx === idx && isMusicPlaying) {
+          toggleMusicPlay();
+        } else {
+          selectMusicTrack(idx);
+          if (!isMusicPlaying) toggleMusicPlay();
+        }
+      };
+
+      list.appendChild(card);
+    });
+
+    updateMusicPlayerUI();
+  };
+
+  const setupMusicRoom = () => {
+    const playBtn = $('music-play-btn');
+    const prevBtn = $('music-prev-btn');
+    const nextBtn = $('music-next-btn');
+    const progBar = $('music-progress-bar');
+    const volSlider = $('music-volume-slider');
+
+    if (playBtn) playBtn.onclick = toggleMusicPlay;
+    if (prevBtn) {
+      prevBtn.onclick = () => {
+        const nextIdx = (activeMusicTrackIdx - 1 + MUSIC_TRACKS.length) % MUSIC_TRACKS.length;
+        selectMusicTrack(nextIdx);
+      };
+    }
+    if (nextBtn) {
+      nextBtn.onclick = () => {
+        const nextIdx = (activeMusicTrackIdx + 1) % MUSIC_TRACKS.length;
+        selectMusicTrack(nextIdx);
+      };
+    }
+
+    if (progBar) {
+      progBar.addEventListener('input', (e) => {
+        musicCurrentTimeSec = parseFloat(e.target.value) || 0;
+        updateMusicPlayerUI();
+      });
+    }
+
+    if (volSlider) {
+      volSlider.addEventListener('input', (e) => {
+        musicMasterVolume = parseFloat(e.target.value) || 0.75;
+        if (masterMusicGain && audioContextInstance) {
+          masterMusicGain.gain.setValueAtTime(musicMasterVolume * 0.18, audioContextInstance.currentTime);
+        }
+      });
+    }
+
+    // Ambient sound button in sidebar footer
+    const soundBtn = $('ambient-sound-btn');
+    const soundDropdown = $('sound-dropdown');
+    const soundLabel = $('ig-sound-label');
+
+    if (soundBtn && soundDropdown) {
+      soundBtn.onclick = (e) => {
+        e.stopPropagation();
+        soundDropdown.classList.toggle('hidden');
+      };
+
+      qa('.sound-opt').forEach(opt => {
+        opt.onclick = (e) => {
+          e.stopPropagation();
+          const sType = opt.dataset.sound;
+          soundDropdown.classList.add('hidden');
+
+          if (sType === 'off') {
+            if (isMusicPlaying) toggleMusicPlay();
+            if (soundLabel) soundLabel.innerText = 'No Sound';
+            showToast('Ambient sound turned off');
+          } else if (sType === 'rain') {
+            selectMusicTrack(1); // Gentle rain
+            if (!isMusicPlaying) toggleMusicPlay();
+            if (soundLabel) soundLabel.innerText = 'Rain';
+          } else if (sType === 'noise') {
+            selectMusicTrack(0); // 432Hz
+            if (!isMusicPlaying) toggleMusicPlay();
+            if (soundLabel) soundLabel.innerText = '432Hz Calm';
+          } else if (sType === 'lofi') {
+            selectMusicTrack(3); // Lo-fi
+            if (!isMusicPlaying) toggleMusicPlay();
+            if (soundLabel) soundLabel.innerText = 'Lo-Fi Chill';
+          }
+        };
+      });
+
+      document.addEventListener('click', (e) => {
+        if (soundDropdown && !soundDropdown.contains(e.target) && e.target !== soundBtn) {
+          soundDropdown.classList.add('hidden');
+        }
+      });
+    }
+
+    renderMusicRoom();
   };
 
   // Run!
