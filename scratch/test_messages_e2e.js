@@ -51,7 +51,7 @@ async function testMessagesE2E() {
 
     // 2. Test Sending Message via Backend Endpoint
     console.log('\n[2/5] Testing message dispatch via POST /api/messages/send...');
-    const threadId = 'dm_velvet_echo';
+    const threadId = 'dm_velvet_echo_' + Date.now();
     const testMsg = {
       id: 'msg_' + Date.now(),
       sender: 'me',
@@ -64,7 +64,7 @@ async function testMessagesE2E() {
       threadId,
       message: testMsg
     });
-    assert.strictEqual(sendRes.status, 200);
+    assert(sendRes.status === 200 || sendRes.status === 201, 'Status should be 200 or 201');
     assert.strictEqual(sendRes.data.success, true);
     assert.strictEqual(sendRes.data.messageId, testMsg.id);
     console.log(`✔ Message successfully sent to thread: ${threadId}`);

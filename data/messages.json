@@ -1,5 +1,119 @@
 [
   {
+    "threadId": "dm_velvet_echo_1787843153361",
+    "recipient": {
+      "id": "Anonymous",
+      "name": "Anonymous",
+      "tag": "Anonymous",
+      "avatar": null,
+      "online": true,
+      "bio": "Community member",
+      "lastSeen": "Active now"
+    },
+    "unreadCount": 0,
+    "lastActivity": 1787843153361,
+    "messages": [
+      {
+        "id": "msg_1787843153361",
+        "sender": "me",
+        "text": "Hey VelvetEcho, thank you for sharing your story on betrayal yesterday. It really resonated with me.",
+        "image": null,
+        "isVoice": false,
+        "duration": null,
+        "reaction": null,
+        "timestamp": 1787843153361,
+        "status": "read"
+      }
+    ]
+  },
+  {
+    "threadId": "dm_velvet_echo_1787843135830",
+    "recipient": {
+      "id": "Anonymous",
+      "name": "Anonymous",
+      "tag": "Anonymous",
+      "avatar": null,
+      "online": true,
+      "bio": "Community member",
+      "lastSeen": "Active now"
+    },
+    "unreadCount": 0,
+    "lastActivity": 1787843135830,
+    "messages": [
+      {
+        "id": "msg_1787843135830",
+        "sender": "me",
+        "text": "Hey VelvetEcho, thank you for sharing your story on betrayal yesterday. It really resonated with me.",
+        "image": null,
+        "isVoice": false,
+        "duration": null,
+        "reaction": null,
+        "timestamp": 1787843135830,
+        "status": "read"
+      }
+    ]
+  },
+  {
+    "threadId": "dm_velvet_echo",
+    "recipient": {
+      "id": "Anonymous",
+      "name": "Anonymous",
+      "tag": "Anonymous",
+      "avatar": null,
+      "online": true,
+      "bio": "Community member",
+      "lastSeen": "Active now"
+    },
+    "unreadCount": 0,
+    "lastActivity": 1787843117835,
+    "messages": [
+      {
+        "id": "msg_1787843003820",
+        "sender": "me",
+        "text": "Hey VelvetEcho, thank you for sharing your story on betrayal yesterday. It really resonated with me.",
+        "image": null,
+        "isVoice": false,
+        "duration": null,
+        "reaction": null,
+        "timestamp": 1787843003820,
+        "status": "read"
+      },
+      {
+        "id": "msg_1787843027288",
+        "sender": "me",
+        "text": "Hey VelvetEcho, thank you for sharing your story on betrayal yesterday. It really resonated with me.",
+        "image": null,
+        "isVoice": false,
+        "duration": null,
+        "reaction": null,
+        "timestamp": 1787843027288,
+        "status": "read"
+      },
+      {
+        "id": "msg_1787843081101",
+        "sender": "me",
+        "text": "Hey VelvetEcho, thank you for sharing your story on betrayal yesterday. It really resonated with me.",
+        "image": null,
+        "isVoice": false,
+        "duration": null,
+        "reaction": null,
+        "timestamp": 1787843081101,
+        "status": "read"
+      },
+      {
+        "id": "msg_1787843117835",
+        "sender": "me",
+        "text": "Hey VelvetEcho, thank you for sharing your story on betrayal yesterday. It really resonated with me.",
+        "image": null,
+        "isVoice": false,
+        "duration": null,
+        "reaction": null,
+        "timestamp": 1787843117835,
+        "status": "read"
+      }
+    ]
+  },
+  {
     "threadId": "th_velvet_echo",
     "recipient": {
       "id": "VelvetEcho#4092",
@@ -11,7 +125,7 @@
       "lastSeen": "Active now"
     },
     "unreadCount": 0,
-    "lastActivity": 1787839168888,
+    "lastActivity": 1787842986088,
     "messages": [
       {
         "id": "msg_ve_0",
@@ -186,6 +300,17 @@
         "duration": null,
         "reaction": null,
         "timestamp": 1787839168888,
+        "status": "received"
+      },
+      {
+        "id": "msg_1787842986088_39ce28",
+        "sender": "user",
+        "text": "Hey! Have you checked out the new Reels feed in Sonder?",
+        "image": null,
+        "isVoice": false,
+        "duration": null,
+        "reaction": null,
+        "timestamp": 1787842986088,
         "status": "received"
       }
     ]

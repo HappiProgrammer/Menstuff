@@ -3040,6 +3040,11 @@ document.addEventListener('DOMContentLoaded', () => {
     { days: 180, icon: '👑', title: 'Total Liberation', desc: 'Six months of peace and wholeness.' }
   ];
 
+  let openSOSModal = () => {
+    const m = $('sos-modal');
+    if (m) m.classList.remove('hidden');
+  };
+
   const setupTracker = () => {
     const setDateBtn = $('tracker-set-date-btn');
     const modal = $('set-tracker-modal');
@@ -3064,6 +3069,11 @@ document.addEventListener('DOMContentLoaded', () => {
 
     if (closeBtn) closeBtn.onclick = () => modal?.classList.add('hidden');
     if (cancelBtn) cancelBtn.onclick = () => modal?.classList.add('hidden');
+    if (modal) {
+      modal.onclick = (e) => {
+        if (e.target === modal) modal.classList.add('hidden');
+      };
+    }
 
     if (saveBtn) {
       saveBtn.onclick = () => {
@@ -3081,9 +3091,7 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     if (sosBtn) {
-      sosBtn.onclick = () => {
-        $('sos-modal')?.classList.remove('hidden');
-      };
+      sosBtn.onclick = () => openSOSModal();
     }
 
     renderTracker();
@@ -3160,6 +3168,8 @@ document.addEventListener('DOMContentLoaded', () => {
     const closeBtn = $('sos-close-btn');
     const doneBtn = $('sos-done-btn');
     const journalBtn = $('sos-journal-btn');
+    const pillBtn = $('sos-pill-btn');
+    const profileSosTile = $('profile-sos-tile');
     const phaseLabel = $('breath-phase-label');
     const secondsEl = $('breath-seconds');
     const circle = $('breath-circle');
@@ -3222,6 +3232,10 @@ document.addEventListener('DOMContentLoaded', () => {
       }
     };
 
+    openSOSModal = openSOS;
+
+    if (pillBtn) pillBtn.onclick = openSOS;
+    if (profileSosTile) profileSosTile.onclick = openSOS;
     if (closeBtn) closeBtn.onclick = closeSOS;
     if (doneBtn) doneBtn.onclick = () => {
       closeSOS();
@@ -3232,6 +3246,11 @@ document.addEventListener('DOMContentLoaded', () => {
         closeSOS();
         switchPane('diary');
         $('diary-body')?.focus();
+      };
+    }
+    if (modal) {
+      modal.onclick = (e) => {
+        if (e.target === modal) closeSOS();
       };
     }
   };

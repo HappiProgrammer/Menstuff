@@ -529,53 +529,6 @@ app.post('/api/contact', (req, res) => {
 });
 
 // ══════════════════════════════════════════════════════════════════════
-// DIRECT MESSAGES & FRIENDS API
-// ══════════════════════════════════════════════════════════════════════
-const messagesStore = new Map();
-
-// POST /api/messages/send - Send DM message in a thread
-app.post('/api/messages/send', (req, res) => {
-  try {
-    const { threadId, message } = req.body;
-    if (!threadId || !message) {
-      return res.status(400).json({ error: 'threadId and message are required.' });
-    }
-
-    if (!messagesStore.has(threadId)) {
-      messagesStore.set(threadId, []);
-    }
-    const threadMsgs = messagesStore.get(threadId);
-    threadMsgs.push(message);
-
-    console.log(`[DM] Sent to thread ${threadId}: "${(message.text || '').substring(0, 40)}" (Total msgs: ${threadMsgs.length})`);
-    return res.status(200).json({
-      success: true,
-      messageId: message.id,
-      threadId: threadId,
-      count: threadMsgs.length
-    });
-  } catch (err) {
-    console.error('Error handling /api/messages/send:', err.message);
-    return res.status(500).json({ error: 'Failed to send message.' });
-  }
-});
-
-// GET /api/messages/threads/:threadId - Retrieve message thread history
-app.get('/api/messages/threads/:threadId', (req, res) => {
-  try {
-    const { threadId } = req.params;
-    const messages = messagesStore.get(threadId) || [];
-    return res.json({
-      success: true,
-      threadId,
-      messages
-    });
-  } catch (err) {
-    return res.status(500).json({ error: 'Failed to retrieve messages.' });
-  }
-});
-
-// ══════════════════════════════════════════════════════════════════════
 // STORIES & ANONYMOUS COMMUNITY FEED API
 // ══════════════════════════════════════════════════════════════════════
 const storiesDb = require('./db/stories');
@@ -690,7 +643,7 @@ app.get('/api/messages/threads/:threadId', (req, res) => {
     if (!thread) {
       return res.status(404).json({ error: 'Thread not found.' });
     }
-    return res.json({ success: true, thread });
+    return res.json({ success: true, thread, messages: thread.messages || [] });
   } catch (err) {
     console.error('Error fetching thread:', err.message);
     return res.status(500).json({ error: 'Failed to retrieve conversation.' });
@@ -705,7 +658,7 @@ app.post('/api/messages/send', (req, res) => {
       return res.status(400).json({ error: 'threadId and message are required.' });
     }
     const result = messagesDb.appendMessage(threadId, message);
-    return res.status(201).json({ success: true, ...result });
+    return res.status(201).json({ success: true, ...result, messageId: result.message?.id });
   } catch (err) {
     console.error('Error sending message:', err.message);
     return res.status(500).json({ error: 'Failed to send message.' });

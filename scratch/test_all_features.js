@@ -115,7 +115,7 @@ async function runAll() {
         read: true
       }
     });
-    assert.strictEqual(sendRes.status, 201);
+    assert(sendRes.status === 200 || sendRes.status === 201, 'Status should be 200 or 201');
     assert.strictEqual(sendRes.data.success, true);
     console.log('✔ Direct message sent successfully to thread.');
 

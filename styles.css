@@ -189,29 +189,31 @@ input, textarea, select { font-family: var(--font-sans); }
 ::-webkit-scrollbar-thumb:hover { background: var(--border2); }
 
 /* =====================================================
-   REGISTER / LANDING PAGE — Visual Reference Design
+   REGISTER / LANDING PAGE — Unified Dark Luxury Aesthetic
    ===================================================== */
 #landing-page {
   min-height: 100dvh;
   display: flex;
   flex-direction: column;
-  /* Removed align/justify center to fix scroll clipping on small heights */
+  align-items: center;
+  justify-content: center;
   padding: 40px 20px;
   position: relative;
   overflow-x: hidden;
   overflow-y: auto;
-  background-color: #bcc8d4;
-  background-image: radial-gradient(circle at 50% 30%, rgba(255,255,255,0.4) 0%, transparent 70%), url('register-bg.jpg');
+  background-color: var(--bg);
+  background-image: radial-gradient(circle at 50% 20%, #172638 0%, #0d1520 70%, #080d14 100%), url('register-bg.jpg');
   background-size: cover;
   background-position: center;
+  background-blend-mode: overlay;
 }
 
 .land-mist-bg {
   position: absolute;
   inset: 0;
-  background: radial-gradient(circle at 50% 40%, rgba(207, 222, 235, 0.45) 0%, rgba(160, 180, 200, 0.65) 100%);
+  background: radial-gradient(circle at 50% 35%, rgba(0, 199, 149, 0.08) 0%, rgba(15, 23, 35, 0.78) 60%, rgba(10, 15, 24, 0.95) 100%);
   pointer-events: none;
-  backdrop-filter: blur(1px);
+  backdrop-filter: blur(2px);
 }
 
 .land-particles { position: fixed; inset: 0; pointer-events: none; z-index: 1; overflow: hidden; }
@@ -230,47 +232,60 @@ input, textarea, select { font-family: var(--font-sans); }
   position: relative;
   z-index: 2;
   width: 100%;
-  max-width: 960px;
+  max-width: 980px;
   display: flex;
   align-items: center;
   justify-content: center;
+  padding: 24px 0;
 }
 
-/* Dual Card Split Container */
+/* Dual Card Split Container - Perfectly Matching & Cohesive Dark Theme */
 .register-split-card {
   display: flex;
   width: 100%;
-  min-height: 520px;
+  min-height: 540px;
   border-radius: 28px;
-  box-shadow: 0 25px 60px -12px rgba(15, 23, 42, 0.45), 0 0 0 1px rgba(255, 255, 255, 0.15);
+  background: rgba(21, 32, 46, 0.88);
+  backdrop-filter: blur(28px);
+  -webkit-backdrop-filter: blur(28px);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  box-shadow: 0 30px 80px -15px rgba(0, 0, 0, 0.7), 0 0 0 1px rgba(255, 255, 255, 0.06), 0 0 45px rgba(0, 199, 149, 0.14);
   position: relative;
+  overflow: hidden;
+  align-items: stretch;
 }
 
-/* ─── LEFT DARK AUTH CARD ─── */
+/* ─── LEFT AUTH CARD (Sign In & Create Account) ─── */
 .register-auth-card {
-  flex: 0 0 440px;
-  background: linear-gradient(150deg, #2b3542 0%, #1e2632 100%);
-  border-radius: 28px;
-  padding: 48px 40px;
+  flex: 0 0 460px;
+  background: linear-gradient(165deg, rgba(30, 44, 63, 0.96) 0%, rgba(21, 32, 46, 0.98) 100%);
+  border-right: 1px solid rgba(255, 255, 255, 0.09);
+  padding: 44px 38px;
   display: flex;
   flex-direction: column;
   justify-content: space-between;
-  box-shadow: 10px 0 35px rgba(0, 0, 0, 0.28);
   position: relative;
   z-index: 3;
 }
 
+.rac-brand-header {
+  display: none;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 20px;
+}
+
 .rac-header {
-  margin-bottom: 24px;
+  margin-bottom: 22px;
 }
 
 /* Auth Mode Switcher Tabs */
 .rac-mode-tabs {
   display: flex;
-  background: rgba(255, 255, 255, 0.05);
-  border: 1px solid rgba(255, 255, 255, 0.1);
-  border-radius: 10px;
-  padding: 3px;
+  background: rgba(15, 23, 35, 0.7);
+  border: 1px solid rgba(255, 255, 255, 0.09);
+  border-radius: 12px;
+  padding: 4px;
   margin-bottom: 20px;
   gap: 4px;
 }
@@ -280,12 +295,13 @@ input, textarea, select { font-family: var(--font-sans); }
   background: none;
   border: none;
   color: #94a3b8;
-  font-size: 13px;
+  font-size: 13.5px;
   font-weight: 600;
-  padding: 8px 12px;
-  border-radius: 7px;
+  padding: 9px 14px;
+  border-radius: 9px;
   cursor: pointer;
   transition: all var(--t-fast);
+  font-family: var(--font-sans);
 }
 
 .rac-tab:hover {
@@ -295,7 +311,8 @@ input, textarea, select { font-family: var(--font-sans); }
 .rac-tab.active-tab {
   background: var(--accent);
   color: #06110e;
-  box-shadow: 0 2px 8px rgba(0, 199, 149, 0.3);
+  font-weight: 700;
+  box-shadow: 0 2px 12px rgba(0, 199, 149, 0.35);
 }
 
 .rac-title {
@@ -313,7 +330,7 @@ input, textarea, select { font-family: var(--font-sans); }
 }
 
 .rac-sub {
-  font-size: 13px;
+  font-size: 13.5px;
   color: #94a3b8;
   letter-spacing: 0.1px;
 }
@@ -321,17 +338,17 @@ input, textarea, select { font-family: var(--font-sans); }
 .rac-form {
   display: flex;
   flex-direction: column;
-  gap: 20px;
+  gap: 18px;
 }
 
 .rac-field {
   display: flex;
   flex-direction: column;
-  gap: 8px;
+  gap: 7px;
 }
 
 .rac-label {
-  font-size: 12px;
+  font-size: 12.5px;
   font-weight: 500;
   color: #94a3b8;
   letter-spacing: 0.2px;
@@ -339,12 +356,12 @@ input, textarea, select { font-family: var(--font-sans); }
 
 .rac-input {
   width: 100%;
-  background: rgba(255, 255, 255, 0.03);
-  border: 1px solid rgba(255, 255, 255, 0.18);
-  border-radius: 10px;
+  background: rgba(15, 23, 35, 0.65);
+  border: 1px solid rgba(255, 255, 255, 0.14);
+  border-radius: 11px;
   color: #ffffff;
   font-size: 14px;
-  padding: 14px 16px;
+  padding: 13px 16px;
   outline: none;
   transition: all var(--t-fast);
   font-family: var(--font-sans);
@@ -356,23 +373,23 @@ input, textarea, select { font-family: var(--font-sans); }
 
 .rac-input:focus {
   border-color: var(--accent);
-  background: rgba(255, 255, 255, 0.06);
-  box-shadow: 0 0 0 3px rgba(0, 199, 149, 0.18);
+  background: rgba(15, 23, 35, 0.9);
+  box-shadow: 0 0 0 3px rgba(0, 199, 149, 0.2);
 }
 
 .rac-submit-btn {
   width: 100%;
   padding: 14px 20px;
-  background: var(--accent);
+  background: linear-gradient(135deg, #00c795 0%, #00a87e 100%);
   border: none;
-  border-radius: 10px;
-  color: #ffffff;
+  border-radius: 11px;
+  color: #06110e;
   font-size: 15px;
-  font-weight: 600;
+  font-weight: 700;
   letter-spacing: 0.2px;
   cursor: pointer;
   transition: all var(--t-fast);
-  box-shadow: 0 6px 20px rgba(0, 199, 149, 0.35);
+  box-shadow: 0 6px 22px rgba(0, 199, 149, 0.38);
   margin-top: 6px;
   display: flex;
   align-items: center;
@@ -381,9 +398,9 @@ input, textarea, select { font-family: var(--font-sans); }
 }
 
 .rac-submit-btn:hover:not(:disabled) {
-  background: #00b386;
+  background: linear-gradient(135deg, #25e2af 0%, #00c795 100%);
   transform: translateY(-1px);
-  box-shadow: 0 8px 24px rgba(0, 199, 149, 0.45);
+  box-shadow: 0 8px 26px rgba(0, 199, 149, 0.48);
 }
 
 .rac-submit-btn:disabled {
@@ -394,9 +411,9 @@ input, textarea, select { font-family: var(--font-sans); }
 
 .rac-error-banner {
   padding: 10px 14px;
-  background: rgba(244, 63, 94, 0.12);
-  border: 1px solid rgba(244, 63, 94, 0.35);
-  border-radius: 8px;
+  background: rgba(244, 63, 94, 0.14);
+  border: 1px solid rgba(244, 63, 94, 0.4);
+  border-radius: 9px;
   color: #fb7185;
   font-size: 12.5px;
   line-height: 1.4;
@@ -406,9 +423,9 @@ input, textarea, select { font-family: var(--font-sans); }
 
 .rac-info-banner {
   padding: 10px 14px;
-  background: rgba(0, 199, 149, 0.12);
-  border: 1px solid rgba(0, 199, 149, 0.35);
-  border-radius: 8px;
+  background: rgba(0, 199, 149, 0.14);
+  border: 1px solid rgba(0, 199, 149, 0.4);
+  border-radius: 9px;
   color: #25e2af;
   font-size: 12.5px;
   line-height: 1.4;
@@ -430,7 +447,7 @@ input, textarea, select { font-family: var(--font-sans); }
 
 .rac-footer {
   text-align: center;
-  margin-top: 24px;
+  margin-top: 22px;
 }
 
 .rac-link-btn {
@@ -444,42 +461,44 @@ input, textarea, select { font-family: var(--font-sans); }
 }
 
 .rac-link-btn:hover {
-  color: #f1f5f9;
+  color: var(--accent);
 }
 
-/* ─── RIGHT LIGHT HERO CARD ─── */
+/* ─── RIGHT HERO SHOWCASE CARD (Dark Theme Matched) ─── */
 .register-hero-card {
   flex: 1;
-  background: #ffffff;
+  background: linear-gradient(165deg, rgba(26, 39, 58, 0.8) 0%, rgba(15, 23, 35, 0.92) 100%);
   border-radius: 0 28px 28px 0;
-  margin-left: -20px;
-  padding: 48px 44px 48px 60px;
+  margin-left: 0;
+  padding: 44px 44px;
   display: flex;
   flex-direction: column;
   justify-content: flex-start;
   position: relative;
   overflow: hidden;
   z-index: 1;
+  color: #f8fafc;
 }
 
 .rhc-brand {
   display: flex;
   align-items: center;
   gap: 12px;
-  margin-bottom: 40px;
+  margin-bottom: 36px;
   position: relative;
   z-index: 2;
 }
 
 .rhc-logo-emblem {
-  width: 36px;
-  height: 36px;
+  width: 38px;
+  height: 38px;
   border-radius: 50%;
-  background: #64748b;
+  background: rgba(0, 199, 149, 0.12);
+  border: 1px solid rgba(0, 199, 149, 0.3);
   display: flex;
   align-items: center;
   justify-content: center;
-  color: #ffffff;
+  color: var(--accent);
 }
 
 .rhc-brand-text {
@@ -491,95 +510,101 @@ input, textarea, select { font-family: var(--font-sans); }
 .rhc-brand-name {
   font-size: 16px;
   font-weight: 700;
-  color: var(--accent);
+  color: #ffffff;
   letter-spacing: -0.2px;
 }
 
 .rhc-brand-subword {
-  color: #475569;
+  color: var(--accent);
   font-weight: 700;
 }
 
 .rhc-brand-tag {
-  font-size: 10px;
+  font-size: 11px;
   color: #94a3b8;
   font-weight: 500;
 }
 
 .rhc-headline-wrap {
-  margin-bottom: 32px;
+  margin-bottom: 28px;
   position: relative;
   z-index: 2;
-  max-width: 320px;
+  max-width: 340px;
 }
 
 .rhc-headline {
   font-family: var(--font-sans);
   font-size: 32px;
-  font-weight: 700;
-  color: #1e293b;
-  line-height: 1.2;
-  margin-bottom: 8px;
+  font-weight: 800;
+  color: #f8fafc;
+  line-height: 1.22;
+  letter-spacing: -0.5px;
+  margin-bottom: 10px;
 }
 
 .rhc-badge {
-  background: #1e293b;
-  color: #ffffff;
+  background: rgba(0, 199, 149, 0.16);
+  color: #25e2af;
+  border: 1px solid rgba(0, 199, 149, 0.35);
   padding: 2px 10px;
-  border-radius: 4px;
+  border-radius: 6px;
   display: inline-block;
   font-weight: 700;
 }
 
 .rhc-subheadline {
-  font-size: 16px;
-  color: #475569;
-  line-height: 1.4;
+  font-size: 15px;
+  color: #94a3b8;
+  line-height: 1.45;
 }
 
 .rhc-subheadline strong {
-  color: #1e293b;
+  color: #f8fafc;
   font-weight: 700;
 }
 
 .rhc-actions {
   display: flex;
   align-items: center;
-  gap: 20px;
+  gap: 14px;
   position: relative;
   z-index: 2;
 }
 
 .rhc-btn-outline {
-  background: #ffffff;
-  border: 1.5px solid #2b3542;
-  border-radius: 8px;
-  color: #2b3542;
+  background: rgba(0, 199, 149, 0.1);
+  border: 1.5px solid var(--accent);
+  border-radius: 9px;
+  color: #25e2af;
   font-size: 14px;
   font-weight: 600;
-  padding: 10px 28px;
+  padding: 10px 24px;
   cursor: pointer;
   transition: all var(--t-fast);
 }
 
 .rhc-btn-outline:hover {
-  background: #2b3542;
-  color: #ffffff;
+  background: var(--accent);
+  color: #06110e;
+  box-shadow: 0 4px 16px rgba(0, 199, 149, 0.35);
 }
 
 .rhc-btn-text {
-  background: none;
-  border: none;
-  color: #2b3542;
+  background: rgba(56, 189, 248, 0.08);
+  border: 1px solid rgba(56, 189, 248, 0.22);
+  color: #38bdf8;
   font-size: 14px;
   font-weight: 600;
+  border-radius: 9px;
   cursor: pointer;
-  padding: 8px 4px;
-  transition: color var(--t-fast);
+  padding: 9px 18px;
+  transition: all var(--t-fast);
 }
 
 .rhc-btn-text:hover {
-  color: var(--accent);
+  background: rgba(56, 189, 248, 0.18);
+  color: #7dd3fc;
+  border-color: #38bdf8;
 }
 
 .rhc-imagery-wrap {
@@ -587,7 +612,7 @@ input, textarea, select { font-family: var(--font-sans); }
   right: 0;
   bottom: 0;
   top: 0;
-  width: 55%;
+  width: 58%;
   pointer-events: none;
   overflow: hidden;
   z-index: 1;
@@ -598,8 +623,9 @@ input, textarea, select { font-family: var(--font-sans); }
   height: 100%;
   object-fit: cover;
   object-position: right bottom;
-  mask-image: linear-gradient(to right, transparent 0%, rgba(0,0,0,0.8) 35%, black 100%);
-  -webkit-mask-image: linear-gradient(to right, transparent 0%, rgba(0,0,0,0.8) 35%, black 100%);
+  opacity: 0.85;
+  mask-image: linear-gradient(to right, transparent 0%, rgba(0,0,0,0.3) 25%, black 100%), linear-gradient(to top, transparent 0%, rgba(0,0,0,0.6) 20%, black 100%);
+  -webkit-mask-image: linear-gradient(to right, transparent 0%, rgba(0,0,0,0.3) 25%, black 100%), linear-gradient(to top, transparent 0%, rgba(0,0,0,0.6) 20%, black 100%);
 }
 
 /* ── Responsive adjustments for register / auth card ── */
@@ -622,8 +648,12 @@ input, textarea, select { font-family: var(--font-sans); }
     max-width: 100%;
     width: 100%;
     border-radius: 24px;
+    border-right: none;
     padding: 36px 28px;
     box-sizing: border-box;
+  }
+  .rac-brand-header {
+    display: flex;
   }
   .register-hero-card {
     display: none;
@@ -658,13 +688,6 @@ input, textarea, select { font-family: var(--font-sans); }
   .rac-input {
     min-height: 48px;
     font-size: 16px;
-    padding: 12px 14px;
-    box-sizing: border-box;
-  }
-  .rac-submit-btn {
-    min-height: 48px;
-    font-size: 15px;
-    border-radius: 10px;
   }
 }
 

@@ -1,5 +1,187 @@
 [
   {
+    "id": "p_1787843144547_5097d7",
+    "userId": "Explorer#1010",
+    "avatar": "<svg></svg>",
+    "title": "Longing under the stars in Explore",
+    "body": "I looked up at Orion and wondered if you were looking up too.",
+    "emotion": "longing",
+    "date": "2026-08-27T15:05:44.547Z",
+    "reacts": {
+      "love": 0,
+      "cry": 0,
+      "angry": 0,
+      "healing": 0,
+      "peace": 0
+    },
+    "comments": [],
+    "imageUrl": null,
+    "gradient": [
+      "#1a1209",
+      "#3d2a0a"
+    ],
+    "isMine": true
+  },
+  {
+    "id": "p_1787843143572_08b044",
+    "userId": "SilentStar#9921",
+    "avatar": "<svg></svg>",
+    "title": "Testing Heartbreak Story 1787843143537",
+    "body": "This is an end-to-end verification of story creation and persistence.",
+    "emotion": "heartbreak",
+    "date": "2026-08-27T15:05:43.572Z",
+    "reacts": {
+      "love": 1,
+      "cry": 0,
+      "angry": 0,
+      "healing": 0,
+      "peace": 0
+    },
+    "comments": [
+      {
+        "id": "c_1787843143624",
+        "user": "VelvetEcho#4092",
+        "text": "Beautiful and resilient reflection.",
+        "date": "2026-08-27T15:05:43.624Z"
+      }
+    ],
+    "imageUrl": null,
+    "gradient": [
+      "#1a0a12",
+      "#3d1626"
+    ],
+    "isMine": true
+  },
+  {
+    "id": "p_1787842994466_213b09",
+    "userId": "Explorer#1010",
+    "avatar": "<svg></svg>",
+    "title": "Longing under the stars in Explore",
+    "body": "I looked up at Orion and wondered if you were looking up too.",
+    "emotion": "longing",
+    "date": "2026-08-27T15:03:14.466Z",
+    "reacts": {
+      "love": 0,
+      "cry": 0,
+      "angry": 0,
+      "healing": 0,
+      "peace": 0
+    },
+    "comments": [],
+    "imageUrl": null,
+    "gradient": [
+      "#0d1a2b",
+      "#1a3a5c"
+    ],
+    "isMine": true
+  },
+  {
+    "id": "p_1787842993238_b7e354",
+    "userId": "SilentStar#9921",
+    "avatar": "<svg></svg>",
+    "title": "Testing Heartbreak Story 1787842993207",
+    "body": "This is an end-to-end verification of story creation and persistence.",
+    "emotion": "heartbreak",
+    "date": "2026-08-27T15:03:13.238Z",
+    "reacts": {
+      "love": 1,
+      "cry": 0,
+      "angry": 0,
+      "healing": 0,
+      "peace": 0
+    },
+    "comments": [
+      {
+        "id": "c_1787842993282",
+        "user": "VelvetEcho#4092",
+        "text": "Beautiful and resilient reflection.",
+        "date": "2026-08-27T15:03:13.282Z"
+      }
+    ],
+    "imageUrl": null,
+    "gradient": [
+      "#1a0f0f",
+      "#3d1a1a"
+    ],
+    "isMine": true
+  },
+  {
+    "id": "p_1787842676547_e0985a",
+    "userId": "Explorer#1010",
+    "avatar": "<svg></svg>",
+    "title": "Longing under the stars in Explore",
+    "body": "I looked up at Orion and wondered if you were looking up too.",
+    "emotion": "longing",
+    "date": "2026-08-27T14:57:56.547Z",
+    "reacts": {
+      "love": 0,
+      "cry": 0,
+      "angry": 0,
+      "healing": 0,
+      "peace": 0
+    },
+    "comments": [],
+    "imageUrl": null,
+    "gradient": [
+      "#180f1a",
+      "#3a1a3d"
+    ],
+    "isMine": true
+  },
+  {
+    "id": "p_1787842675734_49cb66",
+    "userId": "SilentStar#9921",
+    "avatar": "<svg></svg>",
+    "title": "Testing Heartbreak Story 1787842675709",
+    "body": "This is an end-to-end verification of story creation and persistence.",
+    "emotion": "heartbreak",
+    "date": "2026-08-27T14:57:55.734Z",
+    "reacts": {
+      "love": 1,
+      "cry": 0,
+      "angry": 0,
+      "healing": 0,
+      "peace": 0
+    },
+    "comments": [
+      {
+        "id": "c_1787842675780",
+        "user": "VelvetEcho#4092",
+        "text": "Beautiful and resilient reflection.",
+        "date": "2026-08-27T14:57:55.780Z"
+      }
+    ],
+    "imageUrl": null,
+    "gradient": [
+      "#0d0d1a",
+      "#1a1a3d"
+    ],
+    "isMine": true
+  },
+  {
+    "id": "p_1787842586159_c930da",
+    "userId": "Auditor#1001",
+    "avatar": "<svg width=\"18\" height=\"18\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"1.8\" stroke-linecap=\"round\" stroke-linejoin=\"round\"><circle cx=\"12\" cy=\"7\" r=\"4\"/><path d=\"M5.5 21v-2a6.5 6.5 0 0 1 13 0v2\"/></svg>",
+    "title": "Audit Verification Story",
+    "body": "Verifying end-to-end functionality for visible features.",
+    "emotion": "heartbreak",
+    "date": "2026-08-27T14:56:26.159Z",
+    "reacts": {
+      "love": 0,
+      "cry": 0,
+      "angry": 0,
+      "healing": 0,
+      "peace": 0
+    },
+    "comments": [],
+    "imageUrl": null,
+    "gradient": [
+      "#1a0f0f",
+      "#3d1a1a"
+    ],
+    "isMine": true
+  },
+  {
     "id": "p_1787841971478_5a371b",
     "userId": "Explorer#1010",
     "avatar": "<svg></svg>",

@@ -228,5 +228,75 @@
     "avatar": null,
     "createdAt": "2026-08-27T14:46:02.115Z",
     "bio": ""
+  },
+  {
+    "id": "u_1787842630946_d5c8a112",
+    "email": "reels_tester_1787842630142@shattered.io",
+    "username": "TesterHero#5967",
+    "passwordHash": "$2a$12$YdyY/VMQk8LVsj.lvQ1nf.px.QXjbR9O78sDbk.V/w0Q0.xxkQURa",
+    "role": "user",
+    "avatar": null,
+    "createdAt": "2026-08-27T14:57:10.946Z",
+    "bio": ""
+  },
+  {
+    "id": "u_1787842664152_07097b5e",
+    "email": "reels_tester_1787842663366@shattered.io",
+    "username": "TesterHero#4924",
+    "passwordHash": "$2a$12$liD1Qraqdl9a2Feagwq03.NQgBqcmZ.6DgrMZtjyp6OkHlNcWCUOu",
+    "role": "user",
+    "avatar": null,
+    "createdAt": "2026-08-27T14:57:44.152Z",
+    "bio": ""
+  },
+  {
+    "id": "u_1787842682491_b5282f65",
+    "email": "sonder_seeker_1787842681703@shattered.io",
+    "username": "SonderSeeker#404#9988",
+    "passwordHash": "$2a$12$McUfcSZuQmn0Xx/o2lWXjes.2/eSokkhwppJxGx3WajZG5Ly1znUy",
+    "role": "user",
+    "avatar": null,
+    "createdAt": "2026-08-27T14:58:02.491Z",
+    "bio": ""
+  },
+  {
+    "id": "u_1787842744559_39b2d61e",
+    "email": "reels_tester_1787842743610@shattered.io",
+    "username": "TesterHero#4365",
+    "passwordHash": "$2a$12$kH016RUliPEgw4if73npPOaZi4MZWJAmwTKfsvGDySqSntXk7TQH6",
+    "role": "user",
+    "avatar": null,
+    "createdAt": "2026-08-27T14:59:04.559Z",
+    "bio": ""
+  },
+  {
+    "id": "u_1787842984417_f01ca818",
+    "email": "reels_tester_1787842983656@shattered.io",
+    "username": "TesterHero#2054",
+    "passwordHash": "$2a$12$DcoYUdLFAtT7vlGweS2p5eQZuJ7CCjLEhRbdNOpVGE2E2Has/8AMW",
+    "role": "user",
+    "avatar": null,
+    "createdAt": "2026-08-27T15:03:04.418Z",
+    "bio": ""
+  },
+  {
+    "id": "u_1787843000977_da93c283",
+    "email": "sonder_seeker_1787842999986@shattered.io",
+    "username": "SonderSeeker#404#8568",
+    "passwordHash": "$2a$12$s3FuUshgX7CDAMX4Qz7.UO1kpte.25o4rgScCfGUNSD5CeGpR4ITW",
+    "role": "user",
+    "avatar": null,
+    "createdAt": "2026-08-27T15:03:20.977Z",
+    "bio": ""
+  },
+  {
+    "id": "u_1787843150750_3b683edd",
+    "email": "sonder_seeker_1787843149347@shattered.io",
+    "username": "SonderSeeker#404#7796",
+    "passwordHash": "$2a$12$I73NI2xQ8roDuZt4ssD/sedEWx4gznb.A.zOJoQjX7iyJ0nNQN942",
+    "role": "user",
+    "avatar": null,
+    "createdAt": "2026-08-27T15:05:50.751Z",
+    "bio": ""
   }
 ]
