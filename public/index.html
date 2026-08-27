@@ -169,6 +169,17 @@
       
       <!-- LEFT DARK AUTH CARD (Matches Left Dark Section of Reference) -->
       <div class="register-auth-card">
+        <!-- Mobile Brand Logo & Header -->
+        <div class="rac-brand-header">
+          <div class="rhc-logo-emblem">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#00c795" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/><circle cx="12" cy="11" r="2.5" fill="#00c795"/></svg>
+          </div>
+          <div class="rhc-brand-text">
+            <span class="rhc-brand-name">Sonder <span class="rhc-brand-subword">Community</span></span>
+            <span class="rhc-brand-tag">Every heart has a story</span>
+          </div>
+        </div>
+
         <!-- Explicit Auth Mode Switcher Tabs -->
         <div class="rac-mode-tabs" id="rac-mode-tabs" role="tablist">
           <button type="button" class="rac-tab active-tab" id="tab-mode-signin" role="tab" aria-selected="true">Sign In</button>
@@ -398,6 +409,31 @@
               <span class="story-name">Your Story</span>
             </div>
           </div>
+        </div>
+
+        <!-- Mobile Feature Quick-Navigation Hub -->
+        <div class="mobile-quick-hub" aria-label="Feature quick navigation">
+          <button type="button" class="hub-chip" data-pane="healing">
+            <span>🌿 Healing Hub</span>
+          </button>
+          <button type="button" class="hub-chip" data-pane="advice">
+            <span>📰 Advice &amp; News</span>
+          </button>
+          <button type="button" class="hub-chip" data-pane="music">
+            <span>🎵 Music Room</span>
+          </button>
+          <button type="button" class="hub-chip" data-pane="diary">
+            <span>🔒 Private Diary</span>
+          </button>
+          <button type="button" class="hub-chip" data-pane="saved">
+            <span>🔖 Saved</span>
+          </button>
+          <button type="button" class="hub-chip" data-pane="about">
+            <span>ℹ️ About</span>
+          </button>
+          <button type="button" class="hub-chip" data-pane="contact">
+            <span>💬 Contact</span>
+          </button>
         </div>
 
         <!-- 24-Hour Daily Community Prompt Card -->
@@ -1203,6 +1239,69 @@
           </div>
         </div>
 
+        <!-- Mobile Features & Quick Tools -->
+        <div class="pane-section">
+          <div class="pane-section-label">Features &amp; Tools</div>
+          <div class="profile-tools-grid">
+            <button type="button" class="profile-tool-tile" data-pane="healing">
+              <div class="profile-tool-icon">🌿</div>
+              <div class="profile-tool-info">
+                <span class="profile-tool-title">Healing Hub</span>
+                <span class="profile-tool-sub">Streak &amp; Mood Tracker</span>
+              </div>
+            </button>
+            <button type="button" class="profile-tool-tile" data-pane="advice">
+              <div class="profile-tool-icon">📰</div>
+              <div class="profile-tool-info">
+                <span class="profile-tool-title">Advice &amp; News</span>
+                <span class="profile-tool-sub">Articles &amp; Daily Wisdom</span>
+              </div>
+            </button>
+            <button type="button" class="profile-tool-tile" data-pane="music">
+              <div class="profile-tool-icon">🎵</div>
+              <div class="profile-tool-info">
+                <span class="profile-tool-title">Music Room</span>
+                <span class="profile-tool-sub">Ambient &amp; Lo-Fi Audio</span>
+              </div>
+            </button>
+            <button type="button" class="profile-tool-tile" data-pane="diary">
+              <div class="profile-tool-icon">🔒</div>
+              <div class="profile-tool-info">
+                <span class="profile-tool-title">Private Diary</span>
+                <span class="profile-tool-sub">Encrypted Journal</span>
+              </div>
+            </button>
+            <button type="button" class="profile-tool-tile" data-pane="saved">
+              <div class="profile-tool-icon">🔖</div>
+              <div class="profile-tool-info">
+                <span class="profile-tool-title">Saved Stories</span>
+                <span class="profile-tool-sub">Bookmarked Moments</span>
+              </div>
+            </button>
+            <button type="button" class="profile-tool-tile" data-pane="about">
+              <div class="profile-tool-icon">ℹ️</div>
+              <div class="profile-tool-info">
+                <span class="profile-tool-title">About Sonder</span>
+                <span class="profile-tool-sub">Manifesto &amp; Values</span>
+              </div>
+            </button>
+            <button type="button" class="profile-tool-tile" data-pane="contact">
+              <div class="profile-tool-icon">💬</div>
+              <div class="profile-tool-info">
+                <span class="profile-tool-title">Contact Support</span>
+                <span class="profile-tool-sub">Feedback &amp; FAQ</span>
+              </div>
+            </button>
+            <button type="button" class="profile-tool-tile" id="profile-sos-tile">
+              <div class="profile-tool-icon" style="background:rgba(239,68,68,0.15);color:#ef4444;">🚨</div>
+              <div class="profile-tool-info">
+                <span class="profile-tool-title">SOS Cooldown</span>
+                <span class="profile-tool-sub">Emergency Box Breathing</span>
+              </div>
+            </button>
+          </div>
+        </div>
+
         <!-- Danger Zone -->
         <div class="pane-section">
           <div class="profile-section-title">Danger Zone</div>
@@ -1227,6 +1326,31 @@
         <p class="pane-sticky-sub">Discover stories from the community.</p>
       </div>
       <div class="pane-inner pane-inner--explore">
+        <!-- Mobile Quick-Navigation Hub -->
+        <div class="mobile-quick-hub" aria-label="Feature quick navigation">
+          <button type="button" class="hub-chip" data-pane="healing">
+            <span>🌿 Healing Hub</span>
+          </button>
+          <button type="button" class="hub-chip" data-pane="advice">
+            <span>📰 Advice &amp; News</span>
+          </button>
+          <button type="button" class="hub-chip" data-pane="music">
+            <span>🎵 Music Room</span>
+          </button>
+          <button type="button" class="hub-chip" data-pane="diary">
+            <span>🔒 Private Diary</span>
+          </button>
+          <button type="button" class="hub-chip" data-pane="saved">
+            <span>🔖 Saved</span>
+          </button>
+          <button type="button" class="hub-chip" data-pane="about">
+            <span>ℹ️ About</span>
+          </button>
+          <button type="button" class="hub-chip" data-pane="contact">
+            <span>💬 Contact</span>
+          </button>
+        </div>
+
         <div class="explore-filters" id="explore-filters">
           <button class="explore-chip active-chip" data-emotion="all">All</button>
           <button class="explore-chip" data-emotion="heartbreak">💔 Heartbreak</button>
@@ -1372,13 +1496,31 @@
                 </div>
               </div>
               <div class="dm-th-actions">
-                <button type="button" class="dm-th-action-btn" title="Options">
+                <button type="button" class="dm-th-action-btn" id="dm-th-action-btn" title="Options" aria-label="Conversation options">
                   <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                     <circle cx="12" cy="12" r="1"></circle>
                     <circle cx="19" cy="12" r="1"></circle>
                     <circle cx="5" cy="12" r="1"></circle>
                   </svg>
                 </button>
+                <div class="dm-options-popover hidden" id="dm-options-popover">
+                  <button type="button" class="dm-opt-item" id="dm-opt-clear">
+                    <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="3 6 5 6 21 6"/><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/></svg>
+                    <span>Clear Messages</span>
+                  </button>
+                  <button type="button" class="dm-opt-item" id="dm-opt-export">
+                    <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+                    <span>Export Transcript</span>
+                  </button>
+                  <button type="button" class="dm-opt-item" id="dm-opt-friend">
+                    <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+                    <span id="dm-opt-friend-label">Toggle Friend</span>
+                  </button>
+                  <button type="button" class="dm-opt-item" id="dm-opt-mute">
+                    <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M11 5L6 9H2v6h4l5 4V5z"/><line x1="23" y1="9" x2="17" y2="15"/><line x1="17" y1="9" x2="23" y2="15"/></svg>
+                    <span id="dm-opt-mute-label">Mute Notifications</span>
+                  </button>
+                </div>
               </div>
             </div>
 
@@ -1932,6 +2074,23 @@
     <div class="tmc-actions">
       <button type="button" class="tmc-btn-cancel" id="set-tracker-cancel">Cancel</button>
       <button type="button" class="tmc-btn-save" id="set-tracker-save">Save Start Date</button>
+    </div>
+  </div>
+</div>
+
+<!-- AVATAR PICKER MODAL -->
+<div id="avatar-picker-modal" class="fullscreen-modal hidden" role="dialog" aria-modal="true" aria-label="Choose Silhouette Avatar">
+  <div class="avatar-picker-card">
+    <div class="apm-header">
+      <div class="apm-title">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="var(--accent)" stroke-width="2"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+        <span>Choose Anonymous Silhouette</span>
+      </div>
+      <button type="button" class="apm-close-btn" id="avatar-picker-close" aria-label="Close modal">&times;</button>
+    </div>
+    <p class="apm-desc">Select an anonymous persona silhouette that represents your presence and energy.</p>
+    <div class="apm-grid" id="avatar-picker-grid">
+      <!-- Injected dynamically via app.js -->
     </div>
   </div>
 </div>

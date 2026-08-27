@@ -1582,6 +1582,49 @@ document.addEventListener('DOMContentLoaded', () => {
     $('your-story-bubble').onclick = () => {
       openWrite();
     };
+
+    // Story Viewer Reactions
+    qa('.sv-react').forEach(btn => {
+      btn.onclick = (e) => {
+        e.stopPropagation();
+        const reactionType = btn.dataset.r;
+        const emojiMap = { love: '💔', cry: '🥲', healing: '🌱' };
+        const emoji = emojiMap[reactionType] || '❤️';
+        const st = HIGHLIGHT_STORIES[svActiveIdx];
+
+        // Spawn floating animated emoji
+        const v = $('story-viewer');
+        if (v) {
+          const floatEl = document.createElement('div');
+          floatEl.className = 'story-reaction-float';
+          floatEl.innerText = emoji;
+          v.appendChild(floatEl);
+          setTimeout(() => floatEl.remove(), 1300);
+        }
+
+        showToast(`${emoji} Reaction sent to ${st?.user || 'member'}`);
+
+        if (st && st.user) {
+          triggerNotif(`You sent ${emoji} to ${st.user}'s story: "${st.title}"`);
+        }
+      };
+    });
+
+    // Story Viewer Reply Input
+    const replyInput = $('sv-reply');
+    if (replyInput) {
+      replyInput.addEventListener('keydown', (e) => {
+        if (e.key === 'Enter' && replyInput.value.trim()) {
+          const text = replyInput.value.trim();
+          const st = HIGHLIGHT_STORIES[svActiveIdx];
+          
+          showToast(`💬 Reply sent to ${st?.user || 'member'}!`);
+          replyInput.value = '';
+
+          triggerNotif(`You replied to ${st?.user || 'member'}: "${text}"`);
+        }
+      });
+    }
   };
 
   let svActiveIdx = 0;
@@ -3058,6 +3101,14 @@ document.addEventListener('DOMContentLoaded', () => {
     if (!form) return;
     form.addEventListener('submit', (e) => {
       e.preventDefault();
+      const emailInput = $('contact-email');
+      const email = (emailInput?.value || '').trim();
+      if (email && !EMAIL_REGEX.test(email)) {
+        showToast('⚠️ Please enter a valid email address.');
+        emailInput?.focus();
+        return;
+      }
+
       const thankyou = $('contact-thankyou');
       if (thankyou) {
         form.style.display = 'none';
@@ -3068,7 +3119,7 @@ document.addEventListener('DOMContentLoaded', () => {
           thankyou.classList.add('hidden');
         }, 4000);
       }
-      showToast('Message sent!');
+      showToast('💌 Message sent! Thank you for reaching out.');
     });
   };
 
@@ -3137,6 +3188,45 @@ document.addEventListener('DOMContentLoaded', () => {
       };
     }
 
+    // Avatar Picker Modal
+    const openAvatarPicker = () => {
+      const modal = $('avatar-picker-modal');
+      const grid = $('avatar-picker-grid');
+      if (!modal || !grid) return;
+      
+      grid.innerHTML = '';
+      AVATARS.forEach((svg) => {
+        const item = document.createElement('div');
+        item.className = `apm-item ${S.user.avatar === svg ? 'selected' : ''}`;
+        item.innerHTML = svg;
+        item.onclick = () => {
+          S.user.avatar = svg;
+          saveData();
+          if (bigAv) bigAv.innerHTML = svg;
+          if ($('sidebar-avatar')) $('sidebar-avatar').innerHTML = svg;
+          if ($('right-avatar')) $('right-avatar').innerHTML = svg;
+          if ($('write-bar-avatar')) $('write-bar-avatar').innerHTML = svg;
+          if ($('wm-avatar')) $('wm-avatar').innerHTML = svg;
+          modal.classList.add('hidden');
+          showToast('Anonymous silhouette updated!');
+        };
+        grid.appendChild(item);
+      });
+
+      modal.classList.remove('hidden');
+    };
+
+    if (bigAv) {
+      bigAv.style.cursor = 'pointer';
+      bigAv.title = 'Click to choose silhouette avatar';
+      bigAv.onclick = openAvatarPicker;
+    }
+    const avatarCloseBtn = $('avatar-picker-close');
+    if (avatarCloseBtn) {
+      avatarCloseBtn.onclick = () => {
+        $('avatar-picker-modal')?.classList.add('hidden');
+      };
+    }
   };
 
   // ─── EXPLORE PANE ─────────────────────────────────────────────────
@@ -3599,6 +3689,107 @@ document.addEventListener('DOMContentLoaded', () => {
         const thread = (S.dms || []).find(t => t.threadId === activeDmThreadId);
         if (!thread || !thread.recipient) return;
         toggleFriendStatus(thread.recipient);
+      };
+    }
+
+    // DM Options Menu Popover (3-dots)
+    const dmActionBtn = $('dm-th-action-btn');
+    const dmPopover = $('dm-options-popover');
+    if (dmActionBtn && dmPopover) {
+      dmActionBtn.onclick = (e) => {
+        e.stopPropagation();
+        dmPopover.classList.toggle('hidden');
+        if (!dmPopover.classList.contains('hidden') && activeDmThreadId) {
+          const thread = (S.dms || []).find(t => t.threadId === activeDmThreadId);
+          const isFriend = (S.friends || []).some(f => f.id === thread?.recipient?.id);
+          const friendLabel = $('dm-opt-friend-label');
+          if (friendLabel) friendLabel.innerText = isFriend ? 'Remove Friend' : 'Add as Friend';
+          const muteLabel = $('dm-opt-mute-label');
+          if (muteLabel) muteLabel.innerText = thread?.muted ? 'Unmute Chat' : 'Mute Notifications';
+        }
+      };
+
+      document.addEventListener('click', (e) => {
+        if (dmPopover && !dmPopover.contains(e.target) && e.target !== dmActionBtn) {
+          dmPopover.classList.add('hidden');
+        }
+      });
+    }
+
+    // Option 1: Clear Messages
+    const optClear = $('dm-opt-clear');
+    if (optClear) {
+      optClear.onclick = () => {
+        if (dmPopover) dmPopover.classList.add('hidden');
+        if (!activeDmThreadId) return;
+        const thread = (S.dms || []).find(t => t.threadId === activeDmThreadId);
+        if (!thread) return;
+        if (confirm(`Clear all messages with ${thread.recipient?.name || 'this member'}?`)) {
+          thread.messages = [];
+          saveData();
+          renderDMMessages(thread);
+          renderDMInbox($('dm-search-input')?.value || '');
+          showToast('Conversation cleared.');
+        }
+      };
+    }
+
+    // Option 2: Export Chat Transcript
+    const optExport = $('dm-opt-export');
+    if (optExport) {
+      optExport.onclick = () => {
+        if (dmPopover) dmPopover.classList.add('hidden');
+        if (!activeDmThreadId) return;
+        const thread = (S.dms || []).find(t => t.threadId === activeDmThreadId);
+        if (!thread) return;
+        
+        let transcript = `=== SONDER PRIVATE CHAT TRANSCRIPT ===\n`;
+        transcript += `With: ${thread.recipient?.name || 'Member'} (${thread.recipient?.id || ''})\n`;
+        transcript += `Date: ${new Date().toLocaleString()}\n`;
+        transcript += `=====================================\n\n`;
+        
+        (thread.messages || []).forEach(m => {
+          const senderName = m.sender === 'me' ? (S.user?.id || 'You') : (thread.recipient?.name || 'Member');
+          const time = new Date(m.timestamp || Date.now()).toLocaleTimeString();
+          transcript += `[${time}] ${senderName}: ${m.text || (m.isVoice ? '[Voice Note]' : '[Image]')}\n`;
+        });
+
+        const blob = new Blob([transcript], { type: 'text/plain;charset=utf-8' });
+        const url = URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = `sonder_chat_${(thread.recipient?.name || 'chat').toLowerCase().replace(/\s+/g, '_')}.txt`;
+        document.body.appendChild(a);
+        a.click();
+        document.body.removeChild(a);
+        URL.revokeObjectURL(url);
+        showToast('Chat transcript exported!');
+      };
+    }
+
+    // Option 3: Toggle Friend Status
+    const optFriend = $('dm-opt-friend');
+    if (optFriend) {
+      optFriend.onclick = () => {
+        if (dmPopover) dmPopover.classList.add('hidden');
+        if (!activeDmThreadId) return;
+        const thread = (S.dms || []).find(t => t.threadId === activeDmThreadId);
+        if (!thread || !thread.recipient) return;
+        toggleFriendStatus(thread.recipient);
+      };
+    }
+
+    // Option 4: Mute Notifications
+    const optMute = $('dm-opt-mute');
+    if (optMute) {
+      optMute.onclick = () => {
+        if (dmPopover) dmPopover.classList.add('hidden');
+        if (!activeDmThreadId) return;
+        const thread = (S.dms || []).find(t => t.threadId === activeDmThreadId);
+        if (!thread) return;
+        thread.muted = !thread.muted;
+        saveData();
+        showToast(thread.muted ? 'Notifications muted for this chat.' : 'Notifications unmuted.');
       };
     }
 
@@ -4770,12 +4961,14 @@ document.addEventListener('DOMContentLoaded', () => {
 
   const setupSOSGrounding = () => {
     const pillBtn = $('sos-pill-btn');
+    const profileSosTile = $('profile-sos-tile');
     const closeBtn = $('sos-close-btn');
     const doneBtn = $('sos-done-btn');
     const journalBtn = $('sos-journal-btn');
     const modal = $('sos-modal');
 
     if (pillBtn) pillBtn.onclick = openSOSModal;
+    if (profileSosTile) profileSosTile.onclick = openSOSModal;
     if (closeBtn) closeBtn.onclick = closeSOSModal;
     if (doneBtn) doneBtn.onclick = () => {
       closeSOSModal();

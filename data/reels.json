@@ -24,14 +24,23 @@
       "albumArt": "https://images.unsplash.com/photo-1518495973542-4542c06a5843?w=100&auto=format&fit=crop&q=80"
     },
     "stats": {
-      "likes": 1420,
-      "comments": 14,
+      "likes": 1421,
+      "comments": 15,
       "shares": 312,
       "saves": 541
     },
-    "userLiked": false,
+    "userLiked": true,
     "userSaved": true,
     "commentsList": [
+      {
+        "id": "c_1787839168957_s3pi",
+        "username": "VelvetEcho",
+        "handle": "@velvetecho",
+        "avatar": null,
+        "text": "Such a grounding visual reflection.",
+        "timestamp": 1787839168957,
+        "likes": 0
+      },
       {
         "id": "c_1787705238421_9czf",
         "username": "VelvetEcho",
