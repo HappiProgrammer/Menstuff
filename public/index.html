@@ -14,6 +14,7 @@
 
   <!-- Mobile & PWA Theme Colors -->
   <meta name="theme-color" content="#0d131a" />
+  <link rel="manifest" href="manifest.json" />
   <meta name="mobile-web-app-capable" content="yes" />
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
   <meta name="apple-mobile-web-app-title" content="Sonder" />
@@ -133,6 +134,9 @@
     ]
   }
   </script>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Playfair+Display:ital,wght@0,600;0,700;1,600&display=swap" rel="stylesheet">
 </head>
 <body>
   <!-- TOP NAVIGATION -->
@@ -184,13 +188,13 @@
           <!-- Email Field -->
           <div class="rac-field">
             <label class="rac-label" for="returning-id">Email</label>
-            <input type="email" id="returning-id" class="rac-input" placeholder="you@example.com" autocomplete="email" required />
+            <input type="email" id="returning-id" class="rac-input" placeholder="you@example.com" autocomplete="email" inputmode="email" enterkeyhint="next" autocapitalize="none" spellcheck="false" required />
           </div>
 
           <!-- Password Field -->
           <div class="rac-field">
             <label class="rac-label" for="rac-password-input">Password <span style="font-size:11px; opacity:0.75;">(min 8 chars, 1 number/symbol)</span></label>
-            <input type="password" id="rac-password-input" class="rac-input" placeholder="&bull;&bull;&bull;&bull;&bull;&bull;&bull;&bull;" autocomplete="current-password" required />
+            <input type="password" id="rac-password-input" class="rac-input" placeholder="••••••••" autocomplete="current-password" enterkeyhint="done" required />
           </div>
 
           <!-- Primary Emerald Mint CTA Button -->
@@ -253,72 +257,72 @@
 <div id="app-page" class="page hidden">
 
   <!-- LEFT SIDEBAR -->
-  <aside class="ig-sidebar" id="ig-sidebar">
+  <aside class="ig-sidebar">
     <div class="ig-logo">
       <svg class="ig-logo-icon" width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/><circle cx="12" cy="10" r="2" fill="var(--accent)"/></svg>
       <span class="ig-logo-text">Sonder</span>
     </div>
 
     <nav class="ig-nav" aria-label="Main navigation">
-      <button class="ig-nav-item active-nav" data-pane="feed" id="nav-feed" aria-label="Home feed">
+      <button class="ig-nav-item active-nav" data-pane="feed" aria-label="Home feed">
         <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" aria-hidden="true"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
         <span>Home</span>
       </button>
-      <button class="ig-nav-item" data-pane="search" id="nav-search" aria-label="Search stories">
+      <button class="ig-nav-item" data-pane="search" aria-label="Search stories">
         <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" aria-hidden="true"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
         <span>Search</span>
       </button>
-      <button class="ig-nav-item" data-pane="explore" id="nav-explore" aria-label="Explore community posts">
+      <button class="ig-nav-item" data-pane="explore" aria-label="Explore community posts">
         <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" aria-hidden="true"><circle cx="12" cy="12" r="10"/><polygon points="16.24 7.76 14.12 14.12 7.76 16.24 9.88 9.88 16.24 7.76"/></svg>
         <span>Explore</span>
       </button>
-      <button class="ig-nav-item" data-pane="reels" id="nav-reels" aria-label="Reels & Stories Video Feed">
+      <button class="ig-nav-item" data-pane="reels" aria-label="Reels & Stories Video Feed">
         <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="2" y="2" width="20" height="20" rx="5" ry="5"/><path d="M16 2v20M8 2v20M2 12h20M2 7h6M2 17h6M16 17h6M16 7h6"/></svg>
         <span>Reels</span>
       </button>
-      <button class="ig-nav-item" data-pane="advice" id="nav-advice" aria-label="Relationship Advice & News">
+      <button class="ig-nav-item" data-pane="advice" aria-label="Relationship Advice & News">
         <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/><line x1="8" y1="7" x2="16" y2="7"/><line x1="8" y1="11" x2="14" y2="11"/></svg>
         <span>Advice &amp; News</span>
       </button>
-      <button class="ig-nav-item" data-pane="messages" id="nav-messages" aria-label="Direct messages">
+      <button class="ig-nav-item" data-pane="messages" aria-label="Direct messages">
         <span class="ig-notif-wrap">
           <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" aria-hidden="true"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
           <span class="notif-badge hidden" id="dm-badge">0</span>
         </span>
         <span>Messages</span>
       </button>
-      <button class="ig-nav-item" data-pane="music" id="nav-music" aria-label="Music Room">
+      <button class="ig-nav-item" data-pane="music" aria-label="Music Room">
         <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" aria-hidden="true"><path d="M9 18V5l12-2v13"/><circle cx="6" cy="18" r="3"/><circle cx="18" cy="16" r="3"/></svg>
         <span>Music Room</span>
       </button>
-      <button class="ig-nav-item" data-pane="healing" id="nav-healing" aria-label="Healing Hub">
+      <button class="ig-nav-item" data-pane="healing" aria-label="Healing Hub">
         <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" aria-hidden="true"><path d="M11 20A7 7 0 0 1 9.8 6.1C15.5 5 17 4.48 19 2c1 2 2 4.18 2 8 0 5.5-4.78 10-10 10z"/><path d="M2 21c0-3 1.85-5.36 5.08-6C9.5 14.52 12 13 13 12"/></svg>
         <span>Healing Hub</span>
       </button>
-      <button class="ig-nav-item" data-pane="diary" id="nav-diary" aria-label="Private Diary">
+      <button class="ig-nav-item" data-pane="diary" aria-label="Private Diary">
         <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" aria-hidden="true"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/></svg>
         <span>Diary</span>
       </button>
-      <button class="ig-nav-item" data-pane="saved" id="nav-saved" aria-label="Saved posts">
+      <button class="ig-nav-item" data-pane="saved" aria-label="Saved posts">
         <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" aria-hidden="true"><path d="M19 21l-7-5-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z"/></svg>
         <span>Saved</span>
       </button>
-      <button class="ig-nav-item" data-pane="notif" id="nav-notif" aria-label="Notifications">
+      <button class="ig-nav-item" data-pane="notif" aria-label="Notifications">
         <span class="ig-notif-wrap">
           <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" aria-hidden="true"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/></svg>
           <span class="notif-badge hidden" id="notif-badge">0</span>
         </span>
         <span>Notifications</span>
       </button>
-      <button class="ig-nav-item" data-pane="profile" id="nav-profile" aria-label="Profile">
+      <button class="ig-nav-item" data-pane="profile" aria-label="Profile">
         <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" aria-hidden="true"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
         <span>Profile</span>
       </button>
-      <button class="ig-nav-item" data-pane="about" id="nav-about" aria-label="About Sonder">
+      <button class="ig-nav-item" data-pane="about" aria-label="About Sonder">
         <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" aria-hidden="true"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
         <span>About</span>
       </button>
-      <button class="ig-nav-item" data-pane="contact" id="nav-contact" aria-label="Contact Us">
+      <button class="ig-nav-item" data-pane="contact" aria-label="Contact Us">
         <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" aria-hidden="true"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
         <span>Contact</span>
       </button>
@@ -355,7 +359,7 @@
   </aside>
 
   <!-- MAIN CONTENT -->
-  <div class="ig-main" id="ig-main">
+  <div class="ig-main">
 
     <!-- MOBILE TOP BAR -->
     <header class="mobile-top-bar" aria-label="Mobile application header">
@@ -464,7 +468,7 @@
       <div class="search-pane">
         <div class="search-box">
           <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
-          <input type="text" id="search-input" class="search-box-input" placeholder="Search stories&hellip;" autocomplete="off" />
+          <input type="search" id="search-input" class="search-box-input" placeholder="Search stories…" autocomplete="off" inputmode="search" enterkeyhint="search" autocorrect="off" autocapitalize="none" spellcheck="false" />
           <button class="search-clear hidden" id="search-clear">&times;</button>
         </div>
         <div id="search-results" class="search-results">
@@ -513,7 +517,7 @@
              ═══════════════════════════════════════════════════════════ -->
         <div class="source-pane active-source-pane" id="pane-source-direct">
           <!-- Mood Filter -->
-          <div class="direct-mood-chips" id="direct-mood-chips">
+          <div class="direct-mood-chips">
             <button class="direct-chip active-chip" data-mood="heartbreak">💔 Heartbreak</button>
             <button class="direct-chip" data-mood="healing">🌿 Healing &amp; Calm</button>
             <button class="direct-chip" data-mood="lofi">🌧️ Lo-Fi &amp; Piano</button>
@@ -617,7 +621,7 @@
           </div>
 
           <!-- Album / Playlist Quick Switcher -->
-          <div class="spotify-album-chips" id="spotify-album-chips">
+          <div class="spotify-album-chips">
             <button class="spotify-chip active-spotify-chip" data-spotify-uri="album/6s8qw0Vn1vGbsqZox90k1A">💔 Olivia Rodrigo — SOUR</button>
             <button class="spotify-chip" data-spotify-uri="album/1xJHno549zEBi246tlPp1j">💔 Olivia Rodrigo — GUTS</button>
             <button class="spotify-chip" data-spotify-uri="album/21jF5jlMt19JwTdFFVGnIH">💔 Adele — 30</button>
@@ -643,7 +647,7 @@
           </div>
 
           <!-- SoundCloud Selector Chips -->
-          <div class="sc-selector-chips" id="sc-selector-chips">
+          <div class="sc-selector-chips">
             <button class="sc-chip active-sc-chip" data-sc-url="https%3A//api.soundcloud.com/playlists/284050720">💔 Acoustic Heartbreak Covers</button>
             <button class="sc-chip" data-sc-url="https%3A//api.soundcloud.com/playlists/404179331">🌧️ Midnight Sad Lo-Fi</button>
             <button class="sc-chip" data-sc-url="https%3A//api.soundcloud.com/playlists/673891461">🌿 Healing Ambient Piano</button>
@@ -722,11 +726,11 @@
           <div class="yt-search-section">
             <div class="yt-search-bar">
               <svg class="yt-search-icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
-              <input type="text" id="yt-search-input" class="yt-search-input" placeholder="Search YouTube music videos&hellip;" autocomplete="off" aria-label="Search music videos" />
+              <input type="search" id="yt-search-input" class="yt-search-input" placeholder="Search YouTube music videos…" autocomplete="off" inputmode="search" enterkeyhint="search" autocorrect="off" autocapitalize="none" spellcheck="false" aria-label="Search music videos" />
               <button class="yt-search-clear hidden" id="yt-search-clear" aria-label="Clear search">&times;</button>
             </div>
             
-            <div class="yt-genre-chips" id="yt-genre-chips" role="tablist">
+            <div class="yt-genre-chips" role="tablist">
               <button class="yt-genre-chip active-genre" data-genre="heartbreak" role="tab">💔 Heartbreak</button>
               <button class="yt-genre-chip" data-genre="healing" role="tab">🌿 Healing</button>
               <button class="yt-genre-chip" data-genre="lofi" role="tab">🌧️ Lo-Fi &amp; Piano</button>
@@ -963,7 +967,7 @@
         <div class="pane-section">
           <div class="advice-search-bar">
             <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
-            <input type="text" id="advice-search-input" class="advice-search-input" placeholder="Search relationship advice, trust, boundaries, breakup recovery&hellip;" />
+            <input type="search" id="advice-search-input" class="advice-search-input" placeholder="Search relationship advice, trust, boundaries, breakup recovery…" autocomplete="off" inputmode="search" enterkeyhint="search" autocorrect="off" autocapitalize="none" spellcheck="false" />
             <button type="button" id="advice-search-clear" class="advice-search-clear hidden">&times;</button>
           </div>
 
@@ -1005,8 +1009,8 @@
         <div class="pane-section">
           <div class="pane-section-label">New Entry</div>
           <div class="diary-write-card">
-            <input type="text" id="diary-title" class="diary-title-input" placeholder="Entry title&hellip;" maxlength="80" />
-            <textarea id="diary-body" class="diary-body-input" placeholder="Write freely&hellip;" rows="5" maxlength="3000"></textarea>
+            <input type="text" id="diary-title" class="diary-title-input" placeholder="Entry title…" maxlength="80" inputmode="text" enterkeyhint="next" autocapitalize="sentences" />
+            <textarea id="diary-body" class="diary-body-input" placeholder="Write freely…" rows="5" maxlength="3000" autocapitalize="sentences" spellcheck="true"></textarea>
             <div class="diary-write-footer">
               <span class="diary-privacy-note">🔒 Saved locally &mdash; never uploaded</span>
               <button class="diary-save-btn" id="submit-diary-btn">Save Entry</button>
@@ -1115,11 +1119,11 @@
         <form id="contact-form" class="contact-form">
           <div class="contact-field">
             <label class="lc-input-label" for="contact-name">Your Name <span class="field-optional">(optional)</span></label>
-            <input type="text" id="contact-name" class="lc-input" placeholder="e.g. Anonymous" autocomplete="off" />
+            <input type="text" id="contact-name" class="lc-input" placeholder="e.g. Anonymous" autocomplete="name" inputmode="text" enterkeyhint="next" autocapitalize="words" />
           </div>
           <div class="contact-field">
             <label class="lc-input-label" for="contact-email">Email <span class="field-optional">(optional)</span></label>
-            <input type="email" id="contact-email" class="lc-input" placeholder="your@email.com" autocomplete="off" />
+            <input type="email" id="contact-email" class="lc-input" placeholder="your@email.com" autocomplete="email" inputmode="email" enterkeyhint="next" autocapitalize="none" spellcheck="false" />
           </div>
           <div class="contact-field">
             <label class="lc-input-label" for="contact-message">Message <span class="field-required">*</span></label>
@@ -1310,7 +1314,7 @@
             </div>
             <div class="dm-search-row">
               <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
-              <input type="text" id="dm-search-input" class="dm-search-input" placeholder="Search friends or messages&hellip;" />
+              <input type="search" id="dm-search-input" class="dm-search-input" placeholder="Search friends or messages…" autocomplete="off" inputmode="search" enterkeyhint="search" autocorrect="off" autocapitalize="none" spellcheck="false" />
               <button type="button" id="dm-search-clear" class="dm-search-clear hidden">&times;</button>
             </div>
           </div>
@@ -1368,14 +1372,12 @@
                 </div>
               </div>
               <div class="dm-th-actions">
-                <button type="button" class="dm-th-action-btn" id="dm-th-call-btn" title="Start Audio Call">
-                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/></svg>
-                </button>
-                <button type="button" class="dm-th-action-btn" id="dm-th-video-btn" title="Start Video Call">
-                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="23 7 16 12 23 17 23 7"/><rect x="1" y="5" width="15" height="14" rx="2" ry="2"/></svg>
-                </button>
-                <button type="button" class="dm-th-action-btn" id="dm-clear-thread-btn" title="Clear conversation history">
-                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="3 6 5 6 21 6"/><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/></svg>
+                <button type="button" class="dm-th-action-btn" title="Options">
+                  <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <circle cx="12" cy="12" r="1"></circle>
+                    <circle cx="19" cy="12" r="1"></circle>
+                    <circle cx="5" cy="12" r="1"></circle>
+                  </svg>
                 </button>
               </div>
             </div>
@@ -1387,6 +1389,9 @@
 
             <!-- Typing Indicator Bubble -->
             <div class="dm-typing-row hidden" id="dm-typing-row">
+              <div class="dm-msg-avatar" id="dm-typing-avatar">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+              </div>
               <div class="dm-typing-bubble">
                 <span class="dm-dot"></span>
                 <span class="dm-dot"></span>
@@ -1451,7 +1456,7 @@
                   <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 1a3 3 0 0 0-3 3v8a3 3 0 0 0 6 0V4a3 3 0 0 0-3-3z"/><path d="M19 10v2a7 7 0 0 1-14 0v-2"/></svg>
                 </button>
 
-                <textarea id="dm-input" class="dm-input" placeholder="Message… (Enter to send, Shift+Enter for newline)" rows="1" maxlength="2000" aria-label="Type a message"></textarea>
+                <textarea id="dm-input" class="dm-input" placeholder="Message… (Enter to send, Shift+Enter for newline)" rows="1" maxlength="2000" enterkeyhint="send" autocapitalize="sentences" spellcheck="true" aria-label="Type a message"></textarea>
                 
                 <button type="button" class="dm-send-btn" id="dm-send-btn" aria-label="Send message" title="Send message (Enter)">
                   <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg>
@@ -1485,7 +1490,7 @@
   </div>
 
   <!-- RIGHT SIDEBAR -->
-  <aside class="ig-right" id="ig-right">
+  <aside class="ig-right">
 
     <div class="right-user">
       <div class="right-avatar" id="right-avatar"></div>
@@ -1538,7 +1543,7 @@
 </div>
 
 <!-- MOBILE BOTTOM NAV -->
-<nav class="ig-bottom-nav" id="ig-bottom-nav" aria-label="Mobile navigation">
+<nav class="ig-bottom-nav" aria-label="Mobile navigation">
   <button class="ib-btn active-ib" data-pane="feed" aria-label="Home">
     <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" aria-hidden="true"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
   </button>
@@ -1557,8 +1562,8 @@
       <span class="notif-badge hidden" id="dm-badge-mobile">0</span>
     </span>
   </button>
-  <button class="ib-btn" data-pane="saved" aria-label="Saved">
-    <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" aria-hidden="true"><path d="M19 21l-7-5-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z"/></svg>
+  <button class="ib-btn" data-pane="profile" aria-label="Profile">
+    <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" aria-hidden="true"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
   </button>
 </nav>
 
@@ -1600,8 +1605,8 @@
         <span class="wm-prompt-text" id="wm-prompt-text">Loading&hellip;</span>
         <button class="wm-prompt-new" id="wm-prompt-new">New</button>
       </div>
-      <input type="text" id="wm-title" class="wm-title-input" placeholder="Story title&hellip;" maxlength="100" />
-      <textarea id="wm-body" class="wm-body-input" placeholder="Pour your heart out&hellip; This is completely anonymous." rows="7" maxlength="2000" aria-label="Story body"></textarea>
+      <input type="text" id="wm-title" class="wm-title-input" placeholder="Story title…" maxlength="100" inputmode="text" enterkeyhint="next" autocapitalize="sentences" />
+      <textarea id="wm-body" class="wm-body-input" placeholder="Pour your heart out… This is completely anonymous." rows="7" maxlength="2000" autocapitalize="sentences" spellcheck="true" aria-label="Story body"></textarea>
       <div class="wm-meta-row">
         <select id="wm-emotion" class="wm-emotion-select" aria-label="Select emotion">
           <option value="heartbreak">💔 Heartbreak</option>
@@ -1632,7 +1637,7 @@
     </div>
     <div class="rcm-input-row">
       <div class="rcm-user-avatar" id="rcm-my-avatar"></div>
-      <input type="text" id="rcm-comment-input" class="rcm-comment-input" placeholder="Add a supportive comment&hellip;" maxlength="400" />
+      <input type="text" id="rcm-comment-input" class="rcm-comment-input" placeholder="Add a supportive comment…" maxlength="400" inputmode="text" enterkeyhint="send" autocapitalize="sentences" spellcheck="true" />
       <button type="button" id="rcm-comment-submit" class="rcm-comment-submit">Post</button>
     </div>
   </div>
@@ -1664,7 +1669,7 @@
       <div class="sv-tap-next" id="sv-tap-next"></div>
     </div>
     <div class="sv-foot">
-      <input type="text" class="sv-reply" id="sv-reply" placeholder="Reply&hellip;" />
+      <input type="text" class="sv-reply" id="sv-reply" placeholder="Reply…" inputmode="text" enterkeyhint="send" autocapitalize="sentences" />
       <div class="sv-reacts">
         <button class="sv-react" data-r="love">💔</button>
         <button class="sv-react" data-r="cry">🥲</button>
@@ -1693,7 +1698,7 @@
       <h4>Responses (<span id="pm-comments-count">0</span>)</h4>
       <div id="pm-comments-list" class="pm-comments-list"></div>
       <div class="pm-comment-row">
-        <input type="text" id="pm-comment-input" class="pm-comment-input" placeholder="Write a response&hellip;" maxlength="300" />
+        <input type="text" id="pm-comment-input" class="pm-comment-input" placeholder="Write a response…" maxlength="300" inputmode="text" enterkeyhint="send" autocapitalize="sentences" spellcheck="true" />
         <button id="pm-comment-submit" class="pm-comment-send">Post</button>
       </div>
     </div>
@@ -1766,7 +1771,7 @@
     
     <div class="ndm-search-box">
       <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
-      <input type="text" id="new-dm-search-input" class="ndm-search-input" placeholder="Search members or enter handle&hellip;" />
+      <input type="search" id="new-dm-search-input" class="ndm-search-input" placeholder="Search members or enter handle…" autocomplete="off" inputmode="search" enterkeyhint="search" autocorrect="off" autocapitalize="none" spellcheck="false" />
     </div>
 
     <div class="ndm-section-label">Active Community Members</div>
@@ -1788,7 +1793,7 @@
     </div>
 
     <div class="ndm-add-box">
-      <input type="text" id="add-friend-input" class="ndm-search-input" placeholder="Enter username or friend handle (e.g. VelvetEcho#4092)…" />
+      <input type="text" id="add-friend-input" class="ndm-search-input" placeholder="Enter username or friend handle (e.g. VelvetEcho#4092)…" autocomplete="off" inputmode="text" enterkeyhint="done" autocorrect="off" autocapitalize="none" spellcheck="false" />
       <button type="button" class="ndm-add-submit-btn" id="add-friend-submit-btn">Add Friend</button>
     </div>
 

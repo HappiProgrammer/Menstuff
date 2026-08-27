@@ -4770,12 +4770,14 @@ document.addEventListener('DOMContentLoaded', () => {
 
   const setupSOSGrounding = () => {
     const pillBtn = $('sos-pill-btn');
+    const profileSosTile = $('profile-sos-tile');
     const closeBtn = $('sos-close-btn');
     const doneBtn = $('sos-done-btn');
     const journalBtn = $('sos-journal-btn');
     const modal = $('sos-modal');
 
     if (pillBtn) pillBtn.onclick = openSOSModal;
+    if (profileSosTile) profileSosTile.onclick = openSOSModal;
     if (closeBtn) closeBtn.onclick = closeSOSModal;
     if (doneBtn) doneBtn.onclick = () => {
       closeSOSModal();
