@@ -298,5 +298,25 @@
     "avatar": null,
     "createdAt": "2026-08-27T15:05:50.751Z",
     "bio": ""
+  },
+  {
+    "id": "u_1787843966401_4ebdef43",
+    "email": "reels_tester_1787843965870@shattered.io",
+    "username": "TesterHero#3996",
+    "passwordHash": "$2a$12$M.eMSuuUuADLaDkH4WT/NObbEtND7A/vg810UsxWTAKqAgKXn7ghK",
+    "role": "user",
+    "avatar": null,
+    "createdAt": "2026-08-27T15:19:26.401Z",
+    "bio": ""
+  },
+  {
+    "id": "u_1787844046378_649b99e2",
+    "email": "reels_tester_1787844045612@shattered.io",
+    "username": "TesterHero#3978",
+    "passwordHash": "$2a$12$naEbgBB8OxR9NJ.4CPc.peR2mTV45zF2KJU8PQdLsk10Eu/Mxw3JO",
+    "role": "user",
+    "avatar": null,
+    "createdAt": "2026-08-27T15:20:46.379Z",
+    "bio": ""
   }
 ]

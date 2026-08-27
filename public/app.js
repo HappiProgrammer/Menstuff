@@ -1523,36 +1523,9 @@ document.addEventListener('DOMContentLoaded', () => {
     clear.onclick = () => { input.value = ''; performSearch(); };
   };
 
-  // ─── RIGHT SIDEBAR & LIVE SIMULATION ──────────────────────────────
+  // ─── RIGHT SIDEBAR ───────────────────────────────────────────────
   const setupRightSidebar = () => {
-    // Online count
-    $('online-count').innerText = Math.floor(200 + Math.random()*500).toLocaleString();
-    
-    // Online avatars
-    const avs = $('online-avatars');
-    if (avs) {
-      avs.innerHTML = '';
-      for(let i=0; i<12; i++) {
-        avs.innerHTML += `<div class="online-av">${AVATARS[i % AVATARS.length]}</div>`;
-      }
-    }
-    
-    // Trending
-    const trendList = $('trending-list');
-    const topics = ["Missing them", "First holidays alone", "The sudden end", "Dreams about them", "Deleting photos"];
-    topics.forEach((t, i) => {
-      trendList.innerHTML += `
-        <div class="trending-item">
-          <div class="trending-rank">${i+1}</div>
-          <div class="trending-info">
-            <div class="trending-title">${t}</div>
-            <div class="trending-meta">${Math.floor(10 + Math.random()*50)} stories</div>
-          </div>
-        </div>
-      `;
-    });
-    
-    // Ambient Sound
+    // Ambient Sound Switcher
     qa('.right-ambient-btn, .sound-opt').forEach(btn => {
       btn.addEventListener('click', (e) => {
         const s = e.currentTarget.dataset.sound;
@@ -1565,46 +1538,12 @@ document.addEventListener('DOMContentLoaded', () => {
           }
         });
         
-        $('ambient-sound-btn').classList.toggle('active-sound', s !== 'off');
-        $('ig-sound-label').innerText = s === 'off' ? 'No Sound' : s.charAt(0).toUpperCase() + s.slice(1);
+        if ($('ambient-sound-btn')) $('ambient-sound-btn').classList.toggle('active-sound', s !== 'off');
+        if ($('ig-sound-label')) $('ig-sound-label').innerText = s === 'off' ? 'No Sound' : s.charAt(0).toUpperCase() + s.slice(1);
         
-        // Sim audio change
         showToast(`Ambient sound: ${s}`);
       });
     });
-    
-    // Live Feed Simulation
-    setInterval(() => {
-      pushLiveEvent();
-    }, 8000 + Math.random()*5000);
-  };
-  
-  const pushLiveEvent = () => {
-    const feed = $('live-feed');
-    const events = [
-      `<strong>${generateId()}</strong> shared a new story.`,
-      `<strong>${generateId()}</strong> reacted to a story.`,
-      `<strong>${generateId()}</strong> joined the Music Room.`,
-      `<strong>${generateId()}</strong> is writing...`,
-      `<strong>Ghost</strong> shared a secret.`
-    ];
-    const ev = events[Math.floor(Math.random()*events.length)];
-    
-    const el = document.createElement('div');
-    el.className = 'live-item';
-    el.innerHTML = `
-      <div class="live-item-dot" style="background: var(--${Math.random()>0.5?'accent':'green'})"></div>
-      <div>
-        <div class="live-item-text">${ev}</div>
-        <div class="live-item-time">Just now</div>
-      </div>
-    `;
-    
-    feed.prepend(el);
-    if(feed.children.length > 5) feed.lastChild.remove();
-    
-    // Randomly show top banner notif occasionally
-    if(Math.random() > 0.7) showLiveNotif(ev);
   };
 
   const triggerNotif = (msg) => {
@@ -5460,6 +5399,94 @@ document.addEventListener('DOMContentLoaded', () => {
   // ═══════════════════════════════════════════════════════════════════
   // REELS & STORIES VERTICAL VIDEO FEED (INSTAGRAM REELS UX)
   // ═══════════════════════════════════════════════════════════════════
+  const FALLBACK_SEED_REELS = [
+    {
+      id: "reel_1",
+      videoUrl: "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerBlazes.mp4",
+      thumbnailUrl: "https://images.unsplash.com/photo-1518495973542-4542c06a5843?w=800&auto=format&fit=crop&q=80",
+      author: {
+        id: "u_solitude_echo",
+        name: "VelvetEcho",
+        handle: "@velvetecho",
+        avatar: '<svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="12" cy="7" r="4"/><path d="M5.5 21v-2a6.5 6.5 0 0 1 13 0v2"/></svg>',
+        isVerified: true,
+        isFollowing: false
+      },
+      caption: "The moment you realize that their silence was never about you lacking value, but about them lacking capacity. Take a deep breath. You are free now 🌿🕊️ #healing #nocontact #selflove #peace",
+      tags: ["#healing", "#nocontact", "#selflove", "#peace"],
+      audioTrack: {
+        title: "Weightless Horizon (Piano Reflection)",
+        artist: "Sonder Soundscape",
+        albumArt: "https://images.unsplash.com/photo-1518495973542-4542c06a5843?w=100&auto=format&fit=crop&q=80"
+      },
+      stats: { likes: 1420, comments: 89, shares: 312, saves: 540 },
+      userLiked: false,
+      userSaved: false,
+      commentsList: [
+        {
+          id: "c_1_1",
+          username: "QuietRain",
+          handle: "@quietrain",
+          avatar: null,
+          text: "Needed this reminder today. Day 14 of no-contact and the fog is finally lifting.",
+          timestamp: Date.now() - 1000 * 60 * 60 * 3,
+          likes: 24
+        }
+      ]
+    },
+    {
+      id: "reel_2",
+      videoUrl: "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerEscapes.mp4",
+      thumbnailUrl: "https://images.unsplash.com/photo-1506744038136-46273834b3fb?w=800&auto=format&fit=crop&q=80",
+      author: {
+        id: "u_solitary_wanderer",
+        name: "SolitaryWanderer",
+        handle: "@solitarywanderer",
+        avatar: '<svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M7 7.5a5 5 0 0 1 10 0v1H7V7.5z"/><circle cx="12" cy="10" r="3"/><path d="M5.5 21v-2a6.5 6.5 0 0 1 13 0v2"/></svg>',
+        isVerified: true,
+        isFollowing: true
+      },
+      caption: "3 months ago I thought the loneliness would swallow me whole. Today I climbed to this summit and realized: the peace of being on your own is ten times better than the anxiety of being with the wrong person. 🏔️✨ #freedom #growth #mountains",
+      tags: ["#freedom", "#growth", "#mountains", "#healing"],
+      audioTrack: {
+        title: "Summit Breath • Acoustic Serenade",
+        artist: "Echoes of Solitude",
+        albumArt: "https://images.unsplash.com/photo-1506744038136-46273834b3fb?w=100&auto=format&fit=crop&q=80"
+      },
+      stats: { likes: 2890, comments: 142, shares: 615, saves: 1120 },
+      userLiked: true,
+      userSaved: true,
+      commentsList: []
+    },
+    {
+      id: "reel_3",
+      videoUrl: "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerJoyBlazes.mp4",
+      thumbnailUrl: "https://images.unsplash.com/photo-1470071459604-3b5ec3a7fe05?w=800&auto=format&fit=crop&q=80",
+      author: {
+        id: "u_mindful_path",
+        name: "MindfulHeart",
+        handle: "@mindfulheart",
+        avatar: '<svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="12" cy="7" r="4"/><path d="M5.5 21v-2a6.5 6.5 0 0 1 13 0v2"/></svg>',
+        isVerified: true,
+        isFollowing: false
+      },
+      caption: "Quick 60-second nervous system reset. When the memory hits you like a wave, un-clench your jaw, drop your shoulders away from your ears, and exhale for 6 counts. You are safe in this body. 🌊🧘‍♀️ #breathwork #nervoussystem #calm",
+      tags: ["#breathwork", "#nervoussystem", "#calm", "#grounding"],
+      audioTrack: {
+        title: "432Hz Calm Waves & Theta Glow",
+        artist: "Sonder Breath Lab",
+        albumArt: "https://images.unsplash.com/photo-1470071459604-3b5ec3a7fe05?w=100&auto=format&fit=crop&q=80"
+      },
+      stats: { likes: 3640, comments: 215, shares: 980, saves: 1840 },
+      userLiked: false,
+      userSaved: false,
+      commentsList: []
+    }
+  ];
+
+  // ═══════════════════════════════════════════════════════════════════
+  // REELS & STORIES VERTICAL VIDEO FEED (INSTAGRAM REELS UX)
+  // ═══════════════════════════════════════════════════════════════════
   const reelsState = {
     items: [],
     currentPage: 1,
@@ -5551,7 +5578,7 @@ document.addEventListener('DOMContentLoaded', () => {
           const reelId = card.dataset.reelId;
           if (!video) return;
 
-          if (entry.isIntersecting && entry.intersectionRatio >= 0.5) {
+          if (entry.isIntersecting && entry.intersectionRatio >= 0.45) {
             reelsState.activeReelId = reelId;
             video.muted = reelsState.isMuted;
             const playPromise = video.play();
@@ -5577,7 +5604,7 @@ document.addEventListener('DOMContentLoaded', () => {
         });
       }, {
         root: $('reels-feed-container'),
-        threshold: [0.2, 0.55, 0.8]
+        threshold: [0.2, 0.45, 0.8]
       });
 
       // Infinite scroll sentinel observer
@@ -5595,13 +5622,16 @@ document.addEventListener('DOMContentLoaded', () => {
       }
     }
 
-    // Load first page of reels
+    // Load first page of reels immediately
     loadReelsPage(1);
   };
 
   const onEnterReels = () => {
     const container = $('reels-feed-container');
     if (!container) return;
+    if (reelsState.items.length === 0) {
+      loadReelsPage(1);
+    }
     const firstCard = container.querySelector('.reel-card');
     if (firstCard) {
       const video = firstCard.querySelector('.reel-video');
@@ -5642,11 +5672,24 @@ document.addEventListener('DOMContentLoaded', () => {
 
     const stream = $('reels-cards-stream');
     const sentinel = $('reels-sentinel');
+    if (sentinel) sentinel.classList.remove('hidden');
 
     try {
-      const res = await fetch(getApiUrl(`/api/reels?page=${page}&limit=4`));
-      const data = await res.json();
-      const items = data.items || [];
+      let items = [];
+      try {
+        const res = await fetch(getApiUrl(`/api/reels?page=${page}&limit=4`));
+        if (res.ok) {
+          const data = await res.json();
+          items = data.items || [];
+        }
+      } catch (fetchErr) {
+        console.warn('[Reels] Backend unreachable, loading offline seed reels:', fetchErr.message);
+      }
+
+      // If backend returns empty on page 1, load fallback seed reels
+      if (items.length === 0 && page === 1 && reelsState.items.length === 0) {
+        items = FALLBACK_SEED_REELS;
+      }
 
       if (items.length === 0) {
         reelsState.hasMore = false;
@@ -5666,8 +5709,10 @@ document.addEventListener('DOMContentLoaded', () => {
       });
 
       reelsState.currentPage = page;
+      if (sentinel) sentinel.classList.add('hidden');
     } catch (e) {
       console.error('Error fetching reels:', e);
+      if (sentinel) sentinel.classList.add('hidden');
     } finally {
       reelsState.isLoading = false;
     }
@@ -5679,7 +5724,8 @@ document.addEventListener('DOMContentLoaded', () => {
     card.dataset.reelId = reel.id;
 
     card.innerHTML = `
-      <video class="reel-video" src="${reel.videoUrl}" poster="${reel.thumbnailUrl || ''}" playsinline webkit-playsinline loop preload="metadata" ${reelsState.isMuted ? 'muted' : ''}></video>
+      <div class="reel-poster-backdrop" style="background-image: url('${reel.thumbnailUrl || ''}')"></div>
+      <video class="reel-video" src="${reel.videoUrl}" poster="${reel.thumbnailUrl || ''}" playsinline webkit-playsinline loop preload="auto" ${reelsState.isMuted ? 'muted' : ''}></video>
       
       <div class="reel-gradient-overlay"></div>
       

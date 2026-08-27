@@ -24,14 +24,23 @@
       "albumArt": "https://images.unsplash.com/photo-1518495973542-4542c06a5843?w=100&auto=format&fit=crop&q=80"
     },
     "stats": {
-      "likes": 1421,
-      "comments": 19,
+      "likes": 1420,
+      "comments": 20,
       "shares": 312,
-      "saves": 540
+      "saves": 541
     },
-    "userLiked": true,
-    "userSaved": false,
+    "userLiked": false,
+    "userSaved": true,
     "commentsList": [
+      {
+        "id": "c_1787843959324_ytc5",
+        "username": "Test Traveler",
+        "handle": "@testtraveler",
+        "avatar": null,
+        "text": "This video brought me so much peace today. Thank you Sonder! 🌿",
+        "timestamp": 1787843959324,
+        "likes": 0
+      },
       {
         "id": "c_1787843154202_xyt1",
         "username": "Test Traveler",
