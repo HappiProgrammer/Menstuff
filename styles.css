@@ -4137,17 +4137,18 @@ button:focus-visible, a:focus-visible, input:focus-visible, textarea:focus-visib
 }
 
 /* ═══════════════════════════════════════════════════════════════════
-   24-HOUR DAILY COMMUNITY PROMPT CARD
+   24-HOUR DAILY COMMUNITY PROMPT CARD (EDITORIAL SPEC)
    ═══════════════════════════════════════════════════════════════════ */
 .daily-prompt-card {
-  background: linear-gradient(145deg, rgba(16, 32, 28, 0.85), rgba(9, 20, 18, 0.95));
-  border: 1px solid rgba(0, 199, 149, 0.28);
-  border-radius: var(--r-md);
-  padding: 16px 20px;
-  margin-bottom: 16px;
-  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.35);
+  background: linear-gradient(145deg, rgba(22, 33, 49, 0.75), rgba(15, 23, 35, 0.92));
+  border: 1px solid rgba(255, 255, 255, 0.09);
+  border-radius: var(--r-lg);
+  padding: 22px 24px;
+  margin-bottom: 22px;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.35);
   position: relative;
   overflow: hidden;
+  backdrop-filter: blur(14px);
 }
 
 .daily-prompt-card::before {
@@ -4164,88 +4165,98 @@ button:focus-visible, a:focus-visible, input:focus-visible, textarea:focus-visib
   display: flex;
   align-items: center;
   justify-content: space-between;
-  margin-bottom: 10px;
+  margin-bottom: 12px;
 }
 
 .dpc-badge {
   font-size: 11px;
-  font-weight: 600;
-  color: var(--accent);
+  font-weight: 700;
+  color: var(--accent-light);
+  letter-spacing: 0.8px;
   text-transform: uppercase;
-  letter-spacing: 0.5px;
-  display: flex;
+  display: inline-flex;
   align-items: center;
+  gap: 6px;
+  background: rgba(0, 199, 149, 0.1);
+  border: 1px solid rgba(0, 199, 149, 0.22);
+  padding: 4px 10px;
+  border-radius: var(--r-pill);
 }
 
 .dpc-countdown {
   font-size: 11px;
   color: var(--text3);
   background: rgba(255, 255, 255, 0.04);
-  padding: 3px 8px;
-  border-radius: var(--r-sm);
+  padding: 4px 10px;
+  border-radius: var(--r-pill);
+  border: 1px solid rgba(255, 255, 255, 0.06);
 }
 
 .dpc-question {
-  font-size: 16px;
+  font-family: var(--font-serif);
+  font-size: 18px;
   font-weight: 600;
-  line-height: 1.45;
+  line-height: 1.5;
   color: #ffffff;
-  margin: 0 0 6px 0;
-  font-family: inherit;
+  margin: 12px 0 8px 0;
+  letter-spacing: -0.2px;
 }
 
 .dpc-sub {
-  font-size: 12px;
+  font-size: 13px;
   color: var(--text2);
-  margin: 0 0 14px 0;
+  margin: 0 0 18px 0;
+  line-height: 1.5;
 }
 
 .dpc-actions {
   display: flex;
   align-items: center;
-  gap: 8px;
+  gap: 10px;
   flex-wrap: wrap;
 }
 
 .dpc-answer-btn {
   display: inline-flex;
   align-items: center;
-  gap: 6px;
-  background: linear-gradient(135deg, var(--accent), #00a87d);
-  color: #06110e;
-  font-weight: 700;
-  font-size: 12px;
-  padding: 7px 16px;
-  border-radius: var(--r-sm);
+  gap: 7px;
+  background: linear-gradient(135deg, var(--accent), #059669);
+  color: #ffffff;
+  font-weight: 600;
+  font-size: 13px;
+  padding: 9px 18px;
+  border-radius: var(--r-pill);
   border: none;
   cursor: pointer;
-  transition: all 0.2s ease;
+  box-shadow: 0 4px 14px rgba(0, 199, 149, 0.3);
+  transition: all var(--t-fast);
 }
 
 .dpc-answer-btn:hover {
-  transform: translateY(-1px);
-  box-shadow: 0 4px 12px rgba(0, 199, 149, 0.3);
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(0, 199, 149, 0.45);
 }
 
 .dpc-export-btn {
   display: inline-flex;
   align-items: center;
-  gap: 6px;
-  background: rgba(255, 255, 255, 0.05);
+  gap: 7px;
+  background: rgba(255, 255, 255, 0.04);
   color: var(--text2);
-  font-size: 12px;
+  font-size: 13px;
   font-weight: 500;
-  padding: 7px 14px;
-  border-radius: var(--r-sm);
+  padding: 8px 16px;
+  border-radius: var(--r-pill);
   border: 1px solid var(--border);
   cursor: pointer;
-  transition: all 0.2s ease;
+  transition: all var(--t-fast);
 }
 
 .dpc-export-btn:hover {
-  background: rgba(255, 255, 255, 0.1);
+  background: rgba(255, 255, 255, 0.08);
   color: #ffffff;
   border-color: var(--border2);
+  transform: translateY(-1px);
 }
 
 /* ═══════════════════════════════════════════════════════════════════

@@ -403,59 +403,57 @@
             <div class="story-bubble your-story-bubble" id="your-story-bubble">
               <div class="story-ring-wrap add-ring">
                 <div class="story-avatar" id="your-story-avatar">
-                  <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+                  <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
                 </div>
               </div>
-              <span class="story-name">Your Story</span>
+              <span class="story-name">Add Story</span>
             </div>
           </div>
         </div>
 
-        <!-- 24-Hour Daily Community Prompt Card -->
+        <!-- Editorial Featured Community Reflection Card -->
         <div class="daily-prompt-card" id="daily-prompt-card">
           <div class="dpc-top">
             <div class="dpc-badge">
-              <span class="live-dot-inline"></span> Daily Reflection
+              <span class="live-dot-inline"></span> Editorial Reflection
             </div>
             <span class="dpc-countdown" id="dpc-countdown">Resets in 9h 42m</span>
           </div>
           <h3 class="dpc-question" id="dpc-question">&ldquo;What is something you forgave them for that you now realize you shouldn&rsquo;t have?&rdquo;</h3>
-          <p class="dpc-sub">Share your anonymous perspective to join today&rsquo;s community reflection.</p>
+          <p class="dpc-sub">Join today&rsquo;s anonymous community reflection.</p>
           <div class="dpc-actions">
             <button type="button" class="dpc-answer-btn" id="dpc-answer-btn">
               <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M12 20h9"/><path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"/></svg>
-              <span>Answer Question</span>
+              <span>Share Reflection</span>
             </button>
             <button type="button" class="dpc-export-btn" id="dpc-export-btn" title="Export Question as Social Quote Card">
               <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2" ry="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg>
-              <span>Export Card</span>
+              <span>Save Quote</span>
             </button>
           </div>
         </div>
 
-        <!-- Write Bar -->
+        <!-- Composer Bar -->
         <div class="write-bar" id="write-bar">
           <div class="write-bar-avatar" id="write-bar-avatar"></div>
-          <div class="write-bar-pill" id="write-trigger">What broke your heart?</div>
-          <button class="write-bar-btn" id="write-bar-btn">Share</button>
+          <div class="write-bar-pill" id="write-trigger">Share an anonymous perspective or story&hellip;</div>
+          <button class="write-bar-btn" id="write-bar-btn">Post</button>
         </div>
 
         <!-- Feed Header -->
         <div class="feed-header-strip">
           <div class="live-badge-row">
             <span class="live-dot-pulse"></span>
-            <span class="live-label">Live Feed</span>
+            <span class="live-label">Community Stream</span>
           </div>
           <div class="feed-header-right">
             <span id="stories-count-label" class="stories-count-label"></span>
-            <select class="ig-filter-select" id="filter-select">
-              <option value="all">All emotions</option>
-              <option value="heartbreak">Heartbreak</option>
-              <option value="betrayal">Betrayal</option>
-              <option value="longing">Longing</option>
-              <option value="healing">Healing</option>
-              <option value="anger">Anger</option>
-              <option value="acceptance">Acceptance</option>
+            <select class="ig-filter-select" id="filter-select" aria-label="Filter perspectives">
+              <option value="all">All Perspectives</option>
+              <option value="healing">Personal Growth &amp; Healing</option>
+              <option value="communication">Communication &amp; Trust</option>
+              <option value="psychology">Psychology &amp; Mindset</option>
+              <option value="heartbreak">Heartbreak &amp; Letting Go</option>
             </select>
           </div>
         </div>
