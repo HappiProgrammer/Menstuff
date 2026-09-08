@@ -713,15 +713,6 @@ document.addEventListener('DOMContentLoaded', () => {
       };
     }
 
-    // Hero Card: Register CTA button
-    if ($('hero-register-btn')) {
-      $('hero-register-btn').onclick = () => {
-        setAuthMode('register');
-        emailInput?.focus();
-        showToast('Ready to register! Enter your email and password.');
-      };
-    }
-
     // Hero Card: Try for Free button
     if ($('hero-free-btn')) {
       $('hero-free-btn').onclick = () => {

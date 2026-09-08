@@ -560,8 +560,9 @@ input, textarea, select { font-family: var(--font-sans); }
 }
 
 .rhc-headline-wrap {
-  margin-bottom: 28px;
-  max-width: 380px;
+  margin-top: 20px;
+  margin-bottom: auto;
+  max-width: 440px;
 }
 
 .rhc-headline {
@@ -595,69 +596,12 @@ input, textarea, select { font-family: var(--font-sans); }
   font-weight: 600;
 }
 
-.rhc-features-list {
-  display: flex;
-  flex-direction: column;
-  gap: 14px;
-  margin-bottom: auto;
-  padding-bottom: 24px;
-}
-
-.rhc-feature-item {
-  display: flex;
-  align-items: flex-start;
-  gap: 12px;
-  background: rgba(255, 255, 255, 0.04);
-  border: 1px solid rgba(255, 255, 255, 0.07);
-  border-radius: 12px;
-  padding: 11px 14px;
-  backdrop-filter: blur(8px);
-  transition: all var(--t-fast);
-}
-
-.rhc-feature-item:hover {
-  background: rgba(255, 255, 255, 0.07);
-  border-color: rgba(0, 199, 149, 0.35);
-  transform: translateX(3px);
-}
-
-.rhc-feat-icon {
-  width: 28px;
-  height: 28px;
-  border-radius: 8px;
-  background: rgba(0, 199, 149, 0.12);
-  color: var(--accent-light);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  flex-shrink: 0;
-  margin-top: 1px;
-}
-
-.rhc-feat-text {
-  display: flex;
-  flex-direction: column;
-  gap: 2px;
-}
-
-.rhc-feat-title {
-  font-size: 13px;
-  font-weight: 600;
-  color: #ffffff;
-}
-
-.rhc-feat-desc {
-  font-size: 11.5px;
-  color: #94a3b8;
-  line-height: 1.35;
-}
-
 .rhc-actions {
   display: flex;
   align-items: center;
   gap: 12px;
-  margin-top: 4px;
-  margin-bottom: 20px;
+  margin-top: 32px;
+  margin-bottom: 22px;
 }
 
 .rhc-btn-free {

@@ -25,13 +25,31 @@
     },
     "stats": {
       "likes": 1420,
-      "comments": 28,
+      "comments": 30,
       "shares": 312,
       "saves": 540
     },
     "userLiked": false,
     "userSaved": false,
     "commentsList": [
+      {
+        "id": "c_1788874936642_kd05",
+        "username": "VelvetEcho",
+        "handle": "@velvetecho",
+        "avatar": null,
+        "text": "Such a grounding visual reflection.",
+        "timestamp": 1788874936642,
+        "likes": 0
+      },
+      {
+        "id": "c_1788874749237_k62d",
+        "username": "VelvetEcho",
+        "handle": "@velvetecho",
+        "avatar": null,
+        "text": "Such a grounding visual reflection.",
+        "timestamp": 1788874749237,
+        "likes": 0
+      },
       {
         "id": "c_1788872598482_jhmc",
         "username": "Test Traveler",
