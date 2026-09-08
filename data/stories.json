@@ -1,5 +1,35 @@
 [
   {
+    "id": "p_1788872617472_af359f",
+    "userId": "SilentStar#9921",
+    "avatar": "<svg></svg>",
+    "title": "Testing Heartbreak Story 1788872617414",
+    "body": "This is an end-to-end verification of story creation and persistence.",
+    "emotion": "heartbreak",
+    "date": "2026-09-08T13:03:37.473Z",
+    "reacts": {
+      "love": 1,
+      "cry": 0,
+      "angry": 0,
+      "healing": 0,
+      "peace": 0
+    },
+    "comments": [
+      {
+        "id": "c_1788872617540",
+        "user": "VelvetEcho#4092",
+        "text": "Beautiful and resilient reflection.",
+        "date": "2026-09-08T13:03:37.540Z"
+      }
+    ],
+    "imageUrl": null,
+    "gradient": [
+      "#0f1a0d",
+      "#1e3a1a"
+    ],
+    "isMine": true
+  },
+  {
     "id": "p_1788868399998_b854a0",
     "userId": "SilentStar#9921",
     "avatar": "<svg></svg>",

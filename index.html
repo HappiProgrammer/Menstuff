@@ -2153,6 +2153,103 @@
   </div>
 </div>
 
+
+<!-- ═══════════════════════════════════════════════════════════════
+     FLOATING HEALTH & WELLNESS CHAT-BOT WIDGET
+     ═══════════════════════════════════════════════════════════════ -->
+<div id="health-bot-widget" class="health-bot-widget">
+  <!-- Chat Window -->
+  <div id="health-bot-window" class="health-bot-window hidden" role="dialog" aria-modal="false" aria-label="Sonder Health Assistant">
+    <!-- Header -->
+    <div class="hbw-header">
+      <div class="hbw-header-left">
+        <div class="hbw-avatar" aria-hidden="true">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M19 14c1.49-1.46 3-3.21 3-5.5A5.5 5.5 0 0 0 16.5 3c-1.76 0-3 .5-4.5 2-1.5-1.5-2.74-2-4.5-2A5.5 5.5 0 0 0 2 8.5c0 2.3 1.5 4.05 3 5.5l7 7Z"/>
+            <path d="M12 5v14"/>
+          </svg>
+        </div>
+        <div class="hbw-title-wrap">
+          <div class="hbw-title">
+            <span>Sonder Health</span>
+            <span class="hbw-badge">Guide</span>
+          </div>
+          <div class="hbw-subtitle">
+            <span class="hbw-status-dot"></span>
+            <span>Confidential &bull; Wellness &amp; Triage</span>
+          </div>
+        </div>
+      </div>
+      <div class="hbw-header-actions">
+        <button type="button" class="hbw-btn-icon" id="hbw-reset-btn" title="Clear Conversation" aria-label="Reset chat">
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M3 12a9 9 0 0 1 9-9 9.75 9.75 0 0 1 6.74 2.74L21 8"/>
+            <path d="M21 3v5h-5"/>
+            <path d="M21 12a9 9 0 0 1-9 9 9.75 9.75 0 0 1-6.74-2.74L3 16"/>
+            <path d="M3 21v-5h5"/>
+          </svg>
+        </button>
+        <button type="button" class="hbw-btn-icon" id="hbw-close-btn" title="Close Assistant" aria-label="Close chat window">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+            <line x1="18" y1="6" x2="6" y2="18"/>
+            <line x1="6" y1="6" x2="18" y2="18"/>
+          </svg>
+        </button>
+      </div>
+    </div>
+
+    <!-- Quick Topic Pills Bar -->
+    <div class="hbw-topics-bar" role="toolbar" aria-label="Quick health topics">
+      <button type="button" class="hbw-topic-pill" data-topic="symptom">🩺 Symptom Check</button>
+      <button type="button" class="hbw-topic-pill" data-topic="anxiety">🧠 Anxiety &amp; Stress</button>
+      <button type="button" class="hbw-topic-pill" data-topic="sleep">🌙 Can't Sleep</button>
+      <button type="button" class="hbw-topic-pill" data-topic="vitality">⚡ Men's Vitality</button>
+      <button type="button" class="hbw-topic-pill" data-topic="workout">🏋️ Soreness &amp; Recovery</button>
+      <button type="button" class="hbw-topic-pill" data-topic="heartbreak">💔 Heartbreak Healing</button>
+      <button type="button" class="hbw-topic-pill" data-topic="crisis">🚨 Crisis Support</button>
+    </div>
+
+    <!-- Message Stream -->
+    <div id="hbw-messages" class="hbw-messages" role="log" aria-live="polite"></div>
+
+    <!-- Typing Indicator -->
+    <div id="hbw-typing" class="hbw-typing hidden" aria-hidden="true">
+      <span class="hbw-typing-dot"></span>
+      <span class="hbw-typing-dot"></span>
+      <span class="hbw-typing-dot"></span>
+    </div>
+
+    <!-- Input Row -->
+    <form id="hbw-form" class="hbw-input-row" autocomplete="off">
+      <input type="text" id="hbw-input" class="hbw-input" placeholder="Ask about symptoms, sleep, anxiety, workout..." maxlength="500" required />
+      <button type="submit" id="hbw-send" class="hbw-send-btn" aria-label="Send query">
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+          <line x1="22" y1="2" x2="11" y2="13"/>
+          <polygon points="22 2 15 22 11 13 2 9 22 2"/>
+        </svg>
+      </button>
+    </form>
+
+    <!-- Footer Disclaimer -->
+    <div class="hbw-disclaimer">
+      Confidential AI assistant. For emergencies call 911 / 988. Not formal medical diagnosis.
+    </div>
+  </div>
+
+  <!-- Floating Trigger Button -->
+  <div class="health-bot-tooltip" id="hbw-tooltip">
+    <span class="health-bot-tooltip-dot"></span>
+    <span>Ask Health Bot</span>
+  </div>
+  <button type="button" id="health-bot-trigger" class="health-bot-trigger" aria-label="Open Health &amp; Wellness Chatbot" title="Health &amp; Wellness Guide">
+    <span class="health-bot-trigger-pulse"></span>
+    <svg class="hbw-trigger-icon" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+      <path d="M19 14c1.49-1.46 3-3.21 3-5.5A5.5 5.5 0 0 0 16.5 3c-1.76 0-3 .5-4.5 2-1.5-1.5-2.74-2-4.5-2A5.5 5.5 0 0 0 2 8.5c0 2.3 1.5 4.05 3 5.5l7 7Z"/>
+      <polyline points="3 12 7 12 10 9 14 15 17 12 21 12"/>
+    </svg>
+  </button>
+</div>
+
 <script src="app.js?v=24"></script>
 </body>
 </html>

@@ -237,6 +237,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
   const init = async () => {
     setupVisualViewportKeyboard();
+    setupHealthBot();
     // Check server authentication session first via httpOnly cookie / token
     try {
       const res = await fetch(getApiUrl('/api/auth/me'), { credentials: 'include' });
@@ -6695,6 +6696,324 @@ document.addEventListener('DOMContentLoaded', () => {
     });
 
     updateMusicPlayerUI();
+  };
+
+  
+  // ═══════════════════════════════════════════════════════════════════
+  // SONDER HEALTH & WELLNESS CHATBOT LOGIC
+  // ═══════════════════════════════════════════════════════════════════
+  const setupHealthBot = () => {
+    const triggerBtn = $('health-bot-trigger');
+    const tooltipEl = $('hbw-tooltip');
+    const windowEl = $('health-bot-window');
+    const closeBtn = $('hbw-close-btn');
+    const resetBtn = $('hbw-reset-btn');
+    const messagesEl = $('hbw-messages');
+    const formEl = $('hbw-form');
+    const inputEl = $('hbw-input');
+    const typingEl = $('hbw-typing');
+    const topicsBar = document.querySelector('.hbw-topics-bar');
+
+    if (!triggerBtn || !windowEl || !messagesEl) return;
+
+    let chatHistory = [];
+
+    const defaultGreeting = {
+      sender: 'bot',
+      text: "Hey brother! Welcome to Sonder Health. I'm your confidential wellness guide.\n\nHow are you feeling physically or mentally today? Select a topic above or ask anything about symptoms, sleep, stress, or recovery.",
+      suggestions: ["Check Symptoms", "Can't Sleep Protocol", "Stress & Anxiety Reset", "Men's Vitality Tips"],
+      time: new Date()
+    };
+
+    // Load or initialize conversation
+    try {
+      const saved = sessionStorage.getItem('sonder_health_bot_history');
+      if (saved) {
+        chatHistory = JSON.parse(saved);
+      }
+    } catch (e) {}
+
+    if (chatHistory.length === 0) {
+      chatHistory.push(defaultGreeting);
+    }
+
+    const saveHistory = () => {
+      try {
+        sessionStorage.setItem('sonder_health_bot_history', JSON.stringify(chatHistory.slice(-20)));
+      } catch (e) {}
+    };
+
+    const formatTime = (d) => {
+      const date = d instanceof Date ? d : new Date(d);
+      return date.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+    };
+
+    const renderMarkdown = (text) => {
+      return text
+        .replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>')
+        .replace(/\n/g, '<br>');
+    };
+
+    const renderMessages = () => {
+      messagesEl.innerHTML = '';
+      chatHistory.forEach((msg) => {
+        const msgDiv = document.createElement('div');
+        msgDiv.className = 'hbw-msg ' + msg.sender + (msg.isEmergency ? ' emergency' : '');
+
+        const bubble = document.createElement('div');
+        bubble.className = 'hbw-msg-bubble';
+        bubble.innerHTML = renderMarkdown(escapeHTML(msg.text));
+
+        // Append action button if present
+        if (msg.action) {
+          const actionBtn = document.createElement('button');
+          actionBtn.type = 'button';
+          actionBtn.className = 'hbw-action-btn';
+          if (msg.action === 'open_sos') {
+            actionBtn.innerHTML = '<span>Open SOS Box Breathing Cooldown</span> &rarr;';
+            actionBtn.onclick = () => {
+              windowEl.classList.add('hidden');
+              const sosModal = $('sos-modal');
+              if (sosModal) sosModal.classList.remove('hidden');
+            };
+          } else if (msg.action === 'play_rain') {
+            actionBtn.innerHTML = '<span>▶ Play Rain &amp; Thunder Audio</span>';
+            actionBtn.onclick = () => {
+              if (typeof selectMusicTrack === 'function') {
+                selectMusicTrack(1);
+                if (!isMusicPlaying && typeof toggleMusicPlay === 'function') toggleMusicPlay();
+                showToast('Playing Rain Soundscape 🌧️');
+              }
+            };
+          } else if (msg.action === 'open_tracker') {
+            actionBtn.innerHTML = '<span>Open No-Contact Streak Tracker</span> &rarr;';
+            actionBtn.onclick = () => {
+              windowEl.classList.add('hidden');
+              const trackerModal = $('set-tracker-modal');
+              if (trackerModal) trackerModal.classList.remove('hidden');
+            };
+          }
+          bubble.appendChild(actionBtn);
+        }
+
+        // Append quick suggestions if present
+        if (msg.suggestions && msg.suggestions.length > 0) {
+          const sugWrap = document.createElement('div');
+          sugWrap.className = 'hbw-suggestions';
+          msg.suggestions.forEach(sug => {
+            const btn = document.createElement('button');
+            btn.type = 'button';
+            btn.className = 'hbw-suggest-btn';
+            btn.innerText = sug;
+            btn.onclick = () => {
+              handleUserSubmit(sug);
+            };
+            sugWrap.appendChild(btn);
+          });
+          bubble.appendChild(sugWrap);
+        }
+
+        const timeSpan = document.createElement('span');
+        timeSpan.className = 'hbw-msg-time';
+        timeSpan.innerText = formatTime(msg.time);
+
+        msgDiv.appendChild(bubble);
+        msgDiv.appendChild(timeSpan);
+        messagesEl.appendChild(msgDiv);
+      });
+
+      // Scroll to bottom
+      messagesEl.scrollTop = messagesEl.scrollHeight;
+    };
+
+    const openChat = () => {
+      windowEl.classList.remove('hidden');
+      if (tooltipEl) tooltipEl.classList.add('hidden');
+      renderMessages();
+      if (inputEl) inputEl.focus();
+    };
+
+    const closeChat = () => {
+      windowEl.classList.add('hidden');
+    };
+
+    triggerBtn.onclick = () => {
+      if (windowEl.classList.contains('hidden')) {
+        openChat();
+      } else {
+        closeChat();
+      }
+    };
+
+    if (tooltipEl) {
+      tooltipEl.onclick = openChat;
+    }
+
+    if (closeBtn) {
+      closeBtn.onclick = closeChat;
+    }
+
+    if (resetBtn) {
+      resetBtn.onclick = () => {
+        chatHistory = [defaultGreeting];
+        saveHistory();
+        renderMessages();
+        showToast('Health Bot conversation refreshed 🩺');
+      };
+    }
+
+    // Quick Topic Pills
+    if (topicsBar) {
+      topicsBar.addEventListener('click', (e) => {
+        const pill = e.target.closest('.hbw-topic-pill');
+        if (!pill) return;
+        const topic = pill.dataset.topic;
+        const topicPrompts = {
+          symptom: "I want to do a symptom check for some discomfort I'm feeling.",
+          anxiety: "How can I quickly stop anxiety, overthinking, and calm my nervous system?",
+          sleep: "I can't fall asleep. What is the evidence-based protocol for insomnia?",
+          vitality: "What are the natural science-backed ways to optimize male testosterone and energy?",
+          workout: "My muscles are intensely sore from working out. How do I recover faster?",
+          heartbreak: "I'm going through a painful breakup and struggling not to reach out.",
+          crisis: "I'm in severe distress or experiencing an emergency. Where can I get help?"
+        };
+
+        if (topicPrompts[topic]) {
+          handleUserSubmit(topicPrompts[topic]);
+        }
+      });
+    }
+
+    // Client-side fallback knowledge engine in case server is unavailable
+    const getFallbackBotResponse = (cleanMsg) => {
+      const lower = cleanMsg.toLowerCase();
+
+      if (/\b(suicide|suicidal|kill myself|end my life|want to die|hang myself|slit my wrist|overdose|harm myself|end it all|chest pain|heart attack|can't breathe)\b/.test(lower)) {
+        return {
+          reply: "🚨 **Immediate Safety & Emergency Notice**\n\nIf you or someone you know is in severe distress, experiencing chest pain/shortness of breath, or having thoughts of self-harm, please reach out for immediate professional care right now:\n\n• **988 Suicide & Crisis Lifeline**: Call or Text 988 (Free, 24/7, US & Canada)\n• **Crisis Text Line**: Text HOME to 741741\n• **Emergency Services**: Call 911 (US/CA) or 999 / 112 (UK/EU)\n\nYou do not have to walk through this alone. Professional help is available right now.",
+          suggestions: ["I'm safe now, just stressed", "Box Breathing Exercise"],
+          action: 'open_sos',
+          isEmergency: true
+        };
+      }
+
+      if (/\b(anxiety|anxious|panic|panic attack|overthinking|stressed|stress|overwhelm|overwhelmed|racing mind|can't calm down)\b/.test(lower)) {
+        return {
+          reply: "Take a slow, deep breath with me. When anxiety or overthinking spikes, your nervous system is in fight-or-flight overdrive.\n\n• **The Physiological Sigh**: Take two deep inhales through your nose (one long, then a quick top-off), followed by a slow, long exhale through your mouth. Repeat 3 times.\n• **5-4-3-2-1 Grounding**: Acknowledge 5 things you see, 4 you can touch, 3 you hear, 2 you smell, and 1 positive thing about yourself.\n\nYou can also launch Sonder's **SOS Cooldown** for guided visual box breathing.",
+          suggestions: ["Open Box Breathing Cooldown", "Play 432Hz Calming Audio", "Why does overthinking happen?"],
+          action: 'open_sos'
+        };
+      }
+
+      if (/\b(sleep|can't sleep|cannot sleep|insomnia|tired|exhausted|waking up|restless|nightmare|melatonin)\b/.test(lower)) {
+        return {
+          reply: "Sleep quality directly impacts cortisol, testosterone, and mental resilience. If you're struggling to sleep tonight:\n\n• **The 10-3-2-1 Rule**:\n  - 10 hrs before: No caffeine\n  - 3 hrs before: No heavy meals\n  - 2 hrs before: No work\n  - 1 hr before: No screens/blue light\n• **Cool Environment**: Sleep in a cool room (~65–68°F / 18–20°C) to facilitate core temperature drop.\n• **Brain Dump**: Write down racing thoughts on paper so your brain can let go.",
+          suggestions: ["Play Rain & Thunder Sound", "Fixing Sleep Schedule", "Supplements for Sleep"],
+          action: 'play_rain'
+        };
+      }
+
+      if (/\b(testosterone|low t|libido|prostate|erectile|energy|fatigue|hormone|vitality)\b/.test(lower)) {
+        return {
+          reply: "Natural male hormonal vitality relies on 4 biological pillars:\n\n1. **Deep Sleep**: Over 70% of daily testosterone is produced during deep slow-wave sleep.\n2. **Morning Sunlight**: 10–15 minutes of direct sunlight within an hour of waking synchronizes circadian cortisol and testosterone.\n3. **Key Micronutrients**: Zinc (15–30mg/day), Vitamin D3 (2000–5000 IU), and Magnesium Glycinate.\n4. **Heavy Compound Lifting**: Squats, deadlifts, and pull-ups stimulate androgen receptors.",
+          suggestions: ["Best exercises for vitality", "Diet & Healthy Fats", "Morning Routine"]
+        };
+      }
+
+      if (/\b(workout|gym|sore|soreness|doms|muscle|protein|creatine|cramp|recovery)\b/.test(lower)) {
+        return {
+          reply: "Muscles are broken down in training, but rebuilt during recovery:\n\n• **Protein Target**: 1.6 to 2.2g of protein per kg of body weight (approx. 0.8–1g/lb) spread across meals.\n• **Electrolytes & Hydration**: Drink water with electrolytes or unrefined sea salt to prevent muscle cramping and facilitate cellular repair.\n• **Active Recovery**: A light 20-minute walk boosts blood circulation and nutrient delivery far better than staying completely stationary.\n• **Creatine Monohydrate**: 3–5g daily supports cellular energy (ATP) replenishment.",
+          suggestions: ["Post-workout meal ideas", "Daily Hydration Target", "Stretching Routine"]
+        };
+      }
+
+      if (/\b(breakup|break up|heartbreak|heartbroken|ex|miss her|miss him|lonely|alone|cheated|rejected)\b/.test(lower)) {
+        return {
+          reply: "Brother, heartbreak is neurochemically identical to physical pain. What you are feeling is real and valid.\n\n• **Do Not Break No-Contact**: Reaching out resets your brain's dopamine craving cycle to day zero. Check your streak in Sonder's Tracker.\n• **Transmute the Pain**: Channel grief and frustration into gym discipline, reading, and personal growth.\n• **One Day at a Time**: The intensity fades as your neural pathways recalibrate.",
+          suggestions: ["Open No-Contact Tracker", "Write in Private Diary", "Read Brotherhood Stories"],
+          action: 'open_tracker'
+        };
+      }
+
+      return {
+        reply: 'I hear you regarding "' + cleanMsg + '". Your physical and mental wellness are deeply interconnected.\n\nCould you share a bit more detail? For instance:\n• Are you dealing with physical symptoms, mental stress, or sleep difficulty?\n• When did this start?\n\nOr tap one of the quick topic pills below to jump directly to a protocol.',
+        suggestions: ["Check Symptoms", "Mental Stress & Anxiety", "Sleep & Rest", "Men's Vitality", "Fitness Recovery"]
+      };
+    };
+
+    const handleUserSubmit = async (userText) => {
+      const text = (userText || '').trim();
+      if (!text) return;
+
+      if (inputEl) inputEl.value = '';
+
+      // Add user message
+      chatHistory.push({
+        sender: 'user',
+        text: text,
+        time: new Date()
+      });
+      renderMessages();
+
+      // Show typing indicator
+      if (typingEl) typingEl.classList.remove('hidden');
+      messagesEl.scrollTop = messagesEl.scrollHeight;
+
+      let botResponse = null;
+
+      try {
+        const res = await fetch(getApiUrl('/api/health-bot/chat'), {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          credentials: 'include',
+          body: JSON.stringify({ message: text })
+        });
+
+        if (res.ok) {
+          const data = await res.json();
+          if (data && data.reply) {
+            botResponse = {
+              sender: 'bot',
+              text: data.reply,
+              suggestions: data.suggestions || [],
+              action: data.action || null,
+              isEmergency: !!data.isEmergency,
+              time: new Date()
+            };
+          }
+        }
+      } catch (err) {
+        console.warn('Backend chatbot fetch error, falling back to local engine:', err.message);
+      }
+
+      if (!botResponse) {
+        const fallback = getFallbackBotResponse(text);
+        botResponse = {
+          sender: 'bot',
+          text: fallback.reply,
+          suggestions: fallback.suggestions || [],
+          action: fallback.action || null,
+          isEmergency: !!fallback.isEmergency,
+          time: new Date()
+        };
+      }
+
+      // Small natural delay for human-like response
+      setTimeout(() => {
+        if (typingEl) typingEl.classList.add('hidden');
+        chatHistory.push(botResponse);
+        saveHistory();
+        renderMessages();
+      }, 400);
+    };
+
+    if (formEl) {
+      formEl.onsubmit = (e) => {
+        e.preventDefault();
+        const query = inputEl ? inputEl.value : '';
+        handleUserSubmit(query);
+      };
+    }
   };
 
   const setupMusicRoom = () => {

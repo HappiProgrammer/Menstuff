@@ -388,5 +388,45 @@
     "avatar": null,
     "createdAt": "2026-09-08T12:08:52.793Z",
     "bio": ""
+  },
+  {
+    "id": "u_1788872463629_aefe8ab8",
+    "email": "sec_tester_1788872463096@shattered.io",
+    "username": "SecurityTester",
+    "passwordHash": "$2a$12$aUd5398I3nR8oxVQ4UATg.tTP7aQY2Fd5wIaxYteeBfcCgxDl6bE6",
+    "role": "user",
+    "avatar": null,
+    "createdAt": "2026-09-08T13:01:03.629Z",
+    "bio": ""
+  },
+  {
+    "id": "u_1788872470218_18a36ba8",
+    "email": "reels_tester_1788872469683@shattered.io",
+    "username": "TesterHero#1960",
+    "passwordHash": "$2a$12$HbfXucJdiNQkq0Kr0nl8TeKzh.GJNcjdFaFKQnrRUpVtU.A93.T5q",
+    "role": "user",
+    "avatar": null,
+    "createdAt": "2026-09-08T13:01:10.218Z",
+    "bio": ""
+  },
+  {
+    "id": "u_1788872573389_da99f95c",
+    "email": "newuser_1788872572700@example.com",
+    "username": "PeacefulHealer#8630",
+    "passwordHash": "$2a$12$0BVyHLbgUZi74ea5HcGt9OHE.d0/kpOQLbnBfmbiUZ18nZvtgD8Wq",
+    "role": "user",
+    "avatar": null,
+    "createdAt": "2026-09-08T13:02:53.389Z",
+    "bio": ""
+  },
+  {
+    "id": "u_1788872582040_732d39a4",
+    "email": "sonder_seeker_1788872581324@shattered.io",
+    "username": "SonderSeeker#404#1920",
+    "passwordHash": "$2a$12$pLe2v2Ua/sJ.6DVT/NPoiOwVNtCxTym0hGV2TiTzMQNGiyRAXYEfq",
+    "role": "user",
+    "avatar": null,
+    "createdAt": "2026-09-08T13:03:02.040Z",
+    "bio": ""
   }
 ]

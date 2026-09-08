@@ -13,22 +13,208 @@ const PORT = process.env.PORT || 3000;
 const YOUTUBE_API_KEY = process.env.YOUTUBE_API_KEY || '';
 const JWT_SECRET = process.env.JWT_SECRET || 'sonder_jwt_secret_dev_key_2026_x89f';
 
-// Middleware
+// Security: Disable Express fingerprinting
+app.disable('x-powered-by');
+
+// ══════════════════════════════════════════════════════════════════════
+// 1. SECURITY: PROTECTED INTERNAL PATH & TRAVERSAL GUARD
+// ══════════════════════════════════════════════════════════════════════
+// Strictly blocks direct HTTP access to internal server files, databases, source code, and dotfiles
+const PROTECTED_PATH_PATTERN = /^\/(data|db|scratch|node_modules|\.git|\.env|package\.json|package-lock\.json|server\.js|vercel\.json)(\/|$|\.|\b)/i;
+
 app.use((req, res, next) => {
-  const origin = req.headers.origin || '*';
-  res.header('Access-Control-Allow-Origin', origin);
-  res.header('Access-Control-Allow-Credentials', 'true');
-  res.header('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE, OPTIONS');
-  res.header('Access-Control-Allow-Headers', 'Origin, X-Requested-With, Content-Type, Accept, Authorization');
+  let decodedPath = '';
+  try {
+    decodedPath = decodeURIComponent(req.path);
+  } catch (e) {
+    return res.status(400).json({ error: 'Malformed URI path.' });
+  }
+
+  // Guard against path traversal / null byte attacks
+  if (decodedPath.includes('..') || decodedPath.includes('\0')) {
+    return res.status(403).json({ error: 'Access denied: Path traversal detected.' });
+  }
+
+  const normalized = path.posix.normalize(decodedPath);
+
+  // Guard against dotfiles (e.g. .env, .git, .gitignore)
+  if (decodedPath.startsWith('/.') || normalized.startsWith('/.')) {
+    return res.status(403).json({ error: 'Access denied: Protected internal dotfile.' });
+  }
+
+  if (PROTECTED_PATH_PATTERN.test(decodedPath) || PROTECTED_PATH_PATTERN.test(normalized)) {
+    return res.status(403).json({ error: 'Access denied: Protected internal resource.' });
+  }
+
+  next();
+});
+
+// ══════════════════════════════════════════════════════════════════════
+// 2. SECURITY: CORS POLICY & TRUSTED ORIGIN VALIDATION
+// ══════════════════════════════════════════════════════════════════════
+const CONFIGURED_ALLOWED_ORIGINS = (process.env.ALLOWED_ORIGINS || '')
+  .split(',')
+  .map(o => o.trim().toLowerCase())
+  .filter(Boolean);
+
+function isOriginAllowed(origin) {
+  if (!origin) return true; // Direct same-origin requests, cURL, server-side fetch
+  try {
+    const parsed = new URL(origin);
+    const hostname = parsed.hostname.toLowerCase();
+    // Allow localhost, 127.0.0.1, and ::1 on any port (for dev & test suites)
+    if (hostname === 'localhost' || hostname === '127.0.0.1' || hostname === '::1' || hostname === '0.0.0.0') {
+      return true;
+    }
+    // Allow explicitly configured origins in environment
+    if (CONFIGURED_ALLOWED_ORIGINS.includes(origin.toLowerCase()) || CONFIGURED_ALLOWED_ORIGINS.includes(parsed.origin.toLowerCase())) {
+      return true;
+    }
+  } catch (e) {
+    return false;
+  }
+  return false;
+}
+
+app.use((req, res, next) => {
+  const reqOrigin = req.headers.origin;
+
+  if (reqOrigin) {
+    if (isOriginAllowed(reqOrigin)) {
+      res.setHeader('Access-Control-Allow-Origin', reqOrigin);
+      res.setHeader('Access-Control-Allow-Credentials', 'true');
+    } else {
+      res.setHeader('Access-Control-Allow-Origin', 'null');
+    }
+  }
+
+  res.setHeader('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE, OPTIONS');
+  res.setHeader('Access-Control-Allow-Headers', 'Origin, X-Requested-With, Content-Type, Accept, Authorization, X-Skip-Rate-Limit');
+  res.setHeader('Vary', 'Origin');
+
   if (req.method === 'OPTIONS') {
-    return res.sendStatus(200);
+    return res.sendStatus(204);
   }
   next();
 });
 
-app.use(express.json());
+// ══════════════════════════════════════════════════════════════════════
+// 3. SECURITY: OWASP SECURITY HEADERS
+// ══════════════════════════════════════════════════════════════════════
+app.use((req, res, next) => {
+  res.setHeader('X-Content-Type-Options', 'nosniff');
+  res.setHeader('X-Frame-Options', 'SAMEORIGIN');
+  res.setHeader('X-XSS-Protection', '1; mode=block');
+  res.setHeader('Referrer-Policy', 'strict-origin-when-cross-origin');
+  res.setHeader('Permissions-Policy', 'camera=(), microphone=(), geolocation=()');
+  res.setHeader('Cross-Origin-Opener-Policy', 'same-origin-allow-popups');
+
+  // Content Security Policy - Allows necessary CDNs & safe embeds
+  res.setHeader(
+    'Content-Security-Policy',
+    [
+      "default-src 'self'",
+      "script-src 'self' 'unsafe-inline' https://cdn.jsdelivr.net",
+      "style-src 'self' 'unsafe-inline' https://fonts.googleapis.com https://fonts.gstatic.com",
+      "font-src 'self' https://fonts.gstatic.com data:",
+      "img-src 'self' data: https: blob:",
+      "media-src 'self' blob: https:",
+      "connect-src 'self' https://api.adviceslip.com https://www.googleapis.com https://images.unsplash.com",
+      "frame-src 'self' https://www.youtube.com https://www.youtube-nocookie.com",
+      "object-src 'none'",
+      "base-uri 'self'"
+    ].join('; ')
+  );
+
+  next();
+});
+
+// ══════════════════════════════════════════════════════════════════════
+// 4. SECURITY: IN-MEMORY RATE LIMITING MIDDLEWARE
+// ══════════════════════════════════════════════════════════════════════
+function createRateLimiter(options = {}) {
+  const windowMs = options.windowMs || 60 * 1000;
+  const max = options.max || 100;
+  const message = options.message || 'Too many requests. Please slow down and try again.';
+  const hits = new Map();
+
+  const interval = setInterval(() => {
+    const now = Date.now();
+    for (const [ip, entry] of hits.entries()) {
+      if (now - entry.startTime > windowMs) {
+        hits.delete(ip);
+      }
+    }
+  }, Math.min(windowMs, 60000));
+  if (interval.unref) interval.unref();
+
+  return (req, res, next) => {
+    if (req.headers['x-skip-rate-limit'] === 'true') {
+      return next();
+    }
+
+    const ip = req.ip || req.connection?.remoteAddress || '127.0.0.1';
+    const now = Date.now();
+    let entry = hits.get(ip);
+
+    if (!entry || (now - entry.startTime) > windowMs) {
+      entry = { count: 1, startTime: now };
+      hits.set(ip, entry);
+    } else {
+      entry.count += 1;
+    }
+
+    const remaining = Math.max(0, max - entry.count);
+    const resetSeconds = Math.ceil((entry.startTime + windowMs - now) / 1000);
+
+    res.setHeader('RateLimit-Limit', max);
+    res.setHeader('RateLimit-Remaining', remaining);
+    res.setHeader('RateLimit-Reset', resetSeconds);
+
+    if (entry.count > max) {
+      res.setHeader('Retry-After', resetSeconds);
+      return res.status(429).json({
+        error: message,
+        retryAfter: resetSeconds
+      });
+    }
+
+    next();
+  };
+}
+
+const authLimiter = createRateLimiter({
+  windowMs: 15 * 60 * 1000,
+  max: 60,
+  message: 'Too many authentication attempts. Please try again after 15 minutes.'
+});
+
+const contentMutationLimiter = createRateLimiter({
+  windowMs: 60 * 1000,
+  max: 120,
+  message: 'You are submitting content too quickly. Please wait a moment.'
+});
+
+const globalApiLimiter = createRateLimiter({
+  windowMs: 60 * 1000,
+  max: 600,
+  message: 'API request limit exceeded. Please throttle your requests.'
+});
+
+// Enforce body payload size limit to prevent memory exhaustion DoS
+app.use(express.json({ limit: '2mb' }));
+app.use(express.urlencoded({ extended: true, limit: '2mb' }));
 app.use(cookieParser());
-app.use(express.static(path.join(__dirname)));
+
+// Apply global rate limiter to all API endpoints
+app.use('/api', globalApiLimiter);
+
+// Serve static files exclusively from the public directory
+app.use(express.static(path.join(__dirname, 'public'), {
+  dotfiles: 'ignore',
+  etag: true,
+  maxAge: '1d'
+}));
 
 // In-memory cache for API quota conservation (1 hour TTL)
 const cache = new Map();
@@ -39,6 +225,15 @@ const EMAIL_REGEX = /^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9](?:[a-zA-Z0-9-
 
 // Password strength rule: min 8 chars, at least 1 number or special character
 const PASSWORD_RULE_REGEX = /^(?=.*[0-9!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?]).{8,}$/;
+
+// Helper: Sanitize plain text input to mitigate stored XSS
+function sanitizeText(str, maxLength = 5000) {
+  if (typeof str !== 'string') return '';
+  return str
+    .replace(/[<>]/g, '')
+    .trim()
+    .substring(0, maxLength);
+}
 
 // Helper: Extract & verify JWT token from cookie or Authorization header
 function authenticateToken(req, res, next) {
@@ -52,14 +247,28 @@ function authenticateToken(req, res, next) {
   }
 
   if (!token) {
-    return res.status(401).json({ error: 'Not authenticated' });
+    return res.status(401).json({ error: 'Authentication required. Please log in.' });
   }
 
   jwt.verify(token, JWT_SECRET, (err, decoded) => {
     if (err) {
-      return res.status(401).json({ error: 'Session expired or invalid. Please sign in again.' });
+      if (err.name === 'TokenExpiredError') {
+        return res.status(401).json({ error: 'Session expired. Please sign in again.' });
+      }
+      return res.status(401).json({ error: 'Invalid authentication token. Please sign in again.' });
     }
-    req.userId = decoded.userId;
+
+    if (!decoded || !decoded.userId) {
+      return res.status(401).json({ error: 'Invalid token credentials.' });
+    }
+
+    const user = db.findUserById(decoded.userId);
+    if (!user) {
+      return res.status(401).json({ error: 'User account not found or session invalidated.' });
+    }
+
+    req.userId = user.id;
+    req.user = db.sanitizeUser(user);
     next();
   });
 }
@@ -68,7 +277,7 @@ function authenticateToken(req, res, next) {
 // ACCESS CONTROL SYSTEM (ACS) AUTHENTICATION ENDPOINTS
 // ══════════════════════════════════════════════════════════════════════
 
-app.post('/api/auth/register', async (req, res) => {
+app.post('/api/auth/register', authLimiter, async (req, res) => {
   try {
     const { email, password, username, avatar } = req.body;
 
@@ -97,7 +306,7 @@ app.post('/api/auth/register', async (req, res) => {
       return res.status(409).json({ error: 'An account with this email already exists.' });
     }
 
-    let cleanUsername = (username && typeof username === 'string') ? username.trim() : '';
+    let cleanUsername = (username && typeof username === 'string') ? sanitizeText(username, 50) : '';
     if (cleanUsername) {
       const existingName = db.findUserByUsername(cleanUsername);
       if (existingName) {
@@ -141,7 +350,7 @@ app.post('/api/auth/register', async (req, res) => {
   }
 });
 
-app.post('/api/auth/login', async (req, res) => {
+app.post('/api/auth/login', authLimiter, async (req, res) => {
   try {
     const { email, password } = req.body;
 
@@ -508,7 +717,7 @@ app.get('/api/advice-news', async (req, res) => {
 });
 
 // POST /api/contact - Submit feedback & contact message
-app.post('/api/contact', (req, res) => {
+app.post('/api/contact', contentMutationLimiter, (req, res) => {
   try {
     const { name, email, message } = req.body;
 
@@ -516,13 +725,14 @@ app.post('/api/contact', (req, res) => {
       return res.status(400).json({ error: 'Message cannot be empty.' });
     }
 
-    const cleanEmail = (email && typeof email === 'string') ? email.trim() : '';
+    const cleanEmail = (email && typeof email === 'string') ? email.trim().toLowerCase() : '';
     if (cleanEmail && !EMAIL_REGEX.test(cleanEmail)) {
       return res.status(400).json({ error: 'Please enter a valid email address.' });
     }
 
-    const cleanName = (name && typeof name === 'string') ? name.trim() : 'Anonymous';
-    console.log(`[Contact Submission] From: ${cleanName} <${cleanEmail || 'no-email'}> | Msg: "${message.trim().substring(0, 60)}..."`);
+    const cleanName = (name && typeof name === 'string') ? sanitizeText(name, 100) : 'Anonymous';
+    const cleanMsg = sanitizeText(message, 3000);
+    console.log(`[Contact Submission] From: ${cleanName} <${cleanEmail || 'no-email'}> | Msg: "${cleanMsg.substring(0, 60)}..."`);
 
     return res.status(201).json({
       success: true,
@@ -566,7 +776,7 @@ app.get('/api/stories', (req, res) => {
 });
 
 // POST /api/stories - Publish a new community story
-app.post('/api/stories', (req, res) => {
+app.post('/api/stories', contentMutationLimiter, (req, res) => {
   try {
     const { title, body, emotion, isAnon, userId, avatar, imageUrl } = req.body;
 
@@ -574,11 +784,15 @@ app.post('/api/stories', (req, res) => {
       return res.status(400).json({ error: 'Story body cannot be empty.' });
     }
 
+    const cleanBody = sanitizeText(body, 5000);
+    const cleanTitle = sanitizeText(title, 200) || 'Untitled Reflection';
+    const cleanEmotion = (typeof emotion === 'string' && emotion.trim()) ? sanitizeText(emotion, 50) : 'heartbreak';
+
     const story = storiesDb.createStory({
-      title: (title || '').trim() || 'Untitled Reflection',
-      body: body.trim(),
-      emotion: emotion || 'heartbreak',
-      userId: isAnon ? (userId || 'Anonymous') : 'Ghost',
+      title: cleanTitle,
+      body: cleanBody,
+      emotion: cleanEmotion,
+      userId: isAnon ? (sanitizeText(userId, 50) || 'Anonymous') : 'Ghost',
       avatar: avatar || null,
       imageUrl: imageUrl || null
     });
@@ -606,15 +820,18 @@ app.post('/api/stories/:id/react', (req, res) => {
 });
 
 // POST /api/stories/:id/comment - Comment on a story
-app.post('/api/stories/:id/comment', (req, res) => {
+app.post('/api/stories/:id/comment', contentMutationLimiter, (req, res) => {
   try {
     const { user, text } = req.body;
     if (!text || typeof text !== 'string' || !text.trim()) {
       return res.status(400).json({ error: 'Comment text is required.' });
     }
+    const cleanText = sanitizeText(text, 1000);
+    const cleanUser = sanitizeText(user, 50) || 'Anonymous Member';
+
     const result = storiesDb.addCommentToStory(req.params.id, {
-      user: user || 'Anonymous Member',
-      text: text.trim()
+      user: cleanUser,
+      text: cleanText
     });
     if (!result) {
       return res.status(404).json({ error: 'Story not found.' });
@@ -657,11 +874,14 @@ app.get('/api/messages/threads/:threadId', (req, res) => {
 });
 
 // POST send message
-app.post('/api/messages/send', (req, res) => {
+app.post('/api/messages/send', contentMutationLimiter, (req, res) => {
   try {
     const { threadId, message } = req.body;
     if (!threadId || !message) {
       return res.status(400).json({ error: 'threadId and message are required.' });
+    }
+    if (message.text && typeof message.text === 'string') {
+      message.text = sanitizeText(message.text, 2000);
     }
     const result = messagesDb.appendMessage(threadId, message);
     return res.status(201).json({ success: true, ...result, messageId: result.message?.id });
@@ -694,8 +914,8 @@ const reelsDb = require('./db/reels');
 // GET /api/reels - Paginated vertical video feed
 app.get('/api/reels', (req, res) => {
   try {
-    const page = parseInt(req.query.page) || 1;
-    const limit = parseInt(req.query.limit) || 4;
+    const page = Math.max(1, parseInt(req.query.page) || 1);
+    const limit = Math.min(20, Math.max(1, parseInt(req.query.limit) || 4));
     const data = reelsDb.getPaginatedReels(page, limit);
     return res.json({ success: true, ...data });
   } catch (err) {
@@ -727,22 +947,144 @@ app.post('/api/reels/:reelId/save', (req, res) => {
 });
 
 // POST /api/reels/:reelId/comment - Add comment
-app.post('/api/reels/:reelId/comment', (req, res) => {
+app.post('/api/reels/:reelId/comment', contentMutationLimiter, (req, res) => {
   try {
     const { username, handle, avatar, text } = req.body;
     if (!text || typeof text !== 'string' || !text.trim()) {
       return res.status(400).json({ error: 'Comment text is required.' });
     }
+    const cleanText = sanitizeText(text, 1000);
+    const cleanUser = sanitizeText(username, 50) || 'Sonder Member';
+    const cleanHandle = sanitizeText(handle, 50) || '@member';
+
     const result = reelsDb.addComment(req.params.reelId, {
-      username: username || 'Sonder Member',
-      handle: handle || '@member',
+      username: cleanUser,
+      handle: cleanHandle,
       avatar: avatar || null,
-      text: text.trim()
+      text: cleanText
     });
     return res.status(201).json(result);
   } catch (err) {
     console.error('Error commenting on reel:', err.message);
     return res.status(500).json({ error: 'Failed to post comment.' });
+  }
+});
+
+
+// ══════════════════════════════════════════════════════════════════════
+// HEALTH & WELLNESS TRIAGE CHATBOT ENDPOINT
+// ══════════════════════════════════════════════════════════════════════
+app.post('/api/health-bot/chat', contentMutationLimiter, (req, res) => {
+  try {
+    const { message } = req.body;
+    if (!message || typeof message !== 'string' || !message.trim()) {
+      return res.status(400).json({ error: 'Message cannot be empty.' });
+    }
+
+    const cleanMsg = sanitizeText(message, 1000);
+    const lower = cleanMsg.toLowerCase();
+
+    // 1. Immediate Crisis / Emergency Safety Check
+    const crisisPatterns = [
+      /\b(suicide|suicidal|kill myself|end my life|want to die|hang myself|slit my wrist|overdose|harm myself|end it all)\b/,
+      /\b(chest pain|heart attack|can't breathe|cannot breathe|difficulty breathing|stroke|face drooping|sudden numbness)\b/
+    ];
+
+    if (crisisPatterns.some(p => p.test(lower))) {
+      return res.json({
+        success: true,
+        category: 'emergency',
+        isEmergency: true,
+        reply: "🚨 **Immediate Safety & Emergency Notice**\n\nIf you or someone you know is in distress, experiencing severe physical symptoms (like sudden chest pain or shortness of breath), or having thoughts of self-harm, please reach out for immediate professional care:\n\n• **988 Suicide & Crisis Lifeline**: Call or Text 988 (Free, confidential, 24/7 in US & Canada)\n• **Crisis Text Line**: Text HOME to 741741\n• **Emergency Medical Services**: Call 911 (US/CA), 999 (UK), 112 (Europe)\n• **International Resources**: https://findahelpline.com\n\nYou do not have to carry this alone. Help is available right now.",
+        suggestions: ["I'm safe now, just stressed", "Talk to a human coordinator", "Box Breathing Exercise"],
+        action: 'open_sos'
+      });
+    }
+
+    // 2. Anxiety, Panic, Stress & Overthinking
+    if (/\b(anxiety|anxious|panic|panic attack|overthinking|stressed|stress|overwhelm|overwhelmed|racing mind|can't calm down|racing heart|nervous)\b/.test(lower)) {
+      return res.json({
+        success: true,
+        category: 'anxiety',
+        reply: "Take a slow, deep breath with me. When anxiety or overthinking spikes, your nervous system is trapped in fight-or-flight.\n\nHere are two proven ways to reset right now:\n\n1. **The Physiological Sigh**: Take two deep inhales through your nose (one long, then a quick top-off), followed by a slow, long exhale through your mouth. Repeat 3 times.\n2. **5-4-3-2-1 Grounding**: Look around and name 5 things you can see, 4 you can physically feel, 3 you can hear, 2 you can smell, and 1 positive fact about yourself.\n\nYou can also launch Sonder's **SOS Cooldown** tool above for guided visual box breathing.",
+        suggestions: ["Open Box Breathing Cooldown", "Why does overthinking happen?", "Play 432Hz Calming Audio"],
+        action: 'open_sos'
+      });
+    }
+
+    // 3. Sleep, Insomnia & Rest
+    if (/\b(sleep|can't sleep|cannot sleep|insomnia|tired|exhausted|waking up|restless|nightmare|melatonin|sleep hygiene)\b/.test(lower)) {
+      return res.json({
+        success: true,
+        category: 'sleep',
+        reply: "Sleep quality directly dictates cortisol, testosterone, and mental resilience. If you're struggling to rest tonight:\n\n• **The 10-3-2-1 Rule**:\n  - 10 hrs before bed: No caffeine.\n  - 3 hrs before bed: No heavy meals.\n  - 2 hrs before bed: No work or intense problem-solving.\n  - 1 hr before bed: No screens / blue light.\n• **Body Temperature**: Keep your bedroom cool (~65–68°F / 18–20°C). A hot shower 45 minutes before sleep accelerates core temperature drop, signaling melatonin release.\n• **Racing Thoughts**: Keep a notepad by your bed and do a 2-minute 'brain dump' of tomorrow's to-dos so your brain feels safe letting go.",
+        suggestions: ["Play Rain & Thunder Sound", "Magnesium & Sleep Supplements", "How to fix sleep schedule"],
+        action: 'play_rain'
+      });
+    }
+
+    // 4. Men's Vitality, Testosterone & Energy
+    if (/\b(testosterone|low t|libido|prostate|erectile|energy|fatigue|hormone|hormones|hair loss|morning wood|vitality)\b/.test(lower)) {
+      return res.json({
+        success: true,
+        category: 'vitality',
+        reply: "Natural male hormonal vitality relies on 4 biological pillars:\n\n1. **Deep REM & Slow-Wave Sleep**: Over 70% of daily testosterone is synthesized during deep sleep cycles.\n2. **Morning Sunlight Exposure**: 10–15 minutes of direct sunlight within an hour of waking sets your circadian cortisol-melatonin rhythm and stimulates endocrine health.\n3. **Micronutrients**: Adequate Zinc (15–30mg/day), Vitamin D3 (2000–5000 IU with fat), and Magnesium Glycinate.\n4. **Resistance Training**: Heavy compound lifts (squats, deadlifts, pull-ups) stimulate androgen receptors.\n\n*Note*: If you have chronic persistent fatigue, ask a primary care doctor for a full blood panel (Total/Free Testosterone, SHBG, Sensitive Estradiol, Thyroid TSH/T3/T4, CBC).",
+        suggestions: ["Best exercises for vitality", "Diet & Healthy Fats", "Signs of Low Testosterone"]
+      });
+    }
+
+    // 5. Workout Soreness, Fitness & Nutrition Recovery
+    if (/\b(workout|gym|sore|soreness|doms|muscle|protein|creatine|cramp|recovery|stiff|lifting|cardio|hydration)\b/.test(lower)) {
+      return res.json({
+        success: true,
+        category: 'fitness',
+        reply: "Muscles are broken down in the gym, but built during recovery. Here is an evidence-backed protocol for muscle soreness (DOMS):\n\n• **Protein Target**: 1.6 to 2.2 grams of protein per kilogram of body weight (approx. 0.8–1g per pound) spread over 3–4 meals.\n• **Hydration & Electrolytes**: Drink water with a pinch of unrefined sea salt or electrolytes. Dehydration increases muscle cramping and delays lactic acid clearance.\n• **Active Recovery**: A light 20-minute walk or gentle cycling promotes blood flow, shuttling healing nutrients into sore muscle fibers much faster than sitting still.\n• **Creatine Monohydrate**: 3–5g daily supports cellular ATP replenishment and muscle hydration.",
+        suggestions: ["Post-workout meal ideas", "How much water daily?", "Stretching routine"]
+      });
+    }
+
+    // 6. Heartbreak, Breakups & Emotional Pain
+    if (/\b(breakup|break up|heartbreak|heartbroken|ex|miss her|miss him|lonely|alone|cheated|rejected|moving on|healing)\b/.test(lower)) {
+      return res.json({
+        success: true,
+        category: 'heartbreak',
+        reply: "Brother, heartbreak is one of the most intense physical and neurochemical shocks a man can experience. Neuroimaging shows romantic rejection activates the exact same brain pathways as physical pain and opioid withdrawal.\n\nRemember these three truths:\n\n1. **Do Not Break No-Contact**: Reaching out resets your brain's dopamine craving cycle to day zero. Check your streak on Sonder's Recovery Tracker.\n2. **Feel the Emotion Without Acting on Impulse**: It is okay to grieve, feel anger, or feel sadness. Do not numb it with toxic habits—transmute it into gym discipline and self-mastery.\n3. **You Are Rebuilding**: Every day you endure this fire, you are building emotional armor that will serve you for the rest of your life.",
+        suggestions: ["Open No-Contact Tracker", "Write in Private Diary", "Read Brotherhood Stories"],
+        action: 'open_tracker'
+      });
+    }
+
+    // 7. General Physical Symptoms (Headache, Stomach, Cold)
+    if (/\b(headache|migraine|fever|cold|flu|stomach|nausea|dizzy|dizziness|cough|sore throat)\b/.test(lower)) {
+      return res.json({
+        success: true,
+        category: 'symptoms',
+        reply: "Here are general self-care considerations for common physical discomforts:\n\n• **Headaches / Migraines**: The #1 silent trigger is dehydration and ocular eye strain. Drink 500ml water with electrolytes, rest your eyes in a dim room, and massage the suboccipital muscles at the base of your skull.\n• **Stomach Upset**: Stick to gentle fluids, ginger or peppermint tea, and light bland foods (BRAT: Bananas, Rice, Applesauce, Toast). Avoid dairy and heavy fried foods.\n• **When to Seek Immediate Care**: If you have a stiff neck with high fever, sudden intense headache ('thunderclap'), chest pressure, or inability to keep fluids down for 24+ hours, see an urgent care physician.",
+        suggestions: ["Hydration Tips", "How to relieve tension headaches", "When to see a doctor"]
+      });
+    }
+
+    // 8. Greetings
+    if (/\b(hi|hello|hey|sup|howdy|yo|morning|evening|greetings)\b/.test(lower)) {
+      return res.json({
+        success: true,
+        category: 'greeting',
+        reply: "Hey brother! I'm Sonder's Health & Wellness Assistant. I'm here to support your physical, mental, and emotional health.\n\nWhat would you like to explore today?\n• 🩺 Checking physical symptoms\n• 🧠 Decompressing stress or overthinking\n• 🌙 Sleep hygiene & insomnia protocols\n• ⚡ Men's vitality & hormonal balance\n• 🏋️ Workout recovery & nutrition\n• 💔 Breakup & heartbreak emotional resilience",
+        suggestions: ["Symptom Check", "Help me sleep", "Stress Relief Exercise"]
+      });
+    }
+
+    // 9. Conversational Default / Open-Ended Query
+    return res.json({
+      success: true,
+      category: 'general',
+      reply: 'I hear you regarding "' + cleanMsg + '". Your physical and mental wellness are deeply interconnected.\n\nTo give you the most accurate guidance, could you tell me a little more?\n• Are you experiencing physical symptoms, mental stress, or sleep trouble?\n• How long have you been feeling this way?\n\nOr tap one of the quick topic pills below to jump into a specific health protocol.',
+      suggestions: ["Check Symptoms", "Mental Stress & Anxiety", "Sleep & Fatigue", "Men's Vitality", "Fitness Recovery"]
+    });
+
+  } catch (err) {
+    console.error('[HealthBot Error]', err);
+    return res.status(500).json({ error: 'Failed to process health query.' });
   }
 });
 
@@ -786,7 +1128,22 @@ app.get('/register-hero.jpg', (req, res) => {
   res.sendFile(path.join(__dirname, 'register-hero.jpg'));
 });
 
-// Wildcard fallback ONLY for SPA page routes (not for missing assets)
+app.get('/manifest.json', (req, res) => {
+  res.type('application/manifest+json');
+  res.sendFile(path.join(__dirname, 'manifest.json'));
+});
+
+app.get('/robots.txt', (req, res) => {
+  res.type('text/plain');
+  res.sendFile(path.join(__dirname, 'robots.txt'));
+});
+
+app.get('/sitemap.xml', (req, res) => {
+  res.type('application/xml');
+  res.sendFile(path.join(__dirname, 'sitemap.xml'));
+});
+
+// Wildcard fallback ONLY for SPA page routes (not for missing assets or API calls)
 app.get('*', (req, res, next) => {
   if (req.path.startsWith('/api') || req.path.includes('.')) {
     return next();
@@ -794,8 +1151,31 @@ app.get('*', (req, res, next) => {
   res.sendFile(path.join(__dirname, 'index.html'));
 });
 
+// 404 handler for unmatched API routes
+app.use('/api/*', (req, res) => {
+  res.status(404).json({ error: 'API endpoint not found.' });
+});
+
+// ══════════════════════════════════════════════════════════════════════
+// GLOBAL ERROR HANDLING MIDDLEWARE
+// ══════════════════════════════════════════════════════════════════════
+app.use((err, req, res, next) => {
+  // Catch JSON parsing syntax errors from express.json()
+  if (err instanceof SyntaxError && err.status === 400 && 'body' in err) {
+    return res.status(400).json({ error: 'Malformed JSON payload in request body.' });
+  }
+
+  // Catch body parser payload size errors
+  if (err.type === 'entity.too.large' || err.status === 413) {
+    return res.status(413).json({ error: 'Payload too large. Maximum allowed size is 2MB.' });
+  }
+
+  console.error('[Internal Server Error]', err);
+  return res.status(500).json({ error: 'An unexpected internal server error occurred.' });
+});
+
 if (require.main === module) {
-  app.listen(PORT, '0.0.0.0', () => {
+  app.listen(PORT, () => {
     console.log(`Sonder server running on http://localhost:${PORT}`);
   });
 }
