@@ -979,6 +979,11 @@ document.addEventListener('DOMContentLoaded', () => {
       setNewPrompt();
     };
     $('nav-create').onclick = openWrite;
+    const navReels = $('nav-reels');
+    const mobileReelsBtn = $('mobile-reels-btn');
+    const postGhost = $('post-ghost');
+    if (navReels) navReels.onclick = () => switchPane('reels');
+    if (mobileReelsBtn) mobileReelsBtn.onclick = () => switchPane('reels');
     $('mobile-create-btn').onclick = openWrite;
     $('write-trigger').onclick = openWrite;
     $('write-bar-btn').onclick = openWrite;
@@ -1424,7 +1429,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const dmAuthorBtn = el.querySelector('.dm-author-btn');
     if (dmAuthorBtn) {
       dmAuthorBtn.onclick = (e) => {
-        e.stopPropagation();
+        if (e && e.stopPropagation) e.stopPropagation();
         startDirectMessageWith({
           id: p.userId,
           name: p.userId,
@@ -1445,17 +1450,17 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // Bookmark
     const bookmarkBtn = el.querySelector('.post-bookmark-btn');
-    bookmarkBtn.onclick = (e) => { e.stopPropagation(); toggleSave(p.id, bookmarkBtn); };
+    bookmarkBtn.onclick = (e) => { if (e && e.stopPropagation) e.stopPropagation(); toggleSave(p.id, bookmarkBtn); };
 
     // Follow
     const followBtn = el.querySelector('.follow-btn');
     if (followBtn) {
-      followBtn.onclick = (e) => { e.stopPropagation(); toggleFollow(p.userId, followBtn); };
+      followBtn.onclick = (e) => { if (e && e.stopPropagation) e.stopPropagation(); toggleFollow(p.userId, followBtn); };
     }
 
     // More options
     el.querySelector('.ig-post-more').onclick = (e) => {
-      e.stopPropagation();
+      if (e && e.stopPropagation) e.stopPropagation();
       showToast('Options coming soon');
     };
 
@@ -1738,7 +1743,7 @@ document.addEventListener('DOMContentLoaded', () => {
     // Story Viewer Reactions
     qa('.sv-react').forEach(btn => {
       btn.onclick = (e) => {
-        e.stopPropagation();
+        if (e && e.stopPropagation) e.stopPropagation();
         const reactionType = btn.dataset.r;
         const emojiMap = { love: '💔', cry: '🥲', healing: '🌱' };
         const emoji = emojiMap[reactionType] || '❤️';
@@ -2195,14 +2200,14 @@ document.addEventListener('DOMContentLoaded', () => {
       `;
 
       card.querySelector('.atc-play-btn').onclick = (e) => {
-        e.stopPropagation();
+        if (e && e.stopPropagation) e.stopPropagation();
         addDirectToQueue(t);
         directQueueIndex = directPlayQueue.findIndex(item => item.id === t.id);
         playDirectTrack(t, true);
       };
 
       card.querySelector('.atc-queue-btn').onclick = (e) => {
-        e.stopPropagation();
+        if (e && e.stopPropagation) e.stopPropagation();
         addDirectToQueue(t);
       };
 
@@ -2719,7 +2724,7 @@ document.addEventListener('DOMContentLoaded', () => {
         playVideoItem(v, true);
       };
       card.querySelector('.yt-card-queue-btn').onclick = (e) => {
-        e.stopPropagation();
+        if (e && e.stopPropagation) e.stopPropagation();
         addToQueue(v);
       };
       grid.appendChild(card);
@@ -3592,7 +3597,7 @@ document.addEventListener('DOMContentLoaded', () => {
         </div>
       `;
       el.querySelector('.diary-del').onclick = (e) => {
-        e.stopPropagation();
+        if (e && e.stopPropagation) e.stopPropagation();
         if(confirm("Delete this entry?")) {
           S.diary = S.diary.filter(x => x.id !== d.id);
           saveData();
@@ -3662,7 +3667,7 @@ document.addEventListener('DOMContentLoaded', () => {
       `;
       
       el.querySelector('.diary-del').onclick = (e) => {
-        e.stopPropagation();
+        if (e && e.stopPropagation) e.stopPropagation();
         if(confirm("Delete this shared story?")) {
           S.posts = S.posts.filter(x => x.id !== p.id);
           saveData();
@@ -4563,7 +4568,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const dmPopover = $('dm-options-popover');
     if (dmActionBtn && dmPopover) {
       dmActionBtn.onclick = (e) => {
-        e.stopPropagation();
+        if (e && e.stopPropagation) e.stopPropagation();
         dmPopover.classList.toggle('hidden');
         if (!dmPopover.classList.contains('hidden') && activeDmThreadId) {
           const thread = (S.dms || []).find(t => t.threadId === activeDmThreadId);
@@ -4806,7 +4811,7 @@ document.addEventListener('DOMContentLoaded', () => {
     if (!popover || !toggleBtn) return;
 
     toggleBtn.onclick = (e) => {
-      e.stopPropagation();
+      if (e && e.stopPropagation) e.stopPropagation();
       popover.classList.toggle('hidden');
       if (!popover.classList.contains('hidden')) {
         renderEmojiCategory(activeEmojiCategory);
@@ -4815,7 +4820,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     qa('.dm-ep-tab').forEach(tab => {
       tab.onclick = (e) => {
-        e.stopPropagation();
+        if (e && e.stopPropagation) e.stopPropagation();
         qa('.dm-ep-tab').forEach(t => t.classList.remove('active-ep-tab'));
         tab.classList.add('active-ep-tab');
         activeEmojiCategory = tab.dataset.cat || 'smileys';
@@ -4842,7 +4847,7 @@ document.addEventListener('DOMContentLoaded', () => {
       btn.innerText = em;
       btn.title = em;
       btn.onclick = (e) => {
-        e.stopPropagation();
+        if (e && e.stopPropagation) e.stopPropagation();
         insertEmojiIntoInput(em);
       };
       grid.appendChild(btn);
@@ -5007,12 +5012,12 @@ document.addEventListener('DOMContentLoaded', () => {
       `;
 
       card.querySelector('.dm-fc-chat-btn').onclick = (e) => {
-        e.stopPropagation();
+        if (e && e.stopPropagation) e.stopPropagation();
         startDirectMessageWith(f);
       };
 
       card.querySelector('.dm-fc-remove-btn').onclick = (e) => {
-        e.stopPropagation();
+        if (e && e.stopPropagation) e.stopPropagation();
         if (confirm(`Remove ${f.name} from your friends circle?`)) {
           toggleFriendStatus(f);
         }
@@ -5254,7 +5259,7 @@ document.addEventListener('DOMContentLoaded', () => {
       const playBtn = row.querySelector('.dm-voice-play-btn');
       if (playBtn) {
         playBtn.onclick = (e) => {
-          e.stopPropagation();
+          if (e && e.stopPropagation) e.stopPropagation();
           const vb = row.querySelector('.dm-voice-bubble');
           if (vb) {
             vb.classList.toggle('playing');
@@ -5267,7 +5272,7 @@ document.addEventListener('DOMContentLoaded', () => {
       const reactBtn = row.querySelector('.dm-mah-react');
       if (reactBtn) {
         reactBtn.onclick = (e) => {
-          e.stopPropagation();
+          if (e && e.stopPropagation) e.stopPropagation();
           m.reaction = m.reaction === '❤️' ? null : '❤️';
           saveData();
           renderDMMessages(thread);
@@ -5277,7 +5282,7 @@ document.addEventListener('DOMContentLoaded', () => {
       const copyBtn = row.querySelector('.dm-mah-copy');
       if (copyBtn) {
         copyBtn.onclick = (e) => {
-          e.stopPropagation();
+          if (e && e.stopPropagation) e.stopPropagation();
           if (navigator.clipboard && m.text) {
             navigator.clipboard.writeText(m.text).then(() => {
               showToast('📋 Message copied to clipboard');
@@ -5293,7 +5298,7 @@ document.addEventListener('DOMContentLoaded', () => {
       const delBtn = row.querySelector('.dm-mah-del');
       if (delBtn) {
         delBtn.onclick = (e) => {
-          e.stopPropagation();
+          if (e && e.stopPropagation) e.stopPropagation();
           if (confirm('Delete this message for yourself?')) {
             thread.messages.splice(idx, 1);
             saveData();
@@ -5634,7 +5639,7 @@ document.addEventListener('DOMContentLoaded', () => {
         `;
 
         item.querySelector('.ndm-chat-btn').onclick = (e) => {
-          e.stopPropagation();
+          if (e && e.stopPropagation) e.stopPropagation();
           toggleFriendStatus(p);
           openAddFriendModal(); // refresh view
         };
@@ -6123,7 +6128,7 @@ document.addEventListener('DOMContentLoaded', () => {
     // Caption "See more" toggle
     if (captionMore && captionText) {
       captionMore.onclick = (e) => {
-        e.stopPropagation();
+        if (e && e.stopPropagation) e.stopPropagation();
         const isExp = captionText.classList.toggle('expanded');
         captionMore.innerText = isExp ? 'less' : 'more';
       };
@@ -6132,7 +6137,7 @@ document.addEventListener('DOMContentLoaded', () => {
     // Follow toggle
     if (followBtn) {
       followBtn.onclick = (e) => {
-        e.stopPropagation();
+        if (e && e.stopPropagation) e.stopPropagation();
         reel.author.isFollowing = !reel.author.isFollowing;
         followBtn.classList.toggle('following', reel.author.isFollowing);
         followBtn.innerText = reel.author.isFollowing ? 'Following' : '+ Follow';
@@ -6163,7 +6168,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     if (likeBtn) {
       likeBtn.onclick = (e) => {
-        e.stopPropagation();
+        if (e && e.stopPropagation) e.stopPropagation();
         handleLikeToggle('btn');
       };
     }
@@ -6171,7 +6176,7 @@ document.addEventListener('DOMContentLoaded', () => {
     // Comment Sheet Open
     if (commentBtn) {
       commentBtn.onclick = (e) => {
-        e.stopPropagation();
+        if (e && e.stopPropagation) e.stopPropagation();
         openReelsCommentsSheet(reel);
       };
     }
@@ -6179,7 +6184,7 @@ document.addEventListener('DOMContentLoaded', () => {
     // Share Button
     if (shareBtn) {
       shareBtn.onclick = (e) => {
-        e.stopPropagation();
+        if (e && e.stopPropagation) e.stopPropagation();
         if (navigator.share) {
           navigator.share({
             title: `Sonder Story: ${reel.author.name}`,
@@ -6196,7 +6201,7 @@ document.addEventListener('DOMContentLoaded', () => {
     // Save Toggle
     if (saveBtn) {
       saveBtn.onclick = (e) => {
-        e.stopPropagation();
+        if (e && e.stopPropagation) e.stopPropagation();
         reel.userSaved = !reel.userSaved;
         reel.stats.saves += reel.userSaved ? 1 : -1;
         updateReelCardCounts(reel.id, reel);
@@ -6213,7 +6218,7 @@ document.addEventListener('DOMContentLoaded', () => {
     let singleTapTimeout = null;
 
     video.onclick = (e) => {
-      e.stopPropagation();
+      if (e && e.stopPropagation) e.stopPropagation();
       tapCount++;
 
       if (tapCount === 1) {
@@ -6703,319 +6708,393 @@ document.addEventListener('DOMContentLoaded', () => {
   // SONDER HEALTH & WELLNESS CHATBOT LOGIC
   // ═══════════════════════════════════════════════════════════════════
   const setupHealthBot = () => {
-    const triggerBtn = $('health-bot-trigger');
-    const tooltipEl = $('hbw-tooltip');
-    const windowEl = $('health-bot-window');
-    const closeBtn = $('hbw-close-btn');
-    const resetBtn = $('hbw-reset-btn');
-    const messagesEl = $('hbw-messages');
-    const formEl = $('hbw-form');
-    const inputEl = $('hbw-input');
-    const typingEl = $('hbw-typing');
-    const topicsBar = document.querySelector('.hbw-topics-bar');
-
-    if (!triggerBtn || !windowEl || !messagesEl) return;
-
-    let chatHistory = [];
-
-    const defaultGreeting = {
-      sender: 'bot',
-      text: "Hey brother! Welcome to Sonder Health. I'm your confidential wellness guide.\n\nHow are you feeling physically or mentally today? Select a topic above or ask anything about symptoms, sleep, stress, or recovery.",
-      suggestions: ["Check Symptoms", "Can't Sleep Protocol", "Stress & Anxiety Reset", "Men's Vitality Tips"],
-      time: new Date()
-    };
-
-    // Load or initialize conversation
     try {
-      const saved = sessionStorage.getItem('sonder_health_bot_history');
-      if (saved) {
-        chatHistory = JSON.parse(saved);
-      }
-    } catch (e) {}
+      const triggerBtn = $('health-bot-trigger');
+      const tooltipEl = $('hbw-tooltip');
+      const windowEl = $('health-bot-window');
+      const closeBtn = $('hbw-close-btn');
+      const resetBtn = $('hbw-reset-btn');
+      const messagesEl = $('hbw-messages');
+      const formEl = $('hbw-form');
+      const inputEl = $('hbw-input');
+      const sendBtn = $('hbw-send');
+      const typingEl = $('hbw-typing');
+      const topicsBar = document.querySelector('.hbw-topics-bar');
 
-    if (chatHistory.length === 0) {
-      chatHistory.push(defaultGreeting);
-    }
+      if (!triggerBtn || !windowEl || !messagesEl) return;
 
-    const saveHistory = () => {
-      try {
-        sessionStorage.setItem('sonder_health_bot_history', JSON.stringify(chatHistory.slice(-20)));
-      } catch (e) {}
-    };
+      let chatHistory = [];
 
-    const formatTime = (d) => {
-      const date = d instanceof Date ? d : new Date(d);
-      return date.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
-    };
-
-    const renderMarkdown = (text) => {
-      return text
-        .replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>')
-        .replace(/\n/g, '<br>');
-    };
-
-    const renderMessages = () => {
-      messagesEl.innerHTML = '';
-      chatHistory.forEach((msg) => {
-        const msgDiv = document.createElement('div');
-        msgDiv.className = 'hbw-msg ' + msg.sender + (msg.isEmergency ? ' emergency' : '');
-
-        const bubble = document.createElement('div');
-        bubble.className = 'hbw-msg-bubble';
-        bubble.innerHTML = renderMarkdown(escapeHTML(msg.text));
-
-        // Append action button if present
-        if (msg.action) {
-          const actionBtn = document.createElement('button');
-          actionBtn.type = 'button';
-          actionBtn.className = 'hbw-action-btn';
-          if (msg.action === 'open_sos') {
-            actionBtn.innerHTML = '<span>Open SOS Box Breathing Cooldown</span> &rarr;';
-            actionBtn.onclick = () => {
-              windowEl.classList.add('hidden');
-              const sosModal = $('sos-modal');
-              if (sosModal) sosModal.classList.remove('hidden');
-            };
-          } else if (msg.action === 'play_rain') {
-            actionBtn.innerHTML = '<span>▶ Play Rain &amp; Thunder Audio</span>';
-            actionBtn.onclick = () => {
-              if (typeof selectMusicTrack === 'function') {
-                selectMusicTrack(1);
-                if (!isMusicPlaying && typeof toggleMusicPlay === 'function') toggleMusicPlay();
-                showToast('Playing Rain Soundscape 🌧️');
-              }
-            };
-          } else if (msg.action === 'open_tracker') {
-            actionBtn.innerHTML = '<span>Open No-Contact Streak Tracker</span> &rarr;';
-            actionBtn.onclick = () => {
-              windowEl.classList.add('hidden');
-              const trackerModal = $('set-tracker-modal');
-              if (trackerModal) trackerModal.classList.remove('hidden');
-            };
-          }
-          bubble.appendChild(actionBtn);
-        }
-
-        // Append quick suggestions if present
-        if (msg.suggestions && msg.suggestions.length > 0) {
-          const sugWrap = document.createElement('div');
-          sugWrap.className = 'hbw-suggestions';
-          msg.suggestions.forEach(sug => {
-            const btn = document.createElement('button');
-            btn.type = 'button';
-            btn.className = 'hbw-suggest-btn';
-            btn.innerText = sug;
-            btn.onclick = () => {
-              handleUserSubmit(sug);
-            };
-            sugWrap.appendChild(btn);
-          });
-          bubble.appendChild(sugWrap);
-        }
-
-        const timeSpan = document.createElement('span');
-        timeSpan.className = 'hbw-msg-time';
-        timeSpan.innerText = formatTime(msg.time);
-
-        msgDiv.appendChild(bubble);
-        msgDiv.appendChild(timeSpan);
-        messagesEl.appendChild(msgDiv);
-      });
-
-      // Scroll to bottom
-      messagesEl.scrollTop = messagesEl.scrollHeight;
-    };
-
-    const openChat = () => {
-      windowEl.classList.remove('hidden');
-      if (tooltipEl) tooltipEl.classList.add('hidden');
-      renderMessages();
-      if (inputEl) inputEl.focus();
-    };
-
-    const closeChat = () => {
-      windowEl.classList.add('hidden');
-    };
-
-    triggerBtn.onclick = () => {
-      if (windowEl.classList.contains('hidden')) {
-        openChat();
-      } else {
-        closeChat();
-      }
-    };
-
-    if (tooltipEl) {
-      tooltipEl.onclick = openChat;
-    }
-
-    if (closeBtn) {
-      closeBtn.onclick = closeChat;
-    }
-
-    if (resetBtn) {
-      resetBtn.onclick = () => {
-        chatHistory = [defaultGreeting];
-        saveHistory();
-        renderMessages();
-        showToast('Health Bot conversation refreshed 🩺');
-      };
-    }
-
-    // Quick Topic Pills
-    if (topicsBar) {
-      topicsBar.addEventListener('click', (e) => {
-        const pill = e.target.closest('.hbw-topic-pill');
-        if (!pill) return;
-        const topic = pill.dataset.topic;
-        const topicPrompts = {
-          symptom: "I want to do a symptom check for some discomfort I'm feeling.",
-          anxiety: "How can I quickly stop anxiety, overthinking, and calm my nervous system?",
-          sleep: "I can't fall asleep. What is the evidence-based protocol for insomnia?",
-          vitality: "What are the natural science-backed ways to optimize male testosterone and energy?",
-          workout: "My muscles are intensely sore from working out. How do I recover faster?",
-          heartbreak: "I'm going through a painful breakup and struggling not to reach out.",
-          crisis: "I'm in severe distress or experiencing an emergency. Where can I get help?"
-        };
-
-        if (topicPrompts[topic]) {
-          handleUserSubmit(topicPrompts[topic]);
-        }
-      });
-    }
-
-    // Client-side fallback knowledge engine in case server is unavailable
-    const getFallbackBotResponse = (cleanMsg) => {
-      const lower = cleanMsg.toLowerCase();
-
-      if (/\b(suicide|suicidal|kill myself|end my life|want to die|hang myself|slit my wrist|overdose|harm myself|end it all|chest pain|heart attack|can't breathe)\b/.test(lower)) {
-        return {
-          reply: "🚨 **Immediate Safety & Emergency Notice**\n\nIf you or someone you know is in severe distress, experiencing chest pain/shortness of breath, or having thoughts of self-harm, please reach out for immediate professional care right now:\n\n• **988 Suicide & Crisis Lifeline**: Call or Text 988 (Free, 24/7, US & Canada)\n• **Crisis Text Line**: Text HOME to 741741\n• **Emergency Services**: Call 911 (US/CA) or 999 / 112 (UK/EU)\n\nYou do not have to walk through this alone. Professional help is available right now.",
-          suggestions: ["I'm safe now, just stressed", "Box Breathing Exercise"],
-          action: 'open_sos',
-          isEmergency: true
-        };
-      }
-
-      if (/\b(anxiety|anxious|panic|panic attack|overthinking|stressed|stress|overwhelm|overwhelmed|racing mind|can't calm down)\b/.test(lower)) {
-        return {
-          reply: "Take a slow, deep breath with me. When anxiety or overthinking spikes, your nervous system is in fight-or-flight overdrive.\n\n• **The Physiological Sigh**: Take two deep inhales through your nose (one long, then a quick top-off), followed by a slow, long exhale through your mouth. Repeat 3 times.\n• **5-4-3-2-1 Grounding**: Acknowledge 5 things you see, 4 you can touch, 3 you hear, 2 you smell, and 1 positive thing about yourself.\n\nYou can also launch Sonder's **SOS Cooldown** for guided visual box breathing.",
-          suggestions: ["Open Box Breathing Cooldown", "Play 432Hz Calming Audio", "Why does overthinking happen?"],
-          action: 'open_sos'
-        };
-      }
-
-      if (/\b(sleep|can't sleep|cannot sleep|insomnia|tired|exhausted|waking up|restless|nightmare|melatonin)\b/.test(lower)) {
-        return {
-          reply: "Sleep quality directly impacts cortisol, testosterone, and mental resilience. If you're struggling to sleep tonight:\n\n• **The 10-3-2-1 Rule**:\n  - 10 hrs before: No caffeine\n  - 3 hrs before: No heavy meals\n  - 2 hrs before: No work\n  - 1 hr before: No screens/blue light\n• **Cool Environment**: Sleep in a cool room (~65–68°F / 18–20°C) to facilitate core temperature drop.\n• **Brain Dump**: Write down racing thoughts on paper so your brain can let go.",
-          suggestions: ["Play Rain & Thunder Sound", "Fixing Sleep Schedule", "Supplements for Sleep"],
-          action: 'play_rain'
-        };
-      }
-
-      if (/\b(testosterone|low t|libido|prostate|erectile|energy|fatigue|hormone|vitality)\b/.test(lower)) {
-        return {
-          reply: "Natural male hormonal vitality relies on 4 biological pillars:\n\n1. **Deep Sleep**: Over 70% of daily testosterone is produced during deep slow-wave sleep.\n2. **Morning Sunlight**: 10–15 minutes of direct sunlight within an hour of waking synchronizes circadian cortisol and testosterone.\n3. **Key Micronutrients**: Zinc (15–30mg/day), Vitamin D3 (2000–5000 IU), and Magnesium Glycinate.\n4. **Heavy Compound Lifting**: Squats, deadlifts, and pull-ups stimulate androgen receptors.",
-          suggestions: ["Best exercises for vitality", "Diet & Healthy Fats", "Morning Routine"]
-        };
-      }
-
-      if (/\b(workout|gym|sore|soreness|doms|muscle|protein|creatine|cramp|recovery)\b/.test(lower)) {
-        return {
-          reply: "Muscles are broken down in training, but rebuilt during recovery:\n\n• **Protein Target**: 1.6 to 2.2g of protein per kg of body weight (approx. 0.8–1g/lb) spread across meals.\n• **Electrolytes & Hydration**: Drink water with electrolytes or unrefined sea salt to prevent muscle cramping and facilitate cellular repair.\n• **Active Recovery**: A light 20-minute walk boosts blood circulation and nutrient delivery far better than staying completely stationary.\n• **Creatine Monohydrate**: 3–5g daily supports cellular energy (ATP) replenishment.",
-          suggestions: ["Post-workout meal ideas", "Daily Hydration Target", "Stretching Routine"]
-        };
-      }
-
-      if (/\b(breakup|break up|heartbreak|heartbroken|ex|miss her|miss him|lonely|alone|cheated|rejected)\b/.test(lower)) {
-        return {
-          reply: "Brother, heartbreak is neurochemically identical to physical pain. What you are feeling is real and valid.\n\n• **Do Not Break No-Contact**: Reaching out resets your brain's dopamine craving cycle to day zero. Check your streak in Sonder's Tracker.\n• **Transmute the Pain**: Channel grief and frustration into gym discipline, reading, and personal growth.\n• **One Day at a Time**: The intensity fades as your neural pathways recalibrate.",
-          suggestions: ["Open No-Contact Tracker", "Write in Private Diary", "Read Brotherhood Stories"],
-          action: 'open_tracker'
-        };
-      }
-
-      return {
-        reply: 'I hear you regarding "' + cleanMsg + '". Your physical and mental wellness are deeply interconnected.\n\nCould you share a bit more detail? For instance:\n• Are you dealing with physical symptoms, mental stress, or sleep difficulty?\n• When did this start?\n\nOr tap one of the quick topic pills below to jump directly to a protocol.',
-        suggestions: ["Check Symptoms", "Mental Stress & Anxiety", "Sleep & Rest", "Men's Vitality", "Fitness Recovery"]
-      };
-    };
-
-    const handleUserSubmit = async (userText) => {
-      const text = (userText || '').trim();
-      if (!text) return;
-
-      if (inputEl) inputEl.value = '';
-
-      // Add user message
-      chatHistory.push({
-        sender: 'user',
-        text: text,
+      const defaultGreeting = {
+        sender: 'bot',
+        text: "Hey brother! Welcome to Sonder Health. I'm your confidential wellness guide.\n\nHow are you feeling physically or mentally today? Select a topic above or ask anything about symptoms, sleep, stress, or recovery.",
+        suggestions: ["Check Symptoms", "Can't Sleep Protocol", "Stress & Anxiety Reset", "Men's Vitality Tips"],
         time: new Date()
-      });
-      renderMessages();
+      };
 
-      // Show typing indicator
-      if (typingEl) typingEl.classList.remove('hidden');
-      messagesEl.scrollTop = messagesEl.scrollHeight;
-
-      let botResponse = null;
-
+      // Load or initialize conversation safely
       try {
-        const res = await fetch(getApiUrl('/api/health-bot/chat'), {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          credentials: 'include',
-          body: JSON.stringify({ message: text })
-        });
-
-        if (res.ok) {
-          const data = await res.json();
-          if (data && data.reply) {
-            botResponse = {
-              sender: 'bot',
-              text: data.reply,
-              suggestions: data.suggestions || [],
-              action: data.action || null,
-              isEmergency: !!data.isEmergency,
-              time: new Date()
-            };
+        const saved = sessionStorage.getItem('sonder_health_bot_history');
+        if (saved) {
+          const parsed = JSON.parse(saved);
+          if (Array.isArray(parsed) && parsed.length > 0) {
+            chatHistory = parsed;
           }
         }
-      } catch (err) {
-        console.warn('Backend chatbot fetch error, falling back to local engine:', err.message);
+      } catch (e) {}
+
+      if (chatHistory.length === 0) {
+        chatHistory.push(defaultGreeting);
       }
 
-      if (!botResponse) {
-        const fallback = getFallbackBotResponse(text);
-        botResponse = {
-          sender: 'bot',
-          text: fallback.reply,
-          suggestions: fallback.suggestions || [],
-          action: fallback.action || null,
-          isEmergency: !!fallback.isEmergency,
-          time: new Date()
+      const saveHistory = () => {
+        try {
+          sessionStorage.setItem('sonder_health_bot_history', JSON.stringify(chatHistory.slice(-20)));
+        } catch (e) {}
+      };
+
+      const formatTime = (d) => {
+        try {
+          const date = d instanceof Date ? d : new Date(d);
+          if (isNaN(date.getTime())) return '';
+          return date.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+        } catch (e) {
+          return '';
+        }
+      };
+
+      const renderMarkdown = (text) => {
+        return text
+          .replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>')
+          .replace(/\n/g, '<br>');
+      };
+
+      const renderMessages = () => {
+        try {
+          messagesEl.innerHTML = '';
+          chatHistory.forEach((msg) => {
+            const msgDiv = document.createElement('div');
+            msgDiv.className = 'hbw-msg ' + msg.sender + (msg.isEmergency ? ' emergency' : '');
+
+            const bubble = document.createElement('div');
+            bubble.className = 'hbw-msg-bubble';
+            bubble.innerHTML = renderMarkdown(escapeHTML(msg.text));
+
+            // Append action button if present
+            if (msg.action) {
+              const actionBtn = document.createElement('button');
+              actionBtn.type = 'button';
+              actionBtn.className = 'hbw-action-btn';
+              if (msg.action === 'open_sos') {
+                actionBtn.innerHTML = '<span>Open SOS Box Breathing Cooldown</span> &rarr;';
+                actionBtn.onclick = () => {
+                  windowEl.classList.add('hidden');
+                  const sosModal = $('sos-modal');
+                  if (sosModal) sosModal.classList.remove('hidden');
+                };
+              } else if (msg.action === 'play_rain') {
+                actionBtn.innerHTML = '<span>▶ Play Rain &amp; Thunder Audio</span>';
+                actionBtn.onclick = () => {
+                  if (typeof selectMusicTrack === 'function') {
+                    selectMusicTrack(1);
+                    if (!isMusicPlaying && typeof toggleMusicPlay === 'function') toggleMusicPlay();
+                    showToast('Playing Rain Soundscape 🌧️');
+                  }
+                };
+              } else if (msg.action === 'open_tracker') {
+                actionBtn.innerHTML = '<span>Open No-Contact Streak Tracker</span> &rarr;';
+                actionBtn.onclick = () => {
+                  windowEl.classList.add('hidden');
+                  const trackerModal = $('set-tracker-modal');
+                  if (trackerModal) trackerModal.classList.remove('hidden');
+                };
+              }
+              bubble.appendChild(actionBtn);
+            }
+
+            // Append quick suggestions if present
+            if (msg.suggestions && msg.suggestions.length > 0) {
+              const sugWrap = document.createElement('div');
+              sugWrap.className = 'hbw-suggestions';
+              msg.suggestions.forEach(sug => {
+                const btn = document.createElement('button');
+                btn.type = 'button';
+                btn.className = 'hbw-suggest-btn';
+                btn.innerText = sug;
+                btn.onclick = () => {
+                  handleUserSubmit(sug);
+                };
+                sugWrap.appendChild(btn);
+              });
+              bubble.appendChild(sugWrap);
+            }
+
+            const timeSpan = document.createElement('span');
+            timeSpan.className = 'hbw-msg-time';
+            timeSpan.innerText = formatTime(msg.time);
+
+            msgDiv.appendChild(bubble);
+            msgDiv.appendChild(timeSpan);
+            messagesEl.appendChild(msgDiv);
+          });
+
+          // Scroll to bottom
+          messagesEl.scrollTop = messagesEl.scrollHeight;
+        } catch (err) {
+          console.error('[HealthBot Render Error]', err);
+        }
+      };
+
+      const openChat = () => {
+        windowEl.classList.remove('hidden');
+        if (tooltipEl) tooltipEl.classList.add('hidden');
+        renderMessages();
+        if (inputEl) inputEl.focus();
+      };
+
+      const closeChat = () => {
+        windowEl.classList.add('hidden');
+      };
+
+      triggerBtn.onclick = (e) => {
+        if (e && e.stopPropagation) e.stopPropagation();
+        if (windowEl.classList.contains('hidden')) {
+          openChat();
+        } else {
+          closeChat();
+        }
+      };
+
+      if (tooltipEl) {
+        tooltipEl.onclick = (e) => {
+          if (e && e.stopPropagation) e.stopPropagation();
+          openChat();
         };
       }
 
-      // Small natural delay for human-like response
-      setTimeout(() => {
-        if (typingEl) typingEl.classList.add('hidden');
-        chatHistory.push(botResponse);
-        saveHistory();
-        renderMessages();
-      }, 400);
-    };
+      if (closeBtn) {
+        closeBtn.onclick = (e) => {
+          if (e && e.stopPropagation) e.stopPropagation();
+          closeChat();
+        };
+      }
 
-    if (formEl) {
-      formEl.onsubmit = (e) => {
-        e.preventDefault();
-        const query = inputEl ? inputEl.value : '';
-        handleUserSubmit(query);
+      if (resetBtn) {
+        resetBtn.onclick = (e) => {
+          if (e && e.stopPropagation) e.stopPropagation();
+          chatHistory = [defaultGreeting];
+          saveHistory();
+          renderMessages();
+          showToast('Health Bot conversation refreshed 🩺');
+        };
+      }
+
+      // Quick Topic Pills
+      if (topicsBar) {
+        topicsBar.addEventListener('click', (e) => {
+          const pill = e.target.closest('.hbw-topic-pill');
+          if (!pill) return;
+          const topic = pill.dataset.topic;
+          const topicPrompts = {
+            symptom: "I want to do a symptom check for some discomfort I'm feeling.",
+            anxiety: "How can I quickly stop anxiety, overthinking, and calm my nervous system?",
+            sleep: "I can't fall asleep. What is the evidence-based protocol for insomnia?",
+            vitality: "What are the natural science-backed ways to optimize male testosterone and energy?",
+            workout: "My muscles are intensely sore from working out. How do I recover faster?",
+            heartbreak: "I'm going through a painful breakup and struggling not to reach out.",
+            crisis: "I'm in severe distress or experiencing an emergency. Where can I get help?"
+          };
+
+          if (topicPrompts[topic]) {
+            handleUserSubmit(topicPrompts[topic]);
+          }
+        });
+      }
+
+      // Close on Escape key
+      document.addEventListener('keydown', (e) => {
+        if (e.key === 'Escape' && windowEl && !windowEl.classList.contains('hidden')) {
+          closeChat();
+        }
+      });
+
+      // Close when clicking outside widget
+      document.addEventListener('click', (e) => {
+        const widget = $('health-bot-widget');
+        if (widget && !widget.contains(e.target) && windowEl && !windowEl.classList.contains('hidden')) {
+          closeChat();
+        }
+      });
+
+      // Prevent clicks inside window from bubbling to document click
+      windowEl.addEventListener('click', (e) => {
+        if (e && e.stopPropagation) e.stopPropagation();
+      });
+
+      // Client-side fallback knowledge engine in case server is offline or unreachable
+      const getFallbackBotResponse = (cleanMsg) => {
+        const lower = cleanMsg.toLowerCase();
+
+        if (/\b(suicide|suicidal|kill myself|end my life|want to die|hang myself|slit my wrist|overdose|harm myself|end it all|chest pain|heart attack|can't breathe)\b/.test(lower)) {
+          return {
+            reply: "🚨 **Immediate Safety & Emergency Notice**\n\nIf you or someone you know is in severe distress, experiencing chest pain/shortness of breath, or having thoughts of self-harm, please reach out for immediate professional care right now:\n\n• **988 Suicide & Crisis Lifeline**: Call or Text 988 (Free, 24/7, US & Canada)\n• **Crisis Text Line**: Text HOME to 741741\n• **Emergency Services**: Call 911 (US/CA) or 999 / 112 (UK/EU)\n\nYou do not have to walk through this alone. Professional help is available right now.",
+            suggestions: ["I'm safe now, just stressed", "Box Breathing Exercise"],
+            action: 'open_sos',
+            isEmergency: true
+          };
+        }
+
+        if (/\b(anxiety|anxious|panic|panic attack|overthinking|stressed|stress|overwhelm|overwhelmed|racing mind|can't calm down)\b/.test(lower)) {
+          return {
+            reply: "Take a slow, deep breath with me. When anxiety or overthinking spikes, your nervous system is in fight-or-flight overdrive.\n\n• **The Physiological Sigh**: Take two deep inhales through your nose (one long, then a quick top-off), followed by a slow, long exhale through your mouth. Repeat 3 times.\n• **5-4-3-2-1 Grounding**: Acknowledge 5 things you see, 4 you can touch, 3 you hear, 2 you smell, and 1 positive thing about yourself.\n\nYou can also launch Sonder's **SOS Cooldown** for guided visual box breathing.",
+            suggestions: ["Open Box Breathing Cooldown", "Play 432Hz Calming Audio", "Why does overthinking happen?"],
+            action: 'open_sos'
+          };
+        }
+
+        if (/\b(sleep|can't sleep|cannot sleep|insomnia|tired|exhausted|waking up|restless|nightmare|melatonin)\b/.test(lower)) {
+          return {
+            reply: "Sleep quality directly impacts cortisol, testosterone, and mental resilience. If you're struggling to sleep tonight:\n\n• **The 10-3-2-1 Rule**:\n  - 10 hrs before: No caffeine\n  - 3 hrs before: No heavy meals\n  - 2 hrs before: No work\n  - 1 hr before: No screens/blue light\n• **Cool Environment**: Sleep in a cool room (~65–68°F / 18–20°C) to facilitate core temperature drop.\n• **Brain Dump**: Write down racing thoughts on paper so your brain can let go.",
+            suggestions: ["Play Rain & Thunder Sound", "Fixing Sleep Schedule", "Supplements for Sleep"],
+            action: 'play_rain'
+          };
+        }
+
+        if (/\b(testosterone|low t|libido|prostate|erectile|energy|fatigue|hormone|vitality)\b/.test(lower)) {
+          return {
+            reply: "Natural male hormonal vitality relies on 4 biological pillars:\n\n1. **Deep Sleep**: Over 70% of daily testosterone is produced during deep slow-wave sleep.\n2. **Morning Sunlight**: 10–15 minutes of direct sunlight within an hour of waking synchronizes circadian cortisol and testosterone.\n3. **Key Micronutrients**: Zinc (15–30mg/day), Vitamin D3 (2000–5000 IU), and Magnesium Glycinate.\n4. **Heavy Compound Lifting**: Squats, deadlifts, and pull-ups stimulate androgen receptors.",
+            suggestions: ["Best exercises for vitality", "Diet & Healthy Fats", "Morning Routine"]
+          };
+        }
+
+        if (/\b(workout|gym|sore|soreness|doms|muscle|protein|creatine|cramp|recovery)\b/.test(lower)) {
+          return {
+            reply: "Muscles are broken down in training, but rebuilt during recovery:\n\n• **Protein Target**: 1.6 to 2.2g of protein per kg of body weight (approx. 0.8–1g/lb) spread across meals.\n• **Electrolytes & Hydration**: Drink water with electrolytes or unrefined sea salt to prevent muscle cramping and facilitate cellular repair.\n• **Active Recovery**: A light 20-minute walk boosts blood circulation and nutrient delivery far better than staying completely stationary.\n• **Creatine Monohydrate**: 3–5g daily supports cellular energy (ATP) replenishment.",
+            suggestions: ["Post-workout meal ideas", "Daily Hydration Target", "Stretching Routine"]
+          };
+        }
+
+        if (/\b(breakup|break up|heartbreak|heartbroken|ex|miss her|miss him|lonely|alone|cheated|rejected)\b/.test(lower)) {
+          return {
+            reply: "Brother, heartbreak is neurochemically identical to physical pain. What you are feeling is real and valid.\n\n• **Do Not Break No-Contact**: Reaching out resets your brain's dopamine craving cycle to day zero. Check your streak in Sonder's Tracker.\n• **Transmute the Pain**: Channel grief and frustration into gym discipline, reading, and personal growth.\n• **One Day at a Time**: The intensity fades as your neural pathways recalibrate.",
+            suggestions: ["Open No-Contact Tracker", "Write in Private Diary", "Read Brotherhood Stories"],
+            action: 'open_tracker'
+          };
+        }
+
+        if (/\b(headache|migraine|fever|cold|flu|stomach|nausea|dizzy|dizziness|cough|sore throat)\b/.test(lower)) {
+          return {
+            reply: "General self-care guidance for common physical symptoms:\n\n• **Headaches**: Dehydration and eye strain are the most frequent culprits. Drink 500ml water with electrolytes and rest in a dim environment.\n• **Stomach Upset**: Sip ginger or peppermint tea. Opt for plain crackers, rice, or bananas (BRAT diet).\n• **Seek Emergency Care Immediately** if accompanied by high fever with neck stiffness, sudden extreme onset ('thunderclap'), or chest pain.",
+            suggestions: ["Hydration Protocol", "Relieve Tension Headaches", "When to see a doctor"]
+          };
+        }
+
+        if (/\b(hi|hello|hey|sup|howdy|yo|morning|evening|greetings)\b/.test(lower)) {
+          return {
+            reply: "Hey brother! I'm Sonder's Health & Wellness Assistant. I'm here to support your physical, mental, and emotional health.\n\nWhat would you like to explore today?\n• 🩺 Checking physical symptoms\n• 🧠 Decompressing stress or overthinking\n• 🌙 Sleep hygiene & insomnia protocols\n• ⚡ Men's vitality & hormonal balance\n• 🏋️ Workout recovery & nutrition\n• 💔 Breakup & heartbreak emotional resilience",
+            suggestions: ["Check Symptoms", "Help me sleep", "Stress Relief Exercise"]
+          };
+        }
+
+        return {
+          reply: 'I hear you regarding "' + cleanMsg + '". Your physical and mental wellness are deeply interconnected.\n\nCould you share a bit more detail? For instance:\n• Are you dealing with physical symptoms, mental stress, or sleep difficulty?\n• When did this start?\n\nOr tap one of the quick topic pills above to jump directly to a protocol.',
+          suggestions: ["Check Symptoms", "Mental Stress & Anxiety", "Sleep & Rest", "Men's Vitality", "Fitness Recovery"]
+        };
       };
+
+      const handleUserSubmit = async (userText) => {
+        const text = (userText || '').trim();
+        if (!text) return;
+
+        if (inputEl) inputEl.value = '';
+        if (sendBtn) sendBtn.disabled = true;
+        if (inputEl) inputEl.disabled = true;
+
+        // Add user message
+        chatHistory.push({
+          sender: 'user',
+          text: text,
+          time: new Date()
+        });
+        renderMessages();
+
+        // Show typing indicator
+        if (typingEl) typingEl.classList.remove('hidden');
+        messagesEl.scrollTop = messagesEl.scrollHeight;
+
+        let botResponse = null;
+
+        try {
+          const res = await fetch(getApiUrl('/api/health-bot/chat'), {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ message: text })
+          });
+
+          if (res.ok) {
+            const data = await res.json();
+            if (data && data.reply) {
+              botResponse = {
+                sender: 'bot',
+                text: data.reply,
+                suggestions: data.suggestions || [],
+                action: data.action || null,
+                isEmergency: !!data.isEmergency,
+                time: new Date()
+              };
+            }
+          }
+        } catch (err) {
+          console.warn('Backend chatbot fetch error, using client fallback engine:', err.message);
+        }
+
+        if (!botResponse) {
+          const fallback = getFallbackBotResponse(text);
+          botResponse = {
+            sender: 'bot',
+            text: fallback.reply,
+            suggestions: fallback.suggestions || [],
+            action: fallback.action || null,
+            isEmergency: !!fallback.isEmergency,
+            time: new Date()
+          };
+        }
+
+        // Small natural delay for human-like response
+        setTimeout(() => {
+          if (typingEl) typingEl.classList.add('hidden');
+          chatHistory.push(botResponse);
+          saveHistory();
+          renderMessages();
+          if (sendBtn) sendBtn.disabled = false;
+          if (inputEl) {
+            inputEl.disabled = false;
+            inputEl.focus();
+          }
+        }, 350);
+      };
+
+      if (formEl) {
+        formEl.onsubmit = (e) => {
+          e.preventDefault();
+          const query = inputEl ? inputEl.value : '';
+          handleUserSubmit(query);
+        };
+      }
+
+      if (sendBtn) {
+        sendBtn.onclick = (e) => {
+          e.preventDefault();
+          const query = inputEl ? inputEl.value : '';
+          handleUserSubmit(query);
+        };
+      }
+
+      console.log('[Sonder HealthBot] Controller initialized successfully.');
+    } catch (botErr) {
+      console.error('[Sonder HealthBot Init Error]', botErr);
     }
   };
-
   const setupMusicRoom = () => {
     const playBtn = $('music-play-btn');
     const prevBtn = $('music-prev-btn');
@@ -7060,13 +7139,13 @@ document.addEventListener('DOMContentLoaded', () => {
 
     if (soundBtn && soundDropdown) {
       soundBtn.onclick = (e) => {
-        e.stopPropagation();
+        if (e && e.stopPropagation) e.stopPropagation();
         soundDropdown.classList.toggle('hidden');
       };
 
       qa('.sound-opt').forEach(opt => {
         opt.onclick = (e) => {
-          e.stopPropagation();
+          if (e && e.stopPropagation) e.stopPropagation();
           const sType = opt.dataset.sound;
           soundDropdown.classList.add('hidden');
 

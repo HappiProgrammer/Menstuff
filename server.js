@@ -213,7 +213,15 @@ app.use('/api', globalApiLimiter);
 app.use(express.static(path.join(__dirname, 'public'), {
   dotfiles: 'ignore',
   etag: true,
-  maxAge: '1d'
+  setHeaders: (res, filePath) => {
+    if (filePath.endsWith('.html') || filePath.endsWith('.js') || filePath.endsWith('.css')) {
+      res.setHeader('Cache-Control', 'no-cache, no-store, must-revalidate');
+      res.setHeader('Pragma', 'no-cache');
+      res.setHeader('Expires', '0');
+    } else {
+      res.setHeader('Cache-Control', 'public, max-age=86400');
+    }
+  }
 }));
 
 // In-memory cache for API quota conservation (1 hour TTL)
@@ -1088,18 +1096,27 @@ app.post('/api/health-bot/chat', contentMutationLimiter, (req, res) => {
   }
 });
 
-// Explicit static asset routes with guaranteed MIME types for Vercel Serverless
+// Explicit static asset routes with guaranteed MIME types and no-cache headers for dev
 app.get('/', (req, res) => {
+  res.setHeader('Cache-Control', 'no-cache, no-store, must-revalidate');
+  res.setHeader('Pragma', 'no-cache');
+  res.setHeader('Expires', '0');
   res.sendFile(path.join(__dirname, 'index.html'));
 });
 
 app.get('/styles.css', (req, res) => {
   res.type('text/css');
+  res.setHeader('Cache-Control', 'no-cache, no-store, must-revalidate');
+  res.setHeader('Pragma', 'no-cache');
+  res.setHeader('Expires', '0');
   res.sendFile(path.join(__dirname, 'styles.css'));
 });
 
 app.get('/app.js', (req, res) => {
   res.type('application/javascript');
+  res.setHeader('Cache-Control', 'no-cache, no-store, must-revalidate');
+  res.setHeader('Pragma', 'no-cache');
+  res.setHeader('Expires', '0');
   res.sendFile(path.join(__dirname, 'app.js'));
 });
 
