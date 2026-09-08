@@ -30,7 +30,8 @@ async function testAdviceNewsE2E() {
   console.log('🧪 TESTING FEATURE #3: ADVICE & NEWS E2E');
   console.log('====================================================\n');
 
-  const server = app.listen(0);
+  const server = http.createServer(app);
+  await new Promise(resolve => server.listen(0, '127.0.0.1', resolve));
   const port = server.address().port;
 
   try {

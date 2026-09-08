@@ -795,7 +795,7 @@ app.get('*', (req, res, next) => {
 });
 
 if (require.main === module) {
-  app.listen(PORT, () => {
+  app.listen(PORT, '0.0.0.0', () => {
     console.log(`Sonder server running on http://localhost:${PORT}`);
   });
 }

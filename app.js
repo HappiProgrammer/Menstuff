@@ -3377,7 +3377,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
   const setupDailyPrompt = () => {
     const answerBtn = $('dpc-answer-btn');
-    const promptTextEl = $('dpc-prompt-text');
+    const promptTextEl = $('dpc-question') || $('dpc-prompt-text');
     const exportPromptBtn = $('dpc-export-btn');
 
     if (promptTextEl && PROMPTS && PROMPTS.length) {
@@ -4739,7 +4739,7 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     // Clear thread button
-    const clearBtn = $('dm-clear-thread-btn');
+    const clearBtn = $('dm-clear-thread-btn') || $('dm-opt-clear');
     if (clearBtn) {
       clearBtn.onclick = () => {
         if (!activeDmThreadId) return;

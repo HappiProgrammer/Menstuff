@@ -24,14 +24,41 @@
       "albumArt": "https://images.unsplash.com/photo-1518495973542-4542c06a5843?w=100&auto=format&fit=crop&q=80"
     },
     "stats": {
-      "likes": 1421,
-      "comments": 23,
+      "likes": 1420,
+      "comments": 26,
       "shares": 312,
-      "saves": 540
+      "saves": 541
     },
-    "userLiked": true,
-    "userSaved": false,
+    "userLiked": false,
+    "userSaved": true,
     "commentsList": [
+      {
+        "id": "c_1788869153997_uqb4",
+        "username": "VelvetEcho",
+        "handle": "@velvetecho",
+        "avatar": null,
+        "text": "Such a grounding visual reflection.",
+        "timestamp": 1788869153997,
+        "likes": 0
+      },
+      {
+        "id": "c_1788868223162_nj65",
+        "username": "Test Traveler",
+        "handle": "@testtraveler",
+        "avatar": null,
+        "text": "This video brought me so much peace today. Thank you Sonder! 🌿",
+        "timestamp": 1788868223162,
+        "likes": 0
+      },
+      {
+        "id": "c_1788867895977_5ydw",
+        "username": "VelvetEcho",
+        "handle": "@velvetecho",
+        "avatar": null,
+        "text": "Such a grounding visual reflection.",
+        "timestamp": 1788867895977,
+        "likes": 0
+      },
       {
         "id": "c_1787999127651_5euh",
         "username": "VelvetEcho",

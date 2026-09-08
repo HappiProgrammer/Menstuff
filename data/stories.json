@@ -1,5 +1,58 @@
 [
   {
+    "id": "p_1788868399998_b854a0",
+    "userId": "SilentStar#9921",
+    "avatar": "<svg></svg>",
+    "title": "Testing Heartbreak Story 1788868399965",
+    "body": "This is an end-to-end verification of story creation and persistence.",
+    "emotion": "heartbreak",
+    "date": "2026-09-08T11:53:19.998Z",
+    "reacts": {
+      "love": 1,
+      "cry": 0,
+      "angry": 0,
+      "healing": 0,
+      "peace": 0
+    },
+    "comments": [
+      {
+        "id": "c_1788868400053",
+        "user": "VelvetEcho#4092",
+        "text": "Beautiful and resilient reflection.",
+        "date": "2026-09-08T11:53:20.053Z"
+      }
+    ],
+    "imageUrl": null,
+    "gradient": [
+      "#0d1a2b",
+      "#1a3a5c"
+    ],
+    "isMine": true
+  },
+  {
+    "id": "p_1788868283807_1c4f6e",
+    "userId": "Explorer#1010",
+    "avatar": "<svg></svg>",
+    "title": "Longing under the stars in Explore",
+    "body": "I looked up at Orion and wondered if you were looking up too.",
+    "emotion": "longing",
+    "date": "2026-09-08T11:51:23.808Z",
+    "reacts": {
+      "love": 0,
+      "cry": 0,
+      "angry": 0,
+      "healing": 0,
+      "peace": 0
+    },
+    "comments": [],
+    "imageUrl": null,
+    "gradient": [
+      "#1a0a12",
+      "#3d1626"
+    ],
+    "isMine": true
+  },
+  {
     "id": "p_1787846420951_b5201b",
     "userId": "Auditor#1001",
     "avatar": "<svg width=\"18\" height=\"18\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"1.8\" stroke-linecap=\"round\" stroke-linejoin=\"round\"><circle cx=\"12\" cy=\"7\" r=\"4\"/><path d=\"M5.5 21v-2a6.5 6.5 0 0 1 13 0v2\"/></svg>",

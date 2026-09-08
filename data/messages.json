@@ -1,5 +1,43 @@
 [
   {
+    "threadId": "dm_velvet_echo_1788868215337",
+    "recipient": {
+      "id": "Anonymous",
+      "name": "Anonymous",
+      "tag": "Anonymous",
+      "avatar": null,
+      "online": true,
+      "bio": "Community member",
+      "lastSeen": "Active now"
+    },
+    "unreadCount": 0,
+    "lastActivity": 1788869153935,
+    "messages": [
+      {
+        "id": "msg_1788868215337",
+        "sender": "me",
+        "text": "Hey VelvetEcho, thank you for sharing your story on betrayal yesterday. It really resonated with me.",
+        "image": null,
+        "isVoice": false,
+        "duration": null,
+        "reaction": null,
+        "timestamp": 1788868215337,
+        "status": "read"
+      },
+      {
+        "id": "msg_1788869153935_17ded3",
+        "sender": "user",
+        "text": "Hey! Have you checked out the new Reels feed in Sonder?",
+        "image": null,
+        "isVoice": false,
+        "duration": null,
+        "reaction": null,
+        "timestamp": 1788869153935,
+        "status": "received"
+      }
+    ]
+  },
+  {
     "threadId": "dm_velvet_echo_1787843153361",
     "recipient": {
       "id": "Anonymous",
@@ -11,7 +49,7 @@
       "lastSeen": "Active now"
     },
     "unreadCount": 0,
-    "lastActivity": 1787999127609,
+    "lastActivity": 1788867895908,
     "messages": [
       {
         "id": "msg_1787843153361",
@@ -77,6 +115,17 @@
         "duration": null,
         "reaction": null,
         "timestamp": 1787999127609,
+        "status": "received"
+      },
+      {
+        "id": "msg_1788867895908_024c38",
+        "sender": "user",
+        "text": "Hey! Have you checked out the new Reels feed in Sonder?",
+        "image": null,
+        "isVoice": false,
+        "duration": null,
+        "reaction": null,
+        "timestamp": 1788867895908,
         "status": "received"
       }
     ]
