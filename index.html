@@ -49,7 +49,7 @@
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400&family=Inter:wght@300;400;500;600;700&family=Dancing+Script:wght@600&display=swap" rel="stylesheet" />
-  <link rel="stylesheet" href="styles.css?v=50" />
+  <link rel="stylesheet" href="styles.css?v=51" />
 
   <!-- JSON-LD Comprehensive Structured Data Schema -->
   <script type="application/ld+json">
@@ -167,11 +167,12 @@
     <!-- SPLIT DUAL-CARD CONTAINER -->
     <div class="register-split-card">
       
-      <!-- LEFT DARK AUTH CARD (Matches Left Dark Section of Reference) -->
+      <!-- LEFT DARK AUTH CARD (Premium Glassmorphism Design) -->
       <div class="register-auth-card">
+
         <!-- Mobile Brand Logo & Header -->
         <div class="rac-brand-header">
-          <div class="rhc-logo-emblem">
+          <div class="rhc-logo-emblem rac-logo-pulse">
             <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#00c795" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/><circle cx="12" cy="11" r="2.5" fill="#00c795"/></svg>
           </div>
           <div class="rhc-brand-text">
@@ -180,15 +181,16 @@
           </div>
         </div>
 
-        <!-- Explicit Auth Mode Switcher Tabs -->
+        <!-- Auth Mode Switcher Tabs -->
         <div class="rac-mode-tabs" id="rac-mode-tabs" role="tablist">
           <button type="button" class="rac-tab active-tab" id="tab-mode-signin" role="tab" aria-selected="true">Sign In</button>
           <button type="button" class="rac-tab" id="tab-mode-register" role="tab" aria-selected="false">Create Account</button>
         </div>
 
+        <!-- Header -->
         <div class="rac-header">
           <h1 class="rac-title" id="rac-title">Welcome <span class="rac-title-bold" id="rac-title-bold">back</span></h1>
-          <p class="rac-sub" id="rac-sub">Sign in to your account below.</p>
+          <p class="rac-sub" id="rac-sub">Sign in to continue your journey.</p>
         </div>
 
         <form class="rac-form" id="rac-auth-form" novalidate>
@@ -196,19 +198,36 @@
           <div id="rac-error-banner" class="rac-error-banner hidden" role="alert" aria-live="assertive"></div>
           <div id="rac-info-banner" class="rac-info-banner hidden" role="status" aria-live="polite"></div>
 
-          <!-- Email Field -->
+          <!-- Email Field with Icon -->
           <div class="rac-field">
-            <label class="rac-label" for="returning-id">Email</label>
-            <input type="email" id="returning-id" class="rac-input" placeholder="you@example.com" autocomplete="email" inputmode="email" enterkeyhint="next" autocapitalize="none" spellcheck="false" required />
+            <label class="rac-label" for="returning-id">Email address</label>
+            <div class="rac-input-wrap">
+              <span class="rac-input-icon">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="4" width="20" height="16" rx="3"/><path d="m2 7 10 7 10-7"/></svg>
+              </span>
+              <input type="email" id="returning-id" class="rac-input rac-input-icon-pad" placeholder="you@example.com" autocomplete="email" inputmode="email" enterkeyhint="next" autocapitalize="none" spellcheck="false" required />
+            </div>
           </div>
 
-          <!-- Password Field -->
+          <!-- Password Field with Icon & Toggle -->
           <div class="rac-field">
-            <label class="rac-label" for="rac-password-input">Password <span style="font-size:11px; opacity:0.75;">(min 8 chars, 1 number/symbol)</span></label>
-            <input type="password" id="rac-password-input" class="rac-input" placeholder="••••••••" autocomplete="current-password" enterkeyhint="done" required />
+            <div class="rac-label-row">
+              <label class="rac-label" for="rac-password-input">Password</label>
+              <button type="button" class="rac-forgot-btn" tabindex="-1">Forgot password?</button>
+            </div>
+            <div class="rac-input-wrap">
+              <span class="rac-input-icon">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
+              </span>
+              <input type="password" id="rac-password-input" class="rac-input rac-input-icon-pad rac-input-icon-right" placeholder="••••••••" autocomplete="current-password" enterkeyhint="done" required />
+              <button type="button" class="rac-pw-toggle" id="rac-pw-toggle-btn" aria-label="Toggle password visibility" tabindex="-1">
+                <svg class="rac-eye-open" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
+                <svg class="rac-eye-closed hidden" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19m-6.72-1.07a3 3 0 1 1-4.24-4.24"/><line x1="1" y1="1" x2="23" y2="23"/></svg>
+              </button>
+            </div>
           </div>
 
-          <!-- Primary Emerald Mint CTA Button -->
+          <!-- CTA Button -->
           <button type="submit" class="rac-submit-btn" id="enter-btn">
             <span id="enter-btn-text">Sign in</span>
             <span class="rac-btn-spinner hidden" id="enter-btn-spinner" aria-hidden="true">
@@ -219,7 +238,7 @@
 
         <!-- Footer Link -->
         <div class="rac-footer">
-          <button type="button" class="rac-link-btn" id="returning-toggle-btn">Need an account? Create one</button>
+          <button type="button" class="rac-link-btn" id="returning-toggle-btn">Don't have an account? <span class="rac-link-accent">Create one free</span></button>
         </div>
       </div>
 
