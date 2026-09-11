@@ -518,5 +518,15 @@
     "avatar": null,
     "createdAt": "2026-09-11T10:04:22.527Z",
     "bio": ""
+  },
+  {
+    "id": "u_1789130088769_55811847",
+    "email": "qafunc1789130087780@example.com",
+    "username": "qauser",
+    "passwordHash": "$2a$12$dpr2/n/xaaqXJCYuHoJp5e0TZ.MVjJr48gT5znCCdhv9EsaNbwqC6",
+    "role": "user",
+    "avatar": null,
+    "createdAt": "2026-09-11T12:34:48.769Z",
+    "bio": ""
   }
 ]
