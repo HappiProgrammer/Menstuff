@@ -1586,6 +1586,12 @@ input, textarea, select { font-family: var(--font-sans); }
 .music-source-tabs {
   display: flex; gap: 8px; overflow-x: auto; padding-bottom: 6px; margin-bottom: 18px; scrollbar-width: none;
 }
+.music-source-tabs,
+#pane-music,
+.ig-sound-row,
+.health-bot-widget {
+  display: none !important;
+}
 .music-source-tabs::-webkit-scrollbar { display: none; }
 .source-tab-btn {
   display: flex; align-items: center; gap: 7px;
