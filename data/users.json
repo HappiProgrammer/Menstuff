@@ -468,5 +468,55 @@
     "avatar": null,
     "createdAt": "2026-09-08T13:42:42.318Z",
     "bio": ""
+  },
+  {
+    "id": "u_1789119529316_1b7ffd38",
+    "email": "reels_tester_1789119528145@shattered.io",
+    "username": "TesterHero#8509",
+    "passwordHash": "$2a$12$mCRDqJrDLmvhrsUTVg56d.uETZit9L0qK3r.Ta8ILi08Kj6dBusue",
+    "role": "user",
+    "avatar": null,
+    "createdAt": "2026-09-11T09:38:49.317Z",
+    "bio": ""
+  },
+  {
+    "id": "u_1789120105734_daa0fee4",
+    "email": "reels_tester_1789120104358@shattered.io",
+    "username": "TesterHero#1399",
+    "passwordHash": "$2a$12$iIWNMsHNdrxV9BMsdneLE.r.lpTPGOIygdu9p3g0DoSiAl0w7oujW",
+    "role": "user",
+    "avatar": null,
+    "createdAt": "2026-09-11T09:48:25.735Z",
+    "bio": ""
+  },
+  {
+    "id": "u_1789120134360_66295b02",
+    "email": "sonder_seeker_1789120133563@shattered.io",
+    "username": "SonderSeeker#404#9516",
+    "passwordHash": "$2a$12$RrokfsxCXWeiZEBsMa5zD.kf6zjZukyynJ0P9hncHZoR.HBFlzlMy",
+    "role": "user",
+    "avatar": null,
+    "createdAt": "2026-09-11T09:48:54.360Z",
+    "bio": ""
+  },
+  {
+    "id": "u_1789120154643_616a615b",
+    "email": "sec_tester_1789120154143@shattered.io",
+    "username": "SecurityTester#6377",
+    "passwordHash": "$2a$12$7kykr/jEOk41w2KsM9/EL.Cawtfd51m2GOTmMF6Vv5TiH0knSJyK2",
+    "role": "user",
+    "avatar": null,
+    "createdAt": "2026-09-11T09:49:14.643Z",
+    "bio": ""
+  },
+  {
+    "id": "u_1789121062526_d6ca1ebc",
+    "email": "newuser_1789121061587@example.com",
+    "username": "PeacefulHealer#7999",
+    "passwordHash": "$2a$12$DIZwIpmxtqsZzKabfIpDDefojvxlCIEcqeGKIJt.rhGB8RBd92EEa",
+    "role": "user",
+    "avatar": null,
+    "createdAt": "2026-09-11T10:04:22.527Z",
+    "bio": ""
   }
 ]

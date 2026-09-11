@@ -258,25 +258,51 @@ input, textarea, select { font-family: var(--font-sans); }
 /* ─── LEFT AUTH CARD (Sign In & Create Account) ─── */
 .register-auth-card {
   flex: 0 0 460px;
-  background: linear-gradient(165deg, rgba(30, 44, 63, 0.96) 0%, rgba(21, 32, 46, 0.98) 100%);
-  border-right: 1px solid rgba(255, 255, 255, 0.09);
-  padding: 44px 38px;
+  background: linear-gradient(165deg, rgba(22, 36, 54, 0.98) 0%, rgba(14, 22, 34, 0.99) 100%);
+  border-right: 1px solid rgba(255, 255, 255, 0.07);
+  padding: 44px 40px;
   display: flex;
   flex-direction: column;
   justify-content: space-between;
   position: relative;
   z-index: 3;
+  gap: 0;
+}
+
+/* Subtle animated top-edge glow accent */
+.register-auth-card::before {
+  content: '';
+  position: absolute;
+  top: 0; left: 50%;
+  transform: translateX(-50%);
+  width: 60%;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, rgba(0,199,149,0.7), transparent);
+  animation: authTopGlow 3s ease-in-out infinite alternate;
+}
+@keyframes authTopGlow {
+  0%   { opacity: 0.4; width: 40%; }
+  100% { opacity: 1;   width: 70%; }
+}
+
+/* Pulsing logo animation */
+.rac-logo-pulse {
+  animation: logoPulse 2.8s ease-in-out infinite;
+}
+@keyframes logoPulse {
+  0%, 100% { box-shadow: 0 0 12px rgba(0,199,149,0.2); }
+  50%       { box-shadow: 0 0 24px rgba(0,199,149,0.5); }
 }
 
 .rac-brand-header {
   display: none;
   align-items: center;
   gap: 12px;
-  margin-bottom: 20px;
+  margin-bottom: 24px;
 }
 
 .rac-header {
-  margin-bottom: 22px;
+  margin-bottom: 24px;
 }
 
 /* Auth Mode Switcher Tabs */
@@ -317,94 +343,201 @@ input, textarea, select { font-family: var(--font-sans); }
 
 .rac-title {
   font-family: var(--font-sans);
-  font-size: 26px;
-  font-weight: 400;
-  color: #f1f5f9;
-  letter-spacing: -0.3px;
+  font-size: 28px;
+  font-weight: 300;
+  color: #e2e8f0;
+  letter-spacing: -0.5px;
   margin-bottom: 6px;
+  line-height: 1.25;
 }
 
 .rac-title-bold {
-  font-weight: 700;
+  font-weight: 800;
   color: #ffffff;
+  background: linear-gradient(135deg, #25e2af, #00c795);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
 }
 
 .rac-sub {
-  font-size: 13.5px;
-  color: #94a3b8;
+  font-size: 13px;
+  color: #64748b;
   letter-spacing: 0.1px;
 }
 
 .rac-form {
   display: flex;
   flex-direction: column;
-  gap: 18px;
+  gap: 20px;
+  flex: 1;
+  margin-top: 4px;
 }
 
 .rac-field {
   display: flex;
   flex-direction: column;
-  gap: 7px;
+  gap: 8px;
+}
+
+/* Label row — label + forgot password side by side */
+.rac-label-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
 }
 
 .rac-label {
-  font-size: 12.5px;
+  font-size: 12px;
+  font-weight: 600;
+  color: #7e94b0;
+  letter-spacing: 0.5px;
+  text-transform: uppercase;
+}
+
+/* Forgot password link */
+.rac-forgot-btn {
+  background: none;
+  border: none;
+  font-size: 11.5px;
   font-weight: 500;
-  color: #94a3b8;
-  letter-spacing: 0.2px;
+  color: var(--accent);
+  cursor: pointer;
+  padding: 0;
+  opacity: 0.75;
+  transition: opacity var(--t-fast);
+  font-family: var(--font-sans);
+}
+.rac-forgot-btn:hover {
+  opacity: 1;
+}
+
+/* Icon-enhanced input wrapper */
+.rac-input-wrap {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
+.rac-input-icon {
+  position: absolute;
+  left: 14px;
+  top: 50%;
+  transform: translateY(-50%);
+  color: #475569;
+  pointer-events: none;
+  display: flex;
+  align-items: center;
+  transition: color var(--t-fast);
+  z-index: 1;
+}
+
+/* Move icon color on focus */
+.rac-input-wrap:focus-within .rac-input-icon {
+  color: var(--accent);
 }
 
 .rac-input {
   width: 100%;
-  background: rgba(15, 23, 35, 0.65);
-  border: 1px solid rgba(255, 255, 255, 0.14);
-  border-radius: 11px;
-  color: #ffffff;
+  background: rgba(10, 16, 26, 0.7);
+  border: 1.5px solid rgba(255, 255, 255, 0.08);
+  border-radius: 12px;
+  color: #f1f5f9;
   font-size: 14px;
   padding: 13px 16px;
   outline: none;
-  transition: all var(--t-fast);
+  transition: border-color 0.2s ease, box-shadow 0.2s ease, background 0.2s ease;
   font-family: var(--font-sans);
+  letter-spacing: 0.1px;
+}
+
+/* Padding variants for icon spaces */
+.rac-input-icon-pad {
+  padding-left: 42px;
+}
+.rac-input-icon-right {
+  padding-right: 44px;
 }
 
 .rac-input::placeholder {
-  color: #64748b;
+  color: #334155;
 }
 
 .rac-input:focus {
-  border-color: var(--accent);
-  background: rgba(15, 23, 35, 0.9);
-  box-shadow: 0 0 0 3px rgba(0, 199, 149, 0.2);
+  border-color: rgba(0, 199, 149, 0.55);
+  background: rgba(0, 199, 149, 0.04);
+  box-shadow: 0 0 0 3px rgba(0, 199, 149, 0.12), 0 2px 12px rgba(0,0,0,0.3);
+}
+
+/* Password show/hide toggle */
+.rac-pw-toggle {
+  position: absolute;
+  right: 13px;
+  top: 50%;
+  transform: translateY(-50%);
+  background: none;
+  border: none;
+  color: #475569;
+  cursor: pointer;
+  padding: 4px;
+  display: flex;
+  align-items: center;
+  border-radius: 6px;
+  transition: color var(--t-fast), background var(--t-fast);
+}
+.rac-pw-toggle:hover {
+  color: var(--accent-light);
+  background: rgba(0,199,149,0.08);
 }
 
 .rac-submit-btn {
   width: 100%;
-  padding: 14px 20px;
-  background: linear-gradient(135deg, #00c795 0%, #00a87e 100%);
+  padding: 15px 20px;
+  background: linear-gradient(135deg, #00d4a0 0%, #00a87e 100%);
   border: none;
-  border-radius: 11px;
-  color: #06110e;
+  border-radius: 12px;
+  color: #021a11;
   font-size: 15px;
   font-weight: 700;
-  letter-spacing: 0.2px;
+  letter-spacing: 0.3px;
   cursor: pointer;
-  transition: all var(--t-fast);
-  box-shadow: 0 6px 22px rgba(0, 199, 149, 0.38);
-  margin-top: 6px;
+  transition: all 0.2s ease;
+  box-shadow: 0 4px 20px rgba(0, 199, 149, 0.35), 0 1px 4px rgba(0,0,0,0.4);
+  margin-top: 4px;
   display: flex;
   align-items: center;
   justify-content: center;
   gap: 8px;
+  position: relative;
+  overflow: hidden;
+}
+
+/* Shimmer sweep on hover */
+.rac-submit-btn::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(105deg, transparent 35%, rgba(255,255,255,0.18) 50%, transparent 65%);
+  transform: translateX(-100%);
+  transition: transform 0.45s ease;
+}
+.rac-submit-btn:hover::after {
+  transform: translateX(100%);
 }
 
 .rac-submit-btn:hover:not(:disabled) {
   background: linear-gradient(135deg, #25e2af 0%, #00c795 100%);
-  transform: translateY(-1px);
-  box-shadow: 0 8px 26px rgba(0, 199, 149, 0.48);
+  transform: translateY(-2px);
+  box-shadow: 0 8px 30px rgba(0, 199, 149, 0.5), 0 2px 8px rgba(0,0,0,0.4);
+}
+
+.rac-submit-btn:active:not(:disabled) {
+  transform: translateY(0);
+  box-shadow: 0 3px 14px rgba(0, 199, 149, 0.35);
 }
 
 .rac-submit-btn:disabled {
-  opacity: 0.75;
+  opacity: 0.65;
   cursor: not-allowed;
   transform: none;
 }
@@ -447,21 +580,34 @@ input, textarea, select { font-family: var(--font-sans); }
 
 .rac-footer {
   text-align: center;
-  margin-top: 22px;
+  margin-top: 24px;
+  padding-top: 20px;
+  border-top: 1px solid rgba(255, 255, 255, 0.05);
 }
 
 .rac-link-btn {
   background: none;
   border: none;
-  color: #94a3b8;
+  color: #4e6580;
   font-size: 13px;
-  font-weight: 500;
+  font-weight: 400;
   cursor: pointer;
   transition: color var(--t-fast);
+  font-family: var(--font-sans);
+  line-height: 1.5;
 }
 
 .rac-link-btn:hover {
+  color: #94a3b8;
+}
+
+.rac-link-accent {
   color: var(--accent);
+  font-weight: 600;
+}
+
+.rac-link-btn:hover .rac-link-accent {
+  color: var(--accent-light);
 }
 
 /* ─── RIGHT HERO SHOWCASE CARD (High-Craft Atmosphere & Community Pillars) ─── */

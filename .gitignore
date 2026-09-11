@@ -1,0 +1,10 @@
+# Duplicate static assets in project root – ignore them (served from /public)
+app.js
+index.html
+manifest.json
+styles.css
+favicon.svg
+robots.txt
+sitemap.xml
+register-bg.jpg
+register-hero.jpg

@@ -751,6 +751,19 @@ document.addEventListener('DOMContentLoaded', () => {
       };
     }
 
+    // Password show/hide toggle
+    const pwToggleBtn = $('rac-pw-toggle-btn');
+    if (pwToggleBtn && passInput) {
+      pwToggleBtn.addEventListener('click', () => {
+        const isHidden = passInput.type === 'password';
+        passInput.type = isHidden ? 'text' : 'password';
+        const eyeOpen = pwToggleBtn.querySelector('.rac-eye-open');
+        const eyeClosed = pwToggleBtn.querySelector('.rac-eye-closed');
+        if (eyeOpen) eyeOpen.classList.toggle('hidden', isHidden);
+        if (eyeClosed) eyeClosed.classList.toggle('hidden', !isHidden);
+      });
+    }
+
     // Clear banners on input edit
     emailInput?.addEventListener('input', clearAuthBanners);
     passInput?.addEventListener('input', clearAuthBanners);
